@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - Farm2Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="account.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <span>FARM2HOME</span>
+                <span class="account-badge">ACCOUNT</span>
+            </div>
+            <div class="header-user">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="user-profile">
+            <div class="profile-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="profile-info">
+                <h3 class="profile-name">AHMED KHAN</h3>
+                <p class="profile-email">AHMED.KHAN@EMAIL.COM</p>
+            </div>
+        </div>
+
+        <!-- Total Orders Card -->
+        <div class="orders-card">
+            <div class="orders-label">TOTAL ORDERS</div>
+            <div class="orders-count">47 Orders</div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item active">
+                <i class="fas fa-th-large"></i>
+                <span>OVERVIEW</span>
+            </a>
+            <a href="orders.html" class="nav-item">
+                <i class="fas fa-box"></i>
+                <span>ORDERS</span>
+            </a>
+            <a href="addresses.html" class="nav-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>ADDRESSES</span>
+            </a>
+            <a href="payment.html" class="nav-item">
+                <i class="fas fa-credit-card"></i>
+                <span>PAYMENT</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>SETTINGS</span>
+            </a>
+        </nav>
+
+        <!-- Logout Button -->
+        <button class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>LOGOUT</span>
+        </button>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <main class="content">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <h1 class="welcome-title">WELCOME BACK, AHMED! 👋</h1>
+                <p class="welcome-subtitle">HERE'S WHAT'S HAPPENING WITH YOUR ACCOUNT</p>
+            </div>
+
+            <!-- Stats Cards Row -->
+            <div class="stats-row">
+                <!-- Total Spent Card -->
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">TOTAL SPENT</div>
+                        <div class="stat-value">Rs.98,500</div>
+                    </div>
+                    <div class="stat-change">+12%</div>
+                </div>
+
+                <!-- Total Orders Card -->
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">TOTAL ORDERS</div>
+                        <div class="stat-value">47</div>
+                    </div>
+                    <div class="trend-icon">
+                        <i class="fas fa-arrow-trend-up"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Orders Section -->
+            <div class="orders-section">
+                <div class="section-header">
+                    <h2 class="section-title">RECENT ORDERS</h2>
+                    <a href="orders.html" class="view-all-link">
+                        VIEW ALL
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="orders-list">
+                    <!-- Order 1 -->
+                    <div class="order-item">
+                        <div class="order-icon-wrapper delivered">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="order-details">
+                            <div class="order-id-row">
+                                <span class="order-id">ORD-1128</span>
+                                <span class="order-status delivered">Delivered</span>
+                            </div>
+                            <div class="order-items-text">Desi Tomatoes, Fresh Palak +2 more</div>
+                        </div>
+                        <div class="order-meta">
+                            <div class="order-price">Rs.3,850</div>
+                            <div class="order-date">Nov 28, 2024</div>
+                        </div>
+                    </div>
+
+                    <!-- Order 2 -->
+                    <div class="order-item">
+                        <div class="order-icon-wrapper delivered">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="order-details">
+                            <div class="order-id-row">
+                                <span class="order-id">ORD-1115</span>
+                                <span class="order-status delivered">Delivered</span>
+                            </div>
+                            <div class="order-items-text">Mixed Desi Vegetables, Chuansa Mangoes</div>
+                        </div>
+                        <div class="order-meta">
+                            <div class="order-price">Rs.5,200</div>
+                            <div class="order-date">Nov 15, 2024</div>
+                        </div>
+                    </div>
+
+                    <!-- Order 3 -->
+                    <div class="order-item">
+                        <div class="order-icon-wrapper transit">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="order-details">
+                            <div class="order-id-row">
+                                <span class="order-id">ORD-1102</span>
+                                <span class="order-status transit">In Transit</span>
+                            </div>
+                            <div class="order-items-text">Fresh Kinow, Anmood (Guava)</div>
+                        </div>
+                        <div class="order-meta">
+                            <div class="order-price">Rs.2,890</div>
+                            <div class="order-date">Nov 2, 2024</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Cards -->
+            <div class="action-cards">
+                <!-- Shop Card -->
+                <a href="../prod-catalog/index.html" class="action-card shop">
+                    <div class="action-card-icon">
+                        <i class="fas fa-shopping-basket"></i>
+                    </div>
+                    <div class="action-card-label">READY TO SHOP?</div>
+                    <h3 class="action-card-title">BROWSE FRESH PRODUCE</h3>
+                    <div class="action-btn">
+                        SHOP NOW
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+
+                <!-- Support Card -->
+                <a href="../index.html" class="action-card support">
+                    <div class="action-card-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="action-card-label">NEED HELP?</div>
+                    <h3 class="action-card-title">CONTACT SUPPORT</h3>
+                    <div class="action-btn">
+                        GET HELP
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="account.js"></script>
+</body>
+</html>
