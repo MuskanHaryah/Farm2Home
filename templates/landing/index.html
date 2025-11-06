@@ -1,0 +1,355 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm2Home - Fresh Farm to Your Door</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <span>Farm2Home</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#benefits">Benefits</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><button class="auth-btn login-btn" onclick="openLoginModal()">Login</button></li>
+                <li><button class="auth-btn signup-btn" onclick="openSignupModal()">Sign Up</button></li>
+                <li><a href="../prod-catalog/index.html" class="shop-btn">Shop Now</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    FRESH
+                    <span class="highlight">FROM FARM</span>
+                </h1>
+                <p class="hero-subtitle">Directly to your table, no middleman. Just pure, organic goodness.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="window.location.href='../prod-catalog/index.html'">
+                        Explore Products
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-secondary">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="{% static 'images/vegetables/carrot.png' %}" alt="Fresh Vegetables" class="hero-img">
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll to explore</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="benefits">
+        <div class="features-header">
+            <h2>PURE NATURE</h2>
+            <p>Farm-Fresh Quality, Uncompromised</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>100% Organic</h3>
+                <p>No pesticides, no chemicals. Just nature's best grown with care and responsibility.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <h3>Fresh Delivery</h3>
+                <p>Harvested fresh and delivered to your door within 24 hours. Farm to table, truly.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h3>Sustainable</h3>
+                <p>Supporting local farmers and sustainable farming practices for a better tomorrow.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3>Health First</h3>
+                <p>Rich in nutrients, vitamins, and minerals. Naturally grown for your wellness.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3>Quality Assured</h3>
+                <p>Every product inspected and verified. Your food safety is our top priority.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3>Fair Trade</h3>
+                <p>Farmers paid fairly. Direct partnerships ensuring everyone wins.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Showcase -->
+    <section class="showcase" id="products">
+        <div class="showcase-header">
+            <h2>OUR COLLECTION</h2>
+            <p>Explore our fresh, handpicked selection</p>
+        </div>
+
+        <div class="showcase-container">
+            <div class="showcase-slider">
+                <div class="slider-item active">
+                    <img src="{% static 'images/vegetables/tomato.png' %}" alt="Tomato">
+                    <h3>Fresh Tomatoes</h3>
+                    <p>Juicy and red, perfect for salads and cooking</p>
+                </div>
+                <div class="slider-item">
+                    <img src="{% static 'images/fruits/pineapple.png' %}" alt="Pineapple">
+                    <h3>Tropical Pineapple</h3>
+                    <p>Sweet and refreshing tropical goodness</p>
+                </div>
+                <div class="slider-item">
+                    <img src="{% static 'images/vegetables/carrot.png' %}" alt="Carrot">
+                    <h3>Organic Carrots</h3>
+                    <p>Crunchy and nutritious for healthy living</p>
+                </div>
+                <div class="slider-item">
+                    <img src="{% static 'images/herbs/basil.png' %}" alt="Basil">
+                    <h3>Fresh Basil</h3>
+                    <p>Aromatic herbs for your favorite dishes</p>
+                </div>
+            </div>
+
+            <div class="slider-dots" id="sliderDots"></div>
+
+            <button class="slider-arrow prev" onclick="prevSlide()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="slider-arrow next" onclick="nextSlide()">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="showcase-cta">
+            <button class="btn btn-primary" onclick="window.location.href='../prod-catalog/index.html'">
+                Browse All Products
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-content">
+            <div class="about-text">
+                <h2>Why Farm2Home?</h2>
+                <p>We believe in the power of fresh, farm-grown produce. Our mission is simple: connect you directly with farmers who care about quality, sustainability, and your health.</p>
+                <p>No middlemen. No compromises. Just pure, organic goodness delivered straight from the farm to your home.</p>
+                <ul class="about-list">
+                    <li><i class="fas fa-check"></i> Direct from certified organic farms</li>
+                    <li><i class="fas fa-check"></i> 24-hour fresh delivery guarantee</li>
+                    <li><i class="fas fa-check"></i> 100% money-back guarantee</li>
+                    <li><i class="fas fa-check"></i> Supporting local farmers</li>
+                </ul>
+            </div>
+            <div class="about-image">
+                <img src="{% static 'images/fruits/guava.png' %}" alt="Fresh Produce" class="about-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Experience Fresh?</h2>
+            <p>Join thousands of happy customers enjoying farm-fresh produce delivered to their door</p>
+            <button class="btn btn-primary btn-large" onclick="window.location.href='../prod-catalog/index.html'">
+                Start Shopping
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="contact-header">
+            <h2>Get In Touch</h2>
+            <p>We'd love to hear from you</p>
+        </div>
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <h4>Address</h4>
+                        <p>123 Farm Road, Fresh Valley, FV 12345</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <h4>Email</h4>
+                        <p><a href="mailto:hello@farm2home.com">hello@farm2home.com</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <h4>Phone</h4>
+                        <p><a href="tel:+1234567890">+1 (234) 567-890</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <form class="contact-form">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Message" rows="5" required></textarea>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+            <div class="modal-header">
+                <h2>Login to Farm2Home</h2>
+                <p>Welcome back! Sign in to your account</p>
+            </div>
+            <form class="auth-form" id="loginForm">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="Enter your password" required>
+                </div>
+                <div class="form-options">
+                    <label class="checkbox">
+                        <input type="checkbox">
+                        Remember me
+                    </label>
+                    <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                <p class="auth-switch">
+                    Don't have an account? <a href="#" onclick="switchToSignup()">Sign Up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeSignupModal()">&times;</button>
+            <div class="modal-header">
+                <h2>Create Your Farm2Home Account</h2>
+                <p>Join us and get fresh produce delivered to your door</p>
+            </div>
+            <form class="auth-form" id="signupForm">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" placeholder="+1 (234) 567-890" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="Create a strong password" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" placeholder="Confirm your password" required>
+                </div>
+                <label class="checkbox">
+                    <input type="checkbox" required>
+                    I agree to the Terms & Conditions
+                </label>
+                <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                <p class="auth-switch">
+                    Already have an account? <a href="#" onclick="switchToLogin()">Sign In</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Farm2Home</h4>
+                <p>Bringing fresh, organic produce from farm to your table.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="../prod-catalog/index.html">Shop</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Farm2Home. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/authentication.js' %}"></script>
+    <script src="{% static 'js/landing.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Methods - Farm2Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+    <link rel="stylesheet" href="{% static 'css/payment.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <span>FARM2HOME</span>
+                <span class="account-badge">ACCOUNT</span>
+            </div>
+            <div class="header-user">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="user-profile">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-info">
+                    <h3>AHMED KHAN</h3>
+                    <p>AHMED.KHAN@EMAIL.COM</p>
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="stat-label">TOTAL ORDERS</div>
+                <div class="stat-value">47 Orders</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-th-large"></i>
+                    <span>OVERVIEW</span>
+                </a>
+                <a href="orders.html" class="nav-item">
+                    <i class="fas fa-box"></i>
+                    <span>ORDERS</span>
+                </a>
+                <a href="addresses.html" class="nav-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>ADDRESSES</span>
+                </a>
+                <a href="payment.html" class="nav-item active">
+                    <i class="fas fa-credit-card"></i>
+                    <span>PAYMENT</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>SETTINGS</span>
+                </a>
+            </nav>
+
+            <button class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>LOGOUT</span>
+            </button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Page Title -->
+            <div class="payment-header">
+                <div class="payment-title-section">
+                    <h1 class="page-title payment-title">PAYMENT METHODS</h1>
+                    <p class="payment-subtitle">MANAGE YOUR PAYMENT OPTIONS SECURELY</p>
+                </div>
+                <button class="add-payment-btn-header">
+                    <i class="fas fa-plus"></i>
+                    ADD PAYMENT METHOD
+                </button>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="security-notice">
+                <div class="security-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="security-text">
+                    <h3>YOUR PAYMENTS ARE SECURE</h3>
+                    <p>All transactions are encrypted and your payment information is never stored on our servers.</p>
+                </div>
+            </div>
+
+            <!-- Payment Methods Grid -->
+            <div class="payment-grid">
+                <!-- Payment Card 1 - HBL Debit Card (Default) -->
+                <div class="payment-card default-payment" data-payment-id="hbl-card">
+                    <div class="payment-card-header">
+                        <div class="card-icon-section">
+                            <div class="card-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="default-badge-payment">
+                                <i class="fas fa-star"></i>
+                                DEFAULT
+                            </div>
+                        </div>
+                    </div>
+                    <div class="payment-card-body">
+                        <div class="card-info-row">
+                            <span class="card-label">CARD NUMBER</span>
+                            <span class="card-number">•••• •••• •••• 4242</span>
+                        </div>
+                        <div class="card-info-row">
+                            <span class="card-label">CARD HOLDER</span>
+                            <span class="card-holder">AHMED KHAN</span>
+                        </div>
+                        <div class="card-info-row">
+                            <span class="card-label">EXPIRES</span>
+                            <span class="card-expiry">12/25</span>
+                        </div>
+                        <div class="card-bank">HBL DEBIT CARD</div>
+                    </div>
+                    <div class="payment-card-footer">
+                        <button class="icon-btn-payment edit-btn-payment" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="icon-btn-payment delete-btn-payment" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Payment Card 2 - MCB Credit Card -->
+                <div class="payment-card" data-payment-id="mcb-card">
+                    <div class="payment-card-header">
+                        <div class="card-icon-section">
+                            <div class="card-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="payment-card-body">
+                        <div class="card-info-row">
+                            <span class="card-label">CARD NUMBER</span>
+                            <span class="card-number">•••• •••• •••• 8888</span>
+                        </div>
+                        <div class="card-info-row">
+                            <span class="card-label">CARD HOLDER</span>
+                            <span class="card-holder">AHMED KHAN</span>
+                        </div>
+                        <div class="card-info-row">
+                            <span class="card-label">EXPIRES</span>
+                            <span class="card-expiry">08/26</span>
+                        </div>
+                        <div class="card-bank">MCB CREDIT CARD</div>
+                    </div>
+                    <div class="payment-card-footer">
+                        <button class="set-default-payment-btn">
+                            <i class="far fa-star"></i>
+                            SET AS DEFAULT
+                        </button>
+                        <div class="footer-actions">
+                            <button class="icon-btn-payment edit-btn-payment" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="icon-btn-payment delete-btn-payment" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Card 3 - JazzCash -->
+                <div class="payment-card jazzcash-card" data-payment-id="jazzcash">
+                    <div class="payment-card-header">
+                        <div class="card-icon-section">
+                            <div class="card-icon jazzcash-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="payment-card-body">
+                        <div class="card-info-row">
+                            <span class="card-label">JAZZCASH ACCOUNT</span>
+                        </div>
+                        <div class="jazzcash-email">ahmed.khan@email.com</div>
+                        <div class="card-bank jazzcash-label">JAZZCASH</div>
+                    </div>
+                    <div class="payment-card-footer">
+                        <button class="set-default-payment-btn">
+                            <i class="far fa-star"></i>
+                            SET AS DEFAULT
+                        </button>
+                        <div class="footer-actions">
+                            <button class="icon-btn-payment edit-btn-payment" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="icon-btn-payment delete-btn-payment" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add New Payment Card -->
+                <div class="payment-card add-new-payment-card">
+                    <div class="add-new-payment-content">
+                        <div class="add-payment-icon">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <h3>ADD PAYMENT METHOD</h3>
+                        <p>ADD A NEW CARD OR PAYMENT OPTION</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Farm2Home Wallet Section -->
+            <div class="wallet-section">
+                <div class="wallet-card">
+                    <div class="wallet-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="wallet-info">
+                        <h3>FARM2HOME WALLET</h3>
+                        <p class="wallet-balance">Available Balance: <strong>Rs.1,850</strong></p>
+                    </div>
+                    <div class="wallet-actions">
+                        <button class="wallet-btn add-funds-btn">ADD FUNDS</button>
+                        <button class="wallet-btn view-history-btn">VIEW HISTORY</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">ADD PAYMENT METHOD</h2>
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="paymentForm">
+                    <div class="form-group">
+                        <label for="paymentType">Payment Type</label>
+                        <select id="paymentType" name="paymentType" required>
+                            <option value="debit">Debit Card</option>
+                            <option value="credit">Credit Card</option>
+                            <option value="jazzcash">JazzCash</option>
+                            <option value="easypaisa">EasyPaisa</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="cardNumberGroup">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                    </div>
+                    <div class="form-group" id="cardHolderGroup">
+                        <label for="cardHolder">Card Holder Name</label>
+                        <input type="text" id="cardHolder" name="cardHolder" placeholder="AHMED KHAN">
+                    </div>
+                    <div class="form-row" id="cardDetailsRow">
+                        <div class="form-group">
+                            <label for="expiryDate">Expiry Date</label>
+                            <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+                    <div class="form-group" id="bankGroup">
+                        <label for="bankName">Bank Name</label>
+                        <input type="text" id="bankName" name="bankName" placeholder="e.g., HBL, MCB, UBL">
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="setDefaultPayment" name="setDefaultPayment">
+                        <label for="setDefaultPayment">Set as default payment method</label>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" id="cancelBtn">CANCEL</button>
+                        <button type="submit" class="btn-save">
+                            <i class="fas fa-save"></i>
+                            SAVE PAYMENT METHOD
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/account.js' %}"></script>
+    <script src="{% static 'js/payment.js' %}"></script>
+</body>
+</html>

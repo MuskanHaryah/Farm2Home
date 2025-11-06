@@ -1,0 +1,269 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm2Home - Fresh Produce from Pakistani Farms</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="logo">
+                <span class="logo-icon">🌾</span>
+                <span class="logo-text">Farm2Home</span>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <select class="search-category" id="searchCategory">
+                    <option value="all">All categories</option>
+                    <option value="vegetables">Vegetables</option>
+                    <option value="fruits">Fruits</option>
+                    <option value="herbs">Herbs</option>
+                </select>
+                <input type="text" class="search-input" id="headerSearch" placeholder="What are you looking for?">
+                <button class="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <!-- Cart Icon -->
+            <div class="header-icons">
+                <a href="../account/index.html" class="account-icon" title="My Account">
+                    <i class="fas fa-user-circle"></i>
+                </a>
+                <div class="cart-icon" id="cartIconBtn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="navigation">
+            <ul class="nav-menu">
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Categories <i class="fas fa-chevron-down"></i>
+                    </a>
+                </li>
+                <li class="nav-item"><a href="../landing/index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link active">Products</a></li>
+                <li class="nav-item"><a href="../landing/index.html#about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="../landing/index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Fresh Produce from Pakistani Farms</h1>
+                <p class="season-indicator">
+                    <i class="fas fa-sun"></i> Currently Summer Season
+                </p>
+            </div>
+
+            <div class="content-wrapper">
+                <!-- Sidebar Filters -->
+                <aside class="sidebar">
+                    <div class="filter-panel">
+                        <h2 class="filter-title">Filters</h2>
+                        
+                        <!-- In Season Now -->
+                        <div class="filter-section featured-filter">
+                            <label class="filter-checkbox featured">
+                                <input type="checkbox" id="inSeasonNow">
+                                <span class="checkmark"></span>
+                                <span class="label-text">🌿 In Season Now</span>
+                            </label>
+                        </div>
+
+                        <!-- Season Filters -->
+                        <div class="filter-section">
+                            <h3 class="filter-heading">Season</h3>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="season" value="winter">
+                                <span class="checkmark"></span>
+                                <span class="label-text">❄️ Winter</span>
+                                <span class="filter-count">(17)</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="season" value="summer">
+                                <span class="checkmark"></span>
+                                <span class="label-text">☀️ Summer</span>
+                                <span class="filter-count">(21)</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="season" value="year-round">
+                                <span class="checkmark"></span>
+                                <span class="label-text">🔄 Year-round</span>
+                                <span class="filter-count">(18)</span>
+                            </label>
+                        </div>
+
+                        <!-- Category Filters -->
+                        <div class="filter-section">
+                            <h3 class="filter-heading">Category</h3>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="category" value="vegetables">
+                                <span class="checkmark"></span>
+                                <span class="label-text">Vegetables</span>
+                                <span class="filter-count">(24)</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="category" value="fruits">
+                                <span class="checkmark"></span>
+                                <span class="label-text">Fruits</span>
+                                <span class="filter-count">(24)</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="category" value="herbs">
+                                <span class="checkmark"></span>
+                                <span class="label-text">Herbs</span>
+                                <span class="filter-count">(8)</span>
+                            </label>
+                        </div>
+
+                        <!-- Price Range Filters -->
+                        <div class="filter-section">
+                            <h3 class="filter-heading">Price Range</h3>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="price" value="0-100">
+                                <span class="checkmark"></span>
+                                <span class="label-text">Under Rs.100</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="price" value="100-200">
+                                <span class="checkmark"></span>
+                                <span class="label-text">Rs.100 - Rs.200</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="price" value="200-500">
+                                <span class="checkmark"></span>
+                                <span class="label-text">Rs.200 - Rs.500</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="price" value="500+">
+                                <span class="checkmark"></span>
+                                <span class="label-text">Above Rs.500</span>
+                            </label>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Products Section -->
+                <section class="products-section">
+                    <!-- Controls Bar -->
+                    <div class="controls-bar">
+                        <div class="controls-left">
+                            <label for="sortBy" class="control-label">Sort by</label>
+                            <select id="sortBy" class="sort-select">
+                                <option value="featured">Featured</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="date-new">Date: New to Old</option>
+                            </select>
+                        </div>
+                        
+                        <div class="controls-center">
+                            <div class="view-toggle">
+                                <button class="view-btn grid-view-btn active" id="gridViewBtn" title="Grid View">
+                                    <i class="fas fa-th"></i>
+                                </button>
+                                <button class="view-btn list-view-btn" id="listViewBtn" title="List View">
+                                    <i class="fas fa-list"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="item-count-selector">
+                                <label for="itemCount" class="show-label">Show</label>
+                                <select id="itemCount" class="item-count-select">
+                                    <option value="12">12</option>
+                                    <option value="24" selected>24</option>
+                                    <option value="36">36</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="controls-right">
+                            <div class="product-search-container-inline">
+                                <i class="fas fa-search search-icon"></i>
+                                <input type="text" class="product-search" id="productSearch" placeholder="Search products....">
+                            </div>
+                            <button class="location-btn">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Product Count Display -->
+                    <div class="product-count-display">
+                        <span id="productCount">Showing 56 of 56 products</span>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div class="products-grid" id="productsGrid">
+                        <!-- Products will be dynamically inserted here (Grid View) -->
+                    </div>
+                    
+                    <!-- Products List -->
+                    <div class="products-list" id="productsList">
+                        <!-- Products will be dynamically inserted here (List View) -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Farm2Home. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Side Cart -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="side-cart" id="sideCart">
+        <div class="cart-header">
+            <div class="cart-header-top">
+                <h2 class="cart-title">Shopping Cart</h2>
+                <button class="clear-cart-btn" id="clearCartBtn">Clear All</button>
+                <button class="cart-close-btn" id="cartCloseBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <p class="cart-subtitle">Review your selected items and proceed to checkout</p>
+        </div>
+        
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be inserted here dynamically -->
+        </div>
+    
+        <div class="cart-footer">
+            <div class="cart-subtotal">
+                <span class="subtotal-label">Subtotal (<span id="cartItemCount">1</span> items)</span>
+                <span class="cart-subtotal-amount" id="cartSubtotal">Rs. 0</span>
+            </div>
+            <p class="shipping-note">Delivery <span style="color: var(--primary-green); font-weight: 600;">FREE</span></p>
+            <div class="total-row">
+                <span class="total-label">Total</span>
+                <span class="total-amount" id="cartTotal">Rs. 0</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

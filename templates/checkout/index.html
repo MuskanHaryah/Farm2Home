@@ -1,0 +1,206 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Farm2Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+</head>
+<body>
+    <div class="checkout-container">
+
+
+        <div class="checkout-wrapper">
+            <!-- Left Side - Order Items -->
+            <div class="order-items-section">
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                
+                <div class="items-carousel">
+                    <div class="carousel-container">
+                        <div class="carousel-items" id="carouselItems"></div>
+                    </div>
+                    <div class="carousel-dots" id="carouselDots"></div>
+                    
+                    <!-- Navigation Arrows -->
+                    <button class="carousel-arrow prev-arrow" onclick="prevCarouselItem()" style="display: none;">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-arrow next-arrow" onclick="nextCarouselItem()" style="display: none;">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Side - Checkout Form -->
+            <div class="checkout-form-section">
+                <!-- Progress Steps -->
+                <div class="progress-steps">
+                    <div class="step active" id="step1">
+                        <span class="step-number">1</span>
+                        <span class="step-label">SHIPPING</span>
+                    </div>
+                    <div class="step" id="step2">
+                        <span class="step-number">2</span>
+                        <span class="step-label">BILLING</span>
+                    </div>
+                    <div class="step" id="step3">
+                        <span class="step-number">3</span>
+                        <span class="step-label">CONFIRMATION</span>
+                    </div>
+                </div>
+
+                <!-- Shipping Form (Step 1) -->
+                <form id="shippingForm" class="checkout-form active-form">
+                    <h2>SHIPPING INFORMATION</h2>
+                    
+                    <div class="form-group">
+                        <label>FULL NAME</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="fullName" placeholder="John Doe" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>EMAIL ADDRESS</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" placeholder="johndoe@example.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>PHONE NUMBER</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="phone" placeholder="(555) 123-4567" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>STREET ADDRESS</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input type="text" id="address" placeholder="123 Farm Road" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>CITY</label>
+                            <input type="text" id="city" placeholder="Springfield" required>
+                        </div>
+                        <div class="form-group">
+                            <label>ZIP CODE</label>
+                            <input type="text" id="zipCode" placeholder="12345" required>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Details Box -->
+                    <div class="delivery-details">
+                        <h3><i class="fas fa-map-pin"></i> DELIVERY DETAILS</h3>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Your fresh farm products will be delivered within 3-5 business days.</li>
+                            <li><i class="fas fa-check"></i> Free delivery on orders over $50</li>
+                            <li><i class="fas fa-check"></i> Fresh from local farms</li>
+                            <li><i class="fas fa-check"></i> Track your delivery in real-time</li>
+                        </ul>
+                    </div>
+
+                    <button type="button" class="continue-btn" onclick="nextStep()">CONTINUE TO PAYMENT</button>
+                </form>
+
+                <!-- Billing Form (Step 2) -->
+                <form id="billingForm" class="checkout-form">
+                    <h2>BILLING INFORMATION</h2>
+                    
+                    <div class="form-group">
+                        <label>CARD HOLDER NAME</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="cardName" placeholder="John Doe" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>CARD NUMBER</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-credit-card"></i>
+                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>EXPIRY DATE</label>
+                            <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="text" id="cvv" placeholder="123" maxlength="3" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>BILLING ADDRESS</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input type="text" id="billingAddress" placeholder="123 Farm Road" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>CITY</label>
+                            <input type="text" id="billingCity" placeholder="Springfield" required>
+                        </div>
+                        <div class="form-group">
+                            <label>ZIP CODE</label>
+                            <input type="text" id="billingZip" placeholder="12345" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <button type="button" class="continue-btn back-step" onclick="prevStep()">BACK</button>
+                        <button type="button" class="continue-btn" onclick="nextStep()">CONTINUE TO CONFIRMATION</button>
+                    </div>
+                </form>
+
+                <!-- Confirmation (Step 3) -->
+                <div id="confirmationForm" class="checkout-form">
+                    <h2>ORDER CONFIRMATION</h2>
+                    
+                    <div class="confirmation-content">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>Thank You for Your Order!</h3>
+                        <p>Your order has been successfully placed.</p>
+
+                        <div class="order-summary">
+                            <h4>Order Details:</h4>
+                            <div id="confirmationDetails"></div>
+                        </div>
+
+                        <div class="shipping-info">
+                            <h4>Shipping To:</h4>
+                            <p id="confirmationShipping"></p>
+                        </div>
+
+                        <div class="confirmation-actions">
+                            <button type="button" class="continue-btn" onclick="backToHome()">BACK TO HOME</button>
+                            <button type="button" class="continue-btn secondary-btn" onclick="downloadReceipt()">DOWNLOAD RECEIPT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/checkout.js' %}"></script>
+</body>
+</html>

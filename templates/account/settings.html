@@ -1,0 +1,344 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings - Farm2Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+    <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <span>FARM2HOME</span>
+                <span class="account-badge">ACCOUNT</span>
+            </div>
+            <div class="header-user">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="user-profile">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-info">
+                    <h3>AHMED KHAN</h3>
+                    <p>AHMED.KHAN@EMAIL.COM</p>
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="stat-label">TOTAL ORDERS</div>
+                <div class="stat-value">47 Orders</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-th-large"></i>
+                    <span>OVERVIEW</span>
+                </a>
+                <a href="orders.html" class="nav-item">
+                    <i class="fas fa-box"></i>
+                    <span>ORDERS</span>
+                </a>
+                <a href="addresses.html" class="nav-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>ADDRESSES</span>
+                </a>
+                <a href="payment.html" class="nav-item">
+                    <i class="fas fa-credit-card"></i>
+                    <span>PAYMENT</span>
+                </a>
+                <a href="settings.html" class="nav-item active">
+                    <i class="fas fa-cog"></i>
+                    <span>SETTINGS</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </nav>
+
+            <button class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>LOGOUT</span>
+            </button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Page Title -->
+            <div class="settings-header">
+                <div class="settings-title-section">
+                    <h1 class="page-title settings-title">ACCOUNT SETTINGS</h1>
+                    <p class="settings-subtitle">MANAGE YOUR PROFILE AND PREFERENCES</p>
+                </div>
+            </div>
+
+            <!-- Settings Sections -->
+            <div class="settings-container">
+                
+                <!-- Profile Picture Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="section-title-group">
+                            <h2>PROFILE PICTURE</h2>
+                            <p>UPDATE YOUR PROFILE PHOTO</p>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="profile-picture-container">
+                            <div class="profile-picture-preview">
+                                <img src="https://ui-avatars.com/api/?name=Ahmed+Khan&background=8fbc3e&color=fff&size=150" alt="Profile Picture" id="profilePicPreview">
+                                <div class="picture-badge">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                            <div class="profile-picture-actions">
+                                <button class="btn-upload" id="uploadBtn">
+                                    <i class="fas fa-upload"></i>
+                                    UPLOAD NEW
+                                </button>
+                                <button class="btn-remove" id="removeBtn">
+                                    <i class="fas fa-times"></i>
+                                    REMOVE
+                                </button>
+                                <input type="file" id="profilePicInput" accept="image/*" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Information Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <div class="section-icon personal-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <div class="section-title-group">
+                            <h2>PERSONAL INFORMATION</h2>
+                            <p>UPDATE YOUR PERSONAL DETAILS</p>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <form id="personalInfoForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">FIRST NAME</label>
+                                    <input type="text" id="firstName" name="firstName" value="Ahmed" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">LAST NAME</label>
+                                    <input type="text" id="lastName" name="lastName" value="Khan" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">E-MAIL ADDRESS</label>
+                                <input type="email" id="email" name="email" value="ahmed.khan@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">PHONE NUMBER</label>
+                                <input type="tel" id="phone" name="phone" value="+92 (300) 1234567" required>
+                            </div>
+                            <button type="submit" class="btn-save-changes">
+                                <i class="fas fa-save"></i>
+                                SAVE CHANGES
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Password & Security Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <div class="section-icon security-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="section-title-group">
+                            <h2>PASSWORD & SECURITY</h2>
+                            <p>KEEP YOUR ACCOUNT SECURE</p>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <form id="passwordForm">
+                            <div class="form-group">
+                                <label for="currentPassword">CURRENT PASSWORD</label>
+                                <input type="password" id="currentPassword" name="currentPassword" placeholder="Enter current password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">NEW PASSWORD</label>
+                                <input type="password" id="newPassword" name="newPassword" placeholder="Enter new password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">CONFIRM NEW PASSWORD</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" required>
+                            </div>
+                            <button type="submit" class="btn-update-password">
+                                <i class="fas fa-key"></i>
+                                UPDATE PASSWORD
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Notification Preferences Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <div class="section-icon notification-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="section-title-group">
+                            <h2>NOTIFICATION PREFERENCES</h2>
+                            <p>CHOOSE WHAT UPDATES YOU RECEIVE</p>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="preference-item">
+                            <div class="preference-info">
+                                <h3>ORDER UPDATES</h3>
+                                <p>Get notified about your order status</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="orderUpdates" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="preference-item">
+                            <div class="preference-info">
+                                <h3>PROMOTIONAL EMAILS</h3>
+                                <p>Receive emails about special deals and offers</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="promotionalEmails" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="preference-item">
+                            <div class="preference-info">
+                                <h3>SMS NOTIFICATIONS</h3>
+                                <p>Get text messages about delivery updates</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="smsNotifications">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="preference-item">
+                            <div class="preference-info">
+                                <h3>NEWSLETTER</h3>
+                                <p>Weekly newsletter with farming tips and recipes</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="newsletter" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shopping Preferences Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <div class="section-icon shopping-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div class="section-title-group">
+                            <h2>SHOPPING PREFERENCES</h2>
+                            <p>CUSTOMIZE YOUR SHOPPING EXPERIENCE</p>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="preference-item">
+                            <div class="preference-info">
+                                <h3>ORGANIC PRODUCTS ONLY</h3>
+                                <p>Show only certified organic products</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="organicOnly">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="preference-item">
+                            <div class="preference-info">
+                                <h3>LOCAL FARMS PRIORITY</h3>
+                                <p>Prioritize products from local farms</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="localPriority" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="preference-item">
+                            <div class="preference-info">
+                                <h3>SEASONAL RECOMMENDATIONS</h3>
+                                <p>Get suggestions based on seasonal produce</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="seasonalRecommendations" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy & Data Section -->
+                <div class="settings-section danger-section">
+                    <div class="section-header">
+                        <div class="section-icon danger-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="section-title-group">
+                            <h2>PRIVACY & DATA</h2>
+                            <p>MANAGE YOUR DATA AND ACCOUNT</p>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="danger-action">
+                            <div class="danger-action-icon">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <div class="danger-action-info">
+                                <h3>DOWNLOAD MY DATA</h3>
+                                <p>Get a copy of your account data and order history</p>
+                            </div>
+                            <button class="btn-download-data">
+                                <i class="fas fa-download"></i>
+                                DOWNLOAD
+                            </button>
+                        </div>
+                        <div class="danger-action delete-action">
+                            <div class="danger-action-icon delete-icon">
+                                <i class="fas fa-user-times"></i>
+                            </div>
+                            <div class="danger-action-info">
+                                <h3>DELETE MY ACCOUNT</h3>
+                                <p>Permanently delete your account and all data</p>
+                            </div>
+                            <button class="btn-delete-account">
+                                <i class="fas fa-trash-alt"></i>
+                                DELETE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="{% static 'js/account.js' %}"></script>
+    <script src="{% static 'js/settings.js' %}"></script>
+</body>
+</html>

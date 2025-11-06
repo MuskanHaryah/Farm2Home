@@ -1,0 +1,273 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Addresses - Farm2Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+    <link rel="stylesheet" href="{% static 'css/addresses.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <span>FARM2HOME</span>
+                <span class="account-badge">ACCOUNT</span>
+            </div>
+            <div class="header-user">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="user-profile">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-info">
+                    <h3>AHMED KHAN</h3>
+                    <p>AHMED.KHAN@EMAIL.COM</p>
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="stat-label">TOTAL ORDERS</div>
+                <div class="stat-value">47 Orders</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-th-large"></i>
+                    <span>OVERVIEW</span>
+                </a>
+                <a href="orders.html" class="nav-item">
+                    <i class="fas fa-box"></i>
+                    <span>ORDERS</span>
+                </a>
+                <a href="addresses.html" class="nav-item active">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>ADDRESSES</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <a href="payment.html" class="nav-item">
+                    <i class="fas fa-credit-card"></i>
+                    <span>PAYMENT</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>SETTINGS</span>
+                </a>
+            </nav>
+
+            <button class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>LOGOUT</span>
+            </button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Page Title -->
+            <div class="addresses-header">
+                <div class="addresses-title-section">
+                    <h1 class="page-title addresses-title">DELIVERY ADDRESSES</h1>
+                    <p class="addresses-subtitle">MANAGE YOUR SAVED DELIVERY LOCATIONS</p>
+                </div>
+                <button class="add-address-btn-header">
+                    <i class="fas fa-plus"></i>
+                    ADD NEW ADDRESS
+                </button>
+            </div>
+
+            <!-- Addresses Grid -->
+            <div class="addresses-grid">
+                <!-- Address Card 1 - HOME (Default) -->
+                <div class="address-card" data-address-id="home-address">
+                    <div class="address-card-header">
+                        <div class="address-icon-label">
+                            <div class="address-icon home-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div class="address-type">
+                                <h3>HOME</h3>
+                                <span class="default-badge">
+                                    <i class="fas fa-star"></i>
+                                    DEFAULT
+                                </span>
+                            </div>
+                        </div>
+                        <div class="address-actions">
+                            <button class="icon-btn edit-btn" title="Edit address">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="icon-btn delete-btn" title="Delete address">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="address-card-body">
+                        <p class="address-name">Ahmed Khan</p>
+                        <p class="address-line">House 123, Street 5, F-7 Markaz</p>
+                        <p class="address-city">Islamabad, ICT 44000</p>
+                        <p class="address-phone">+92 (300) 1234567</p>
+                    </div>
+                </div>
+
+                <!-- Address Card 2 - WORK -->
+                <div class="address-card" data-address-id="work-address">
+                    <div class="address-card-header">
+                        <div class="address-icon-label">
+                            <div class="address-icon work-icon">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <div class="address-type">
+                                <h3>WORK</h3>
+                            </div>
+                        </div>
+                        <div class="address-actions">
+                            <button class="icon-btn edit-btn" title="Edit address">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="icon-btn delete-btn" title="Delete address">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="address-card-body">
+                        <p class="address-name">Ahmed Khan</p>
+                        <p class="address-line">Office 204, Blue Area, Jinnah Avenue</p>
+                        <p class="address-city">Islamabad, ICT 44000</p>
+                        <p class="address-phone">+92 (321) 9876543</p>
+                    </div>
+                    <div class="address-card-footer">
+                        <button class="set-default-btn">
+                            <i class="far fa-star"></i>
+                            SET AS DEFAULT
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Address Card 3 - OTHER -->
+                <div class="address-card" data-address-id="other-address">
+                    <div class="address-card-header">
+                        <div class="address-icon-label">
+                            <div class="address-icon other-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="address-type">
+                                <h3>OTHER</h3>
+                            </div>
+                        </div>
+                        <div class="address-actions">
+                            <button class="icon-btn edit-btn" title="Edit address">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="icon-btn delete-btn" title="Delete address">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="address-card-body">
+                        <p class="address-name">Ahmed Khan</p>
+                        <p class="address-line">Plot 45, DHA Phase 6, Main Boulevard</p>
+                        <p class="address-city">Karachi, Sindh 75500</p>
+                        <p class="address-phone">+92 (333) 4567890</p>
+                    </div>
+                    <div class="address-card-footer">
+                        <button class="set-default-btn">
+                            <i class="far fa-star"></i>
+                            SET AS DEFAULT
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Add New Address Card -->
+                <div class="address-card add-new-card">
+                    <div class="add-new-content">
+                        <div class="add-icon">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <h3>ADD NEW ADDRESS</h3>
+                        <p>SAVE A NEW DELIVERY LOCATION</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Address Modal -->
+    <div class="modal" id="addressModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">ADD NEW ADDRESS</h2>
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addressForm">
+                    <div class="form-group">
+                        <label for="addressType">Address Type</label>
+                        <select id="addressType" name="addressType" required>
+                            <option value="home">Home</option>
+                            <option value="work">Work</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" placeholder="Enter full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addressLine">Address Line</label>
+                        <input type="text" id="addressLine" name="addressLine" placeholder="House/Plot no, Street, Area" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" placeholder="City" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="province">Province</label>
+                            <input type="text" id="province" name="province" placeholder="Province" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="postalCode">Postal Code</label>
+                            <input type="text" id="postalCode" name="postalCode" placeholder="Postal Code" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+92 (XXX) XXXXXXX" required>
+                        </div>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="setDefault" name="setDefault">
+                        <label for="setDefault">Set as default address</label>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" id="cancelBtn">CANCEL</button>
+                        <button type="submit" class="btn-save">
+                            <i class="fas fa-save"></i>
+                            SAVE ADDRESS
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/account.js' %}"></script>
+    <script src="{% static 'js/addresses.js' %}"></script>
+</body>
+</html>

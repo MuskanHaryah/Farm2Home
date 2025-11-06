@@ -1,0 +1,338 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - Farm2Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+    <link rel="stylesheet" href="{% static 'css/orders.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <span>FARM2HOME</span>
+                <span class="account-badge">ACCOUNT</span>
+            </div>
+            <div class="header-user">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="user-profile">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="profile-info">
+                    <h3 class="profile-name">AHMED KHAN</h3>
+                    <p class="profile-email">AHMED.KHAN@EMAIL.COM</p>
+                </div>
+            </div>
+
+            <!-- Total Orders Card -->
+            <div class="orders-card">
+                <div class="orders-label">TOTAL ORDERS</div>
+                <div class="orders-count">47 Orders</div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-th-large"></i>
+                    <span>OVERVIEW</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <a href="orders.html" class="nav-item active">
+                    <i class="fas fa-box"></i>
+                    <span>ORDERS</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <a href="addresses.html" class="nav-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>ADDRESSES</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <a href="payment.html" class="nav-item">
+                    <i class="fas fa-credit-card"></i>
+                    <span>PAYMENT</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>SETTINGS</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </nav>
+
+            <!-- Logout Button -->
+            <button class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>LOGOUT</span>
+            </button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Orders Header -->
+            <div class="orders-header">
+                <div class="orders-title-section">
+                    <h1 class="orders-title">ORDER HISTORY</h1>
+                    <p class="orders-subtitle">TRACK AND MANAGE ALL YOUR ORDERS</p>
+                </div>
+                            <button class="manage-orders-btn">
+                <i class="fas fa-download"></i>
+                EXPORT ORDERS
+            </button>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search orders...">
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="tab-btn active" data-filter="all">
+                    <span>ALL</span>
+                </button>
+                <button class="tab-btn" data-filter="delivered">
+                    <span>DELIVERED</span>
+                </button>
+                <button class="tab-btn" data-filter="active">
+                    <span>ACTIVE</span>
+                </button>
+                <button class="tab-btn" data-filter="cancelled">
+                    <span>CANCELLED</span>
+                </button>
+            </div>
+
+            <!-- Orders Container -->
+            <div class="orders-container">
+                <!-- Order 1 - Delivered -->
+                <div class="order-item delivered-order" data-status="delivered" data-order-id="ORD-2024-1128">
+                    <div class="order-header">
+                        <div class="order-icon-box delivered">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="order-info">
+                            <h3 class="order-number">ORD-2024-1128</h3>
+                            <p class="order-date">PLACED ON NOV 28, 2024</p>
+                        </div>
+                        <span class="order-status-badge delivered-badge">DELIVERED</span>
+                    </div>
+
+                    <div class="order-content">
+                        <div class="order-items">
+                            <div class="items-grid">
+                                <div class="product-thumb">
+                                    <img src="../images/vegetables/tomato.png" alt="Tomato">
+                                    <span class="item-name">TOMATO</span>
+                                    <span class="item-qty">Qty: 2kg</span>
+                                </div>
+                                <div class="product-thumb">
+                                    <img src="../images/vegetables/greenmustard.png" alt="Mustard Greens">
+                                    <span class="item-name">MUSTARD GREENS</span>
+                                    <span class="item-qty">Qty: 1kg</span>
+                                </div>
+                                <div class="product-thumb">
+                                    <img src="../images/vegetables/potatoes.png" alt="Potato">
+                                    <span class="item-name">POTATO</span>
+                                    <span class="item-qty">Qty: 3kg</span>
+                                </div>
+                                <div class="product-thumb">
+                                    <img src="../images/vegetables/onions.png" alt="Onion">
+                                    <span class="item-name">ONION</span>
+                                    <span class="item-qty">Qty: 2kg</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-footer">
+                            <div class="total-amount">
+                                <span class="amount-label">TOTAL AMOUNT</span>
+                                <span class="amount-value">Rs.3,850</span>
+                            </div>
+                            <div class="order-actions">
+                                <button class="action-btn details-btn">
+                                    <i class="fas fa-eye"></i>
+                                    DETAILS
+                                </button>
+                                <button class="action-btn reorder-btn">
+                                    <i class="fas fa-redo"></i>
+                                    REORDER
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order 2 - Delivered -->
+                <div class="order-item delivered-order" data-status="delivered" data-order-id="ORD-2024-1115">
+                    <div class="order-header">
+                        <div class="order-icon-box delivered">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="order-info">
+                            <h3 class="order-number">ORD-2024-1115</h3>
+                            <p class="order-date">PLACED ON NOV 15, 2024</p>
+                        </div>
+                        <span class="order-status-badge delivered-badge">DELIVERED</span>
+                    </div>
+
+                    <div class="order-content">
+                        <div class="order-items">
+                            <div class="items-grid">
+                                <div class="product-thumb">
+                                    <img src="../images/vegetables/okra.png" alt="Okra">
+                                    <span class="item-name">OKRA (BHINDI)</span>
+                                    <span class="item-qty">Qty: 1.5kg</span>
+                                </div>
+                                <div class="product-thumb">
+                                    <img src="../images/fruits/papaya.png" alt="Papaya">
+                                    <span class="item-name">PAPAYA</span>
+                                    <span class="item-qty">Qty: 2pcs</span>
+                                </div>
+                                <div class="product-thumb">
+                                    <img src="../images/vegetables/carrot.png" alt="Carrot">
+                                    <span class="item-name">CARROT (GAJAR)</span>
+                                    <span class="item-qty">Qty: 2kg</span>
+                                </div>
+                            </div>
+                        </div>                        <div class="order-footer">
+                            <div class="total-amount">
+                                <span class="amount-label">TOTAL AMOUNT</span>
+                                <span class="amount-value">Rs.5,200</span>
+                            </div>
+                            <div class="order-actions">
+                                <button class="action-btn details-btn">
+                                    <i class="fas fa-eye"></i>
+                                    DETAILS
+                                </button>
+                                <button class="action-btn reorder-btn">
+                                    <i class="fas fa-redo"></i>
+                                    REORDER
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order 3 - Active (In Transit) -->
+                <div class="order-item active-order" data-status="active" data-order-id="ORD-2024-1102">
+                    <div class="order-header">
+                        <div class="order-icon-box active">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="order-info">
+                            <h3 class="order-number">ORD-2024-1102</h3>
+                            <p class="order-date">Placed on Nov 02, 2024</p>
+                        </div>
+                        <span class="order-status-badge active-badge">IN TRANSIT</span>
+                    </div>
+
+                    <div class="order-content">
+                        <div class="order-items">
+                            <div class="items-grid">
+                                <div class="product-thumb">
+                                    <img src="../images/fruits/mosambi.png" alt="Mosambi">
+                                    <span class="item-name">MOSAMBI</span>
+                                    <span class="item-qty">Qty: 3kg</span>
+                                </div>
+                                <div class="product-thumb">
+                                    <img src="../images/fruits/guava.png" alt="Guava">
+                                    <span class="item-name">GUAVA (AMROOD)</span>
+                                    <span class="item-qty">Qty: 2kg</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-footer">
+                            <div class="total-amount">
+                                <span class="amount-label">TOTAL AMOUNT</span>
+                                <span class="amount-value">Rs.2,890</span>
+                            </div>
+                            <div class="order-actions">
+                                <button class="action-btn details-btn">
+                                    <i class="fas fa-eye"></i>
+                                    DETAILS
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order 4 - Cancelled -->
+                <div class="order-item cancelled-order" data-status="cancelled" data-order-id="ORD-2024-1020">
+                    <div class="order-header">
+                        <div class="order-icon-box cancelled">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="order-info">
+                            <h3 class="order-number">ORD-2024-1020</h3>
+                            <p class="order-date">Placed on Oct 20, 2024</p>
+                        </div>
+                        <span class="order-status-badge cancelled-badge">CANCELLED</span>
+                    </div>
+
+                    <div class="order-content">
+                        <div class="order-items">
+                            <div class="items-grid">
+                                <div class="product-thumb">
+                                    <img src="../images/vegetables/bitter-gourd.png" alt="Bitter Gourd">
+                                    <span class="item-name">BITTER GOURD</span>
+                                    <span class="item-qty">Qty: 1.5kg</span>
+                                </div>
+                                <div class="product-thumb">
+                                    <img src="../images/herbs/ginger.png" alt="Ginger">
+                                    <span class="item-name">GINGER (ADRAK)</span>
+                                    <span class="item-qty">Qty: 500g</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-footer">
+                            <div class="total-amount">
+                                <span class="amount-label">TOTAL AMOUNT</span>
+                                <span class="amount-value">Rs.2,500</span>
+                            </div>
+                            <div class="order-actions">
+                                <button class="action-btn details-btn">
+                                    <i class="fas fa-eye"></i>
+                                    DETAILS
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State (hidden by default) -->
+            <div class="empty-state" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <h3>No Orders Found</h3>
+                <p>You don't have any orders matching the selected filter.</p>
+                <a href="../prod-catalog/index.html" class="empty-btn">
+                    START SHOPPING
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="{% static 'js/account.js' %}"></script>
+    <script src="{% static 'js/orders.js' %}"></script>
+</body>
+</html>

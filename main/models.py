@@ -65,7 +65,7 @@ class Cart(models.Model):
     cart_id = models.AutoField(primary_key=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="cart")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=1) # i have added extra (not in erd)
 
     class Meta:
         unique_together = ('customer', 'product')  # Prevent duplicate cart items
