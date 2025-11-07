@@ -45,24 +45,24 @@
             </div>
 
             <nav class="sidebar-nav">
-                <a href="index.html" class="nav-item">
+                <a href="{% url 'main:account_home' %}" class="nav-item">
                     <i class="fas fa-th-large"></i>
                     <span>OVERVIEW</span>
                 </a>
-                <a href="orders.html" class="nav-item">
+                <a href="{% url 'main:account_orders' %}" class="nav-item">
                     <i class="fas fa-box"></i>
                     <span>ORDERS</span>
                 </a>
-                <a href="addresses.html" class="nav-item">
+                <a href="{% url 'main:account_addresses' %}" class="nav-item">
                     <i class="fas fa-map-marker-alt"></i>
                     <span>ADDRESSES</span>
                 </a>
-                <a href="payment.html" class="nav-item active">
+                <a href="{% url 'main:account_payment' %}" class="nav-item active">
                     <i class="fas fa-credit-card"></i>
                     <span>PAYMENT</span>
                     <i class="fas fa-chevron-right"></i>
                 </a>
-                <a href="settings.html" class="nav-item">
+                <a href="{% url 'main:account_settings' %}" class="nav-item">
                     <i class="fas fa-cog"></i>
                     <span>SETTINGS</span>
                 </a>

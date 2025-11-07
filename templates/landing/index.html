@@ -24,7 +24,7 @@
                 <li><a href="#contact">Contact</a></li>
                 <li><button class="auth-btn login-btn" onclick="openLoginModal()">Login</button></li>
                 <li><button class="auth-btn signup-btn" onclick="openSignupModal()">Sign Up</button></li>
-                <li><a href="../prod-catalog/index.html" class="shop-btn">Shop Now</a></li>
+                <li><a href="{% url 'main:catalog' %}" class="shop-btn">Shop Now</a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -44,7 +44,7 @@
                 </h1>
                 <p class="hero-subtitle">Directly to your table, no middleman. Just pure, organic goodness.</p>
                 <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="window.location.href='../prod-catalog/index.html'">
+                    <button class="btn btn-primary" onclick="window.location.href='{% url 'main:catalog' %}'">
                         Explore Products
                         <i class="fas fa-arrow-right"></i>
                     </button>
@@ -163,7 +163,7 @@
         </div>
 
         <div class="showcase-cta">
-            <button class="btn btn-primary" onclick="window.location.href='../prod-catalog/index.html'">
+            <button class="btn btn-primary" onclick="window.location.href='{% url 'main:catalog' %}'">
                 Browse All Products
                 <i class="fas fa-arrow-right"></i>
             </button>
@@ -195,7 +195,7 @@
         <div class="cta-content">
             <h2>Ready to Experience Fresh?</h2>
             <p>Join thousands of happy customers enjoying farm-fresh produce delivered to their door</p>
-            <button class="btn btn-primary btn-large" onclick="window.location.href='../prod-catalog/index.html'">
+            <button class="btn btn-primary btn-large" onclick="window.location.href='{% url 'main:catalog' %}'">
                 Start Shopping
                 <i class="fas fa-arrow-right"></i>
             </button>
@@ -330,7 +330,7 @@
                 <ul>
                     <li><a href="#home">Home</a></li>
                     <li><a href="#products">Products</a></li>
-                    <li><a href="../prod-catalog/index.html">Shop</a></li>
+                    <li><a href="{% url 'main:catalog' %}">Shop</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </div>

@@ -34,7 +34,7 @@
 
             <!-- Cart Icon -->
             <div class="header-icons">
-                <a href="../account/index.html" class="account-icon" title="My Account">
+                <a href="{% url 'main:account_home' %}" class="account-icon" title="My Account">
                     <i class="fas fa-user-circle"></i>
                 </a>
                 <div class="cart-icon" id="cartIconBtn">
@@ -52,10 +52,10 @@
                         Categories <i class="fas fa-chevron-down"></i>
                     </a>
                 </li>
-                <li class="nav-item"><a href="../landing/index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="{% url 'main:landing' %}" class="nav-link">Home</a></li>
                 <li class="nav-item"><a href="#" class="nav-link active">Products</a></li>
-                <li class="nav-item"><a href="../landing/index.html#about" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="../landing/index.html#contact" class="nav-link">Contact</a></li>
+                <li class="nav-item"><a href="{% url 'main:landing' %}#about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="{% url 'main:landing' %}#contact" class="nav-link">Contact</a></li>
             </ul>
         </nav>
     </header>
