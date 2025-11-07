@@ -35,7 +35,7 @@ class ProductSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Product
-        fields = ['product_id', 'name', 'category', 'description', 'inventory', 'stock_available']
+        fields = ['product_id', 'name', 'category', 'price', 'inventory', 'stock_available']
         read_only_fields = ['product_id']
     
     def get_stock_available(self, obj):
@@ -52,7 +52,7 @@ class ProductListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Product
-        fields = ['product_id', 'name', 'category', 'stock_available']
+        fields = ['product_id', 'name', 'category', 'price', 'stock_available']
     
     def get_stock_available(self, obj):
         try:
@@ -181,13 +181,13 @@ class CartSerializer(serializers.ModelSerializer):
     """Serializer for Cart model"""
     product_name = serializers.CharField(source='product.name', read_only=True)
     product_category = serializers.CharField(source='product.category', read_only=True)
-    product_description = serializers.CharField(source='product.description', read_only=True)
+    product_price = serializers.DecimalField(source='product.price', max_digits=10, decimal_places=2, read_only=True)
     stock_available = serializers.SerializerMethodField()
     
     class Meta:
         model = Cart
         fields = ['cart_id', 'customer', 'product', 'product_name', 
-                  'product_category', 'product_description', 'quantity', 'stock_available']
+                  'product_category', 'product_price', 'quantity', 'stock_available']
         read_only_fields = ['cart_id']
     
     def get_stock_available(self, obj):
