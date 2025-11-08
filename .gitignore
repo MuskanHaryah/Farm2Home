@@ -16,7 +16,8 @@ local_settings.py
 db.sqlite3
 /media/
 staticfiles/
-static/
+# static/ - Allow main/static (source static files)
+!main/static/
 media/
 
 # Environment variables file
