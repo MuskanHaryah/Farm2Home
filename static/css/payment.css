@@ -1,0 +1,461 @@
+/* Payment specific styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+* {
+    font-family: 'Poppins', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+.payment-container {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.payment-container h2 {
+    font-size: 28px;
+    margin-bottom: 35px;
+    letter-spacing: 0;
+    font-weight: 700;
+    color: white;
+    border-bottom: none;
+    padding-bottom: 0;
+    display: block;
+}
+
+/* Payment Toggle */
+.payment-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.toggle-btn {
+    padding: 16px 30px;
+    background: transparent;
+    border: 3.5px solid rgba(255, 255, 255, 0.5);
+    border-radius: 25px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Poppins', sans-serif;
+    text-transform: uppercase;
+}
+
+.toggle-btn i {
+    font-size: 18px;
+}
+
+.toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+    transform: none;
+}
+
+.toggle-btn.active {
+    background: transparent;
+    border-color: white;
+    color: white;
+    box-shadow: none;
+}
+
+/* Payment Method Sections */
+.payment-method {
+    display: none;
+    animation: fadeInUp 0.4s ease-out;
+}
+
+.payment-method.active {
+    display: block;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Card Payment Form */
+.payment-form {
+    width: 100%;
+}
+
+/* Credit Card Display */
+.card-display {
+    background: linear-gradient(135deg, #5faea9 0%, #3d9c9c 100%);
+    border: none;
+    border-radius: 25px;
+    padding: 35px 40px;
+    margin-bottom: 40px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    min-height: 350px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card-display::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -30%;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+.card-chip {
+    width: 45px;
+    height: 35px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+
+.card-logo {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: white;
+}
+
+.card-number {
+    font-size: 24px;
+    letter-spacing: 3px;
+    margin-bottom: 30px;
+    font-weight: 600;
+    color: white;
+}
+
+.card-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 60px;
+}
+
+.card-detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.card-detail-label {
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    opacity: 0.75;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.card-detail-value {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: white;
+}
+
+/* Form Inputs */
+.payment-form .form-group {
+    margin-bottom: 28px;
+}
+
+.payment-form .form-group label {
+    display: block;
+    font-size: 22px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.payment-form .input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border: none;
+    border-bottom: 3.5px solid rgba(255, 255, 255, 0.4);
+    border-radius: 0;
+    padding: 12px 0;
+    transition: all 0.3s ease;
+    box-shadow: none;
+}
+
+.payment-form .input-wrapper i {
+    display: none;
+}
+
+.payment-form .form-group input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 22px;
+    outline: none;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    padding: 8px 0;
+}
+
+.payment-form .form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+/* Cash on Delivery */
+.cod-content {
+    text-align: center;
+    padding: 30px 0;
+}
+
+.cod-icon {
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 30px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.cod-icon i {
+    font-size: 60px;
+    color: var(--light-green);
+}
+
+.cod-content h3 {
+    font-size: 32px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+
+.cod-content > p {
+    font-size: 19px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 40px;
+    font-weight: 600;
+}
+
+/* COD Info Items */
+.cod-info {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    padding: 40px 45px;
+    margin-bottom: 35px;
+    text-align: left;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 22px;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+}
+
+.info-item i {
+    color: var(--light-green);
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+/* Order Total */
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2.5px solid rgba(255, 255, 255, 0.35);
+    border-radius: 12px;
+    margin-bottom: 35px;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+}
+
+.order-total .amount {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--light-green);
+}
+
+/* Payment Footer */
+.payment-row {
+    margin-bottom: 28px;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.checkbox-wrapper label {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 0;
+}
+
+.payment-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 25px 0;
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    margin-top: 30px;
+}
+
+.total-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.total-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.total-amount {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--green);
+    letter-spacing: 0.5px;
+}
+
+.purchase-btn {
+    padding: 14px 40px;
+    background: white;
+    color: var(--text-dark);
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    min-width: 180px;
+}
+
+.purchase-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+}
+
+.purchase-btn:active {
+    transform: translateY(0);
+}
+
+/* Carousel Items Styling */
+.item-image {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    object-fit: contain;
+    margin: 0 auto;
+    
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .payment-toggle {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .toggle-btn {
+        padding: 18px 20px;
+        font-size: 14px;
+    }
+
+    .toggle-btn i {
+        font-size: 24px;
+    }
+
+    .cod-icon {
+        width: 100px;
+        height: 100px;
+    }
+
+    .cod-icon i {
+        font-size: 50px;
+    }
+
+    .cod-content h3 {
+        font-size: 26px;
+    }
+
+    .order-total {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .payment-footer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .purchase-btn {
+        width: 100%;
+    }
+}

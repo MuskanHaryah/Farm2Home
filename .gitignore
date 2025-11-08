@@ -4,20 +4,20 @@ __pycache__/
 *$py.class
 
 # Virtual environments
-.venv/
-venv/
-env/
-ENV/
-env.bak/
+# .venv/
+# venv/
+# env/
+# ENV/
+# env.bak/
 
 # Django stuff
-*.log
-local_settings.py
-db.sqlite3
-/media/
-staticfiles/
-static/
-media/
+# *.log
+# local_settings.py
+# db.sqlite3
+# /media/
+# staticfiles/
+# # static/  # Commented out - we want to track our static files in development
+# media/
 
 # Environment variables file
 .env
@@ -37,16 +37,16 @@ media/
 .pytest_cache/
 
 # pip / packaging
-pip-wheel-metadata/
-*.egg-info/
+# pip-wheel-metadata/
+# *.egg-info/
 
 # System files
 .DS_Store
 Thumbs.db
 
 # Other
-coverage.xml
-htmlcov/
+# coverage.xml
+# htmlcov/
 
-# Node
-node_modules/
+# # Node
+# node_modules/
