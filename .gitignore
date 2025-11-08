@@ -11,13 +11,14 @@ __pycache__/
 # env.bak/
 
 # Django stuff
-# *.log
-# local_settings.py
-# db.sqlite3
-# /media/
-# staticfiles/
-# # static/  # Commented out - we want to track our static files in development
-# media/
+*.log
+local_settings.py
+db.sqlite3
+/media/
+staticfiles/
+# static/ - Allow main/static (source static files)
+!main/static/
+media/
 
 # Environment variables file
 .env

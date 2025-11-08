@@ -1,0 +1,176 @@
+/* ===============================================
+   FORM ELEMENT OVERRIDES FOR BETTER READABILITY
+   Apply this after global-typography.css
+   =============================================== */
+
+/* All form inputs - larger and more readable */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+textarea,
+select {
+    font-size: 1.125rem !important;  /* 18px */
+    padding: 14px 16px !important;
+    min-height: 50px !important;
+    line-height: 1.6 !important;
+}
+
+/* All labels - larger and bolder */
+label,
+.form-label,
+.input-label {
+    font-size: 1.125rem !important;  /* 18px */
+    font-weight: 500 !important;
+    margin-bottom: 8px !important;
+    color: #333 !important;
+}
+
+/* Placeholder text */
+::placeholder {
+    font-size: 1rem !important;  /* 16px */
+    opacity: 0.6 !important;
+}
+
+/* Section headings */
+.section-title,
+h2.section-title,
+h3.section-title {
+    font-size: 1.875rem !important;  /* 30px */
+    font-weight: 600 !important;
+    margin-bottom: 1rem !important;
+}
+
+/* Subsection headings */
+.subsection-title,
+h4,
+.form-section-title {
+    font-size: 1.5rem !important;  /* 24px */
+    font-weight: 600 !important;
+    margin-bottom: 0.75rem !important;
+}
+
+/* Small descriptive text */
+.form-text,
+.help-text,
+small {
+    font-size: 1rem !important;  /* 16px */
+    color: #666 !important;
+}
+
+/* Button text */
+button,
+.btn,
+input[type="submit"],
+input[type="button"] {
+    font-size: 1.125rem !important;  /* 18px */
+    font-weight: 500 !important;
+    padding: 14px 28px !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Navigation and menu items */
+.nav-item,
+.sidebar-nav a,
+.menu-item {
+    font-size: 1.125rem !important;  /* 18px */
+}
+
+/* Card titles */
+.card-title,
+.product-name,
+.order-title {
+    font-size: 1.25rem !important;  /* 20px */
+    font-weight: 600 !important;
+}
+
+/* Product prices and important numbers */
+.price,
+.total,
+.amount {
+    font-size: 1.25rem !important;  /* 20px */
+    font-weight: 600 !important;
+}
+
+/* Table text */
+table {
+    font-size: 1.125rem !important;  /* 18px */
+}
+
+th {
+    font-size: 1.125rem !important;  /* 18px */
+    font-weight: 600 !important;
+}
+
+td {
+    font-size: 1.125rem !important;  /* 18px */
+}
+
+/* Profile information */
+.profile-name,
+.user-name {
+    font-size: 1.5rem !important;  /* 24px */
+    font-weight: 600 !important;
+}
+
+.profile-email,
+.user-email {
+    font-size: 1rem !important;  /* 16px */
+}
+
+/* Status badges and tags */
+.badge,
+.tag,
+.status {
+    font-size: 0.875rem !important;  /* 14px */
+    font-weight: 500 !important;
+    padding: 6px 12px !important;
+}
+
+/* Error messages */
+.error-message,
+.warning-message,
+.success-message {
+    font-size: 1rem !important;  /* 16px */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="number"],
+    textarea,
+    select {
+        font-size: 1rem !important;  /* 16px on tablet */
+    }
+    
+    label {
+        font-size: 1rem !important;  /* 16px on tablet */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Keep readable sizes on mobile */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="number"],
+    textarea,
+    select {
+        font-size: 1rem !important;  /* 16px minimum for mobile */
+    }
+    
+    label {
+        font-size: 1rem !important;  /* 16px on mobile */
+    }
+    
+    button,
+    .btn {
+        font-size: 1rem !important;  /* 16px on mobile */
+    }
+}

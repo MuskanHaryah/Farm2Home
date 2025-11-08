@@ -80,7 +80,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'farm2home',
-        'USER': 'farmuser',           # or 'postgres' if you didn’t make a new one
+        'USER': 'farmuser',           # or 'postgres' if you didn't make a new one
         'PASSWORD': 'farm123',
         'HOST': 'localhost',
         'PORT': '5433',               
