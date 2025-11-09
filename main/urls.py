@@ -27,4 +27,5 @@ urlpatterns = [
     # Checkout
     path('checkout/', views.checkout, name='checkout'),
     path('checkout/payment/', views.checkout_payment, name='checkout_payment'),
+    path('checkout/confirmation/', views.checkout_confirmation, name='checkout_confirmation'),
 ]

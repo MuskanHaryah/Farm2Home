@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment - Farm2Home</title>
+    <link rel="stylesheet" href="{% static 'css/global-typography.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
     <link rel="stylesheet" href="{% static 'css/payment.css' %}">
+    <link rel="stylesheet" href="{% static 'css/notifications.css' %}"
 </head>
 <body>
     <div class="checkout-container">
@@ -29,7 +31,7 @@
             <!-- Right Side - Payment Options -->
             <div class="checkout-form-section">
                 <!-- Progress Steps -->
-                <div class="progress-steps">
+                <div class="progress-steps" data-active="2">
                     <div class="step active" id="step1">
                         <span class="step-number">1</span>
                         <span class="step-label">SHIPPING</span>
@@ -152,37 +154,40 @@
 
                     <!-- Cash on Delivery -->
                     <div class="payment-method" id="codPayment">
-                        <div class="cod-content">
-                            <div class="cod-icon">
-                                <i class="fas fa-hand-holding-usd"></i>
-                            </div>
-                            
-                            <h3>Cash on Delivery</h3>
-                            <p>Pay when you receive your order</p>
-
-                            <div class="cod-info">
-                                <div class="info-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>No advance payment required</span>
+                        <div class="cod-section">
+                            <div class="cod-card">
+                                <!-- Icon -->
+                                <div class="cod-icon">
+                                    <i class="fas fa-hand-holding-usd"></i>
                                 </div>
-                                <div class="info-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>Pay in cash to delivery person</span>
+                                
+                                <!-- Content -->
+                                <div class="cod-content">
+                                    <h3>Cash on Delivery</h3>
+                                    <p>Pay when you receive your order</p>
+                                    <ul>
+                                        <li>No advance payment required</li>
+                                        <li>Pay in cash to delivery person</li>
+                                        <li>Exact change recommended</li>
+                                    </ul>
                                 </div>
-                                <div class="info-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>Exact change recommended</span>
+                                
+                                <!-- Total Amount -->
+                                <div class="cod-total">
+                                    <span class="label">Total</span>
+                                    <span class="amount" id="codTotal">$0.00</span>
                                 </div>
-                            </div>
-
-                            <div class="order-total">
-                                <span>Total Amount</span>
-                                <span class="amount" id="codTotal">Rs. 0.00</span>
                             </div>
 
-                            <button type="button" class="continue-btn" onclick="processPayment('cod')">
-                                CONFIRM ORDER
-                            </button>
+                            <div class="payment-footer">
+                                <div class="total-section">
+                                    <span class="total-label">Order Total:</span>
+                                    <span class="total-amount" id="codOrderTotal">$0.00</span>
+                                </div>
+                                <button type="button" class="purchase-btn" onclick="processPayment('cod')">
+                                    CONFIRM ORDER
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -190,6 +195,7 @@
         </div>
     </div>
 
+    <script src="{% static 'js/notifications.js' %}"></script>
     <script src="{% static 'js/payment.js' %}"></script>
 </body>
 </html>

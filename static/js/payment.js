@@ -27,8 +27,11 @@ function loadCartData() {
     
     if (cart.length === 0) {
         console.warn('No items in cart');
-        alert('No items found. Redirecting to checkout.');
-        window.location.href = '/checkout/index.html';
+        notifications.error('No items found. Redirecting to checkout.');
+        setTimeout(() => {
+            window.location.href = '/checkout/';
+        }, 2000);
+        return;
     }
 }
 
@@ -137,14 +140,22 @@ function switchPaymentMethod(method) {
 // Update total
 function updateTotal() {
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const codTotalElement = document.getElementById('codTotal');
-    const cardTotalElement = document.getElementById('cardTotal');
+    const totalFormatted = `$${total.toFixed(2)}`;
     
+    // Update COD totals
+    const codTotalElement = document.getElementById('codTotal');
+    const codOrderTotalElement = document.getElementById('codOrderTotal');
     if (codTotalElement) {
-        codTotalElement.textContent = `Rs. ${total.toFixed(2)}`;
+        codTotalElement.textContent = totalFormatted;
     }
+    if (codOrderTotalElement) {
+        codOrderTotalElement.textContent = totalFormatted;
+    }
+    
+    // Update Card total
+    const cardTotalElement = document.getElementById('cardTotal');
     if (cardTotalElement) {
-        cardTotalElement.textContent = `Rs. ${total.toFixed(2)}`;
+        cardTotalElement.textContent = totalFormatted;
     }
 }
 
@@ -214,19 +225,19 @@ function validateCardPayment() {
     const cvv = document.getElementById('cvv').value.trim();
 
     if (!cardName || !cardNumber || !expiryDate || !cvv) {
-        alert('Please fill in all card details.');
+        notifications.error('Please fill in all card details.');
         return false;
     }
 
     // Validate card number (13-19 digits)
     if (!/^\d{13,19}$/.test(cardNumber.replace(/\s/g, ''))) {
-        alert('Please enter a valid card number (13-19 digits).');
+        notifications.error('Please enter a valid card number (13-19 digits).');
         return false;
     }
 
     // Validate expiry date
     if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
-        alert('Please enter expiry date in MM/YY format.');
+        notifications.error('Please enter expiry date in MM/YY format.');
         return false;
     }
 
@@ -237,13 +248,13 @@ function validateCardPayment() {
     const currentMonth = currentDate.getMonth() + 1;
 
     if (year < currentYear || (year === currentYear && month < currentMonth)) {
-        alert('Card has expired. Please use a valid card.');
+        notifications.error('Card has expired. Please use a valid card.');
         return false;
     }
 
     // Validate CVV
     if (!/^\d{3,4}$/.test(cvv)) {
-        alert('Please enter a valid CVV (3-4 digits).');
+        notifications.error('Please enter a valid CVV (3-4 digits).');
         return false;
     }
 
@@ -276,10 +287,10 @@ function processPayment(method) {
     }
 
     // Redirect to confirmation page
-    window.location.href = '/checkout/confirmation.html';
+    window.location.href = '/checkout/confirmation/';
 }
 
 // Go back
 function goBack() {
-    window.location.href = '/checkout/index.html';
+    window.location.href = '/checkout/';
 }

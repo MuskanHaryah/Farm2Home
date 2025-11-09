@@ -26,8 +26,11 @@ function loadCartData() {
     
     if (cart.length === 0) {
         console.warn('No items in cart');
-        alert('No items found. Redirecting to home.');
-        window.location.href = '/';
+        notifications.error('No items found. Redirecting to home.');
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 2000);
+        return;
     }
 }
 
@@ -130,7 +133,7 @@ function nextStep() {
         if (validateShippingForm()) {
             collectShippingData();
             // Redirect to payment page
-            window.location.href = '/checkout/payment.html';
+            window.location.href = '/checkout/payment/';
         }
     } else if (currentStep === 2) {
         // Validate billing form
@@ -163,17 +166,17 @@ function validateShippingForm() {
     const zipCode = document.getElementById('zipCode').value.trim();
 
     if (!fullName || !email || !phone || !address || !city || !zipCode) {
-        alert('Please fill in all shipping fields.');
+        notifications.error('Please fill in all shipping fields.');
         return false;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        alert('Please enter a valid email address.');
+        notifications.error('Please enter a valid email address.');
         return false;
     }
 
     if (!/^\d{10,}$/.test(phone.replace(/\D/g, ''))) {
-        alert('Please enter a valid phone number.');
+        notifications.error('Please enter a valid phone number.');
         return false;
     }
 
@@ -191,25 +194,25 @@ function validateBillingForm() {
     const billingZip = document.getElementById('billingZip').value.trim();
 
     if (!cardName || !cardNumber || !expiryDate || !cvv || !billingAddress || !billingCity || !billingZip) {
-        alert('Please fill in all billing fields.');
+        notifications.error('Please fill in all billing fields.');
         return false;
     }
 
     // Validate card number (basic check)
     if (!/^\d{13,19}$/.test(cardNumber.replace(/\s/g, ''))) {
-        alert('Please enter a valid card number.');
+        notifications.error('Please enter a valid card number.');
         return false;
     }
 
     // Validate expiry date
     if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
-        alert('Please enter expiry date in MM/YY format.');
+        notifications.error('Please enter expiry date in MM/YY format.');
         return false;
     }
 
     // Validate CVV
     if (!/^\d{3,4}$/.test(cvv)) {
-        alert('Please enter a valid CVV.');
+        notifications.error('Please enter a valid CVV.');
         return false;
     }
 
@@ -251,6 +254,10 @@ function updateFormDisplay() {
 
 // Update progress steps
 function updateProgressSteps() {
+    const progressSteps = document.querySelector('.progress-steps');
+    if (progressSteps) {
+        progressSteps.setAttribute('data-active', currentStep);
+    }
     document.querySelectorAll('.step').forEach((step, index) => {
         step.classList.toggle('active', index + 1 <= currentStep);
     });

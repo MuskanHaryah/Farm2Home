@@ -73,3 +73,8 @@ def checkout(request):
 def checkout_payment(request):
     """Render checkout payment page"""
     return render(request, 'checkout/payment.html')
+
+
+def checkout_confirmation(request):
+    """Render checkout confirmation page"""
+    return render(request, 'checkout/confirmation.html')
