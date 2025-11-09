@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Farm2Home</title>
+    <link rel="stylesheet" href="{% static 'css/global-typography.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/notifications.css' %}"
+</head>
+<body>
+    <div class="checkout-container">
+        <div class="checkout-wrapper">
+            <!-- Left Side - Order Items -->
+            <div class="order-items-section">
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                
+                <div class="items-carousel">
+                    <div class="carousel-container">
+                        <div class="carousel-items" id="carouselItems"></div>
+                    </div>
+                    <div class="carousel-dots" id="carouselDots"></div>
+                </div>
+            </div>
+
+            <!-- Right Side - Confirmation -->
+            <div class="checkout-form-section">
+                <!-- Progress Steps -->
+                <div class="progress-steps" data-active="3">
+                    <div class="step active" id="step1">
+                        <span class="step-number">1</span>
+                        <span class="step-label">SHIPPING</span>
+                    </div>
+                    <div class="step active" id="step2">
+                        <span class="step-number">2</span>
+                        <span class="step-label">PAYMENT</span>
+                    </div>
+                    <div class="step active" id="step3">
+                        <span class="step-number">3</span>
+                        <span class="step-label">CONFIRMATION</span>
+                    </div>
+                </div>
+
+                <!-- Confirmation Content -->
+                <div class="checkout-form active-form">
+                    <h2>ORDER CONFIRMATION</h2>
+                    
+                    <div class="confirmation-container">
+                        <div class="confirmation-box">
+                            <h4>ORDER SUMMARY</h4>
+                            <div id="confirmationDetails" class="confirmation-items"></div>
+                        </div>
+
+                        <div class="confirmation-box">
+                            <h4>SHIPPING ADDRESS</h4>
+                            <div id="confirmationShipping"></div>
+                        </div>
+
+                        <div class="confirmation-box">
+                            <h4>PAYMENT METHOD</h4>
+                            <div id="confirmationPayment"></div>
+                        </div>
+
+                        <div class="confirmation-actions">
+                            <button type="button" class="back-btn-secondary" onclick="goBack()">BACK</button>
+                            <button type="button" class="place-order-btn" onclick="backToHome()">PLACE ORDER</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/notifications.js' %}"></script>
+    <script src="{% static 'js/confirmation.js' %}"></script>
+</body>
+</html>

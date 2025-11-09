@@ -52,7 +52,7 @@ function initializeProfilePicture() {
                     };
                     reader.readAsDataURL(file);
                 } else {
-                    alert('Please select an image file.');
+                    notifications.warning('Please select an image file.');
                 }
             }
         });
@@ -97,7 +97,7 @@ function initializePersonalInfoForm() {
             
             // TODO: Implement actual save logic (API call)
             // For now, show success message
-            alert('Personal information updated successfully!');
+            notifications.success('✅ Personal information updated successfully!');
             
             // In a real app, you would:
             // 1. Validate form data
@@ -124,13 +124,13 @@ function initializePasswordForm() {
             
             // Validate passwords match
             if (newPassword !== confirmPassword) {
-                alert('New passwords do not match!');
+                notifications.error('New passwords do not match!');
                 return;
             }
             
             // Validate password strength
             if (newPassword.length < 8) {
-                alert('New password must be at least 8 characters long!');
+                notifications.error('New password must be at least 8 characters long!');
                 return;
             }
             
@@ -138,7 +138,7 @@ function initializePasswordForm() {
             
             // TODO: Implement actual password update (API call)
             // For now, show success message
-            alert('Password updated successfully!');
+            notifications.success('🔐 Password updated successfully!');
             form.reset();
             
             // In a real app, you would:
@@ -328,7 +328,7 @@ Are you absolutely sure you want to delete your account?`;
                 console.log('Deleting account...');
                 
                 // TODO: Implement actual account deletion (API call)
-                alert('Account deletion request submitted. You will receive a confirmation email within 24 hours.');
+                notifications.warning('⚠️ Account deletion request submitted. You will receive a confirmation email within 24 hours.');
                 
                 // In a real app, you would:
                 // 1. Verify user password

@@ -8,7 +8,7 @@ const productsData = [
         name: 'Tomato',
         variety: 'Tamatar',
         price: 120,
-        image: '../images/vegetables/tomato.png',
+        image: '/static/images/vegetables/tomato.png',
         category: 'vegetables',
         season: 'summer',
         inStock: true,
@@ -19,7 +19,7 @@ const productsData = [
         name: 'Potato',
         variety: 'Aloo',
         price: 80,
-        image: '../images/vegetables/potatoes.png',
+        image: '/static/images/vegetables/potatoes.png',
         category: 'vegetables',
         season: 'year-round',
         inStock: true,
@@ -30,7 +30,7 @@ const productsData = [
         name: 'Onion',
         variety: 'Pyaz',
         price: 100,
-        image: '../images/vegetables/onions.png',
+        image: '/static/images/vegetables/onions.png',
         category: 'vegetables',
         season: 'year-round',
         inStock: true,
@@ -41,7 +41,7 @@ const productsData = [
         name: 'Okra',
         variety: 'Bhindi',
         price: 150,
-        image: '../images/vegetables/okra.png',
+        image: '/static/images/vegetables/okra.png',
         category: 'vegetables',
         season: 'summer',
         inStock: true,
@@ -52,7 +52,7 @@ const productsData = [
         name: 'Bitter Gourd',
         variety: 'Karela',
         price: 110,
-        image: '../images/vegetables/bitter-gourd.png',
+        image: '/static/images/vegetables/bitter-gourd.png',
         category: 'vegetables',
         season: 'summer',
         inStock: true,
@@ -63,7 +63,7 @@ const productsData = [
         name: 'Carrot',
         variety: 'Gajar',
         price: 95,
-        image: '../images/vegetables/carrot.png',
+        image: '/static/images/vegetables/carrot.png',
         category: 'vegetables',
         season: 'winter',
         inStock: true,
@@ -74,7 +74,7 @@ const productsData = [
         name: 'Cucumber',
         variety: 'Kheera',
         price: 70,
-        image: '../images/vegetables/cucumber.png',
+        image: '/static/images/vegetables/cucumber.png',
         category: 'vegetables',
         season: 'summer',
         inStock: true,
@@ -85,7 +85,7 @@ const productsData = [
         name: 'Bottle Gourd',
         variety: 'Lauki',
         price: 60,
-        image: '../images/vegetables/bottle-gourd.png',
+        image: '/static/images/vegetables/bottle-gourd.png',
         category: 'vegetables',
         season: 'summer',
         inStock: true,
@@ -96,7 +96,7 @@ const productsData = [
         name: 'Ridge Gourd',
         variety: 'Tori',
         price: 85,
-        image: '../images/vegetables/ridge-gourd.png',
+        image: '/static/images/vegetables/ridge-gourd.png',
         category: 'vegetables',
         season: 'summer',
         inStock: true,
@@ -107,7 +107,7 @@ const productsData = [
         name: 'Apple Gourd',
         variety: 'Tinda',
         price: 90,
-        image: '../images/vegetables/applegourd.png',
+        image: '/static/images/vegetables/applegourd.png',
         category: 'vegetables',
         season: 'summer',
         inStock: true,
@@ -118,7 +118,7 @@ const productsData = [
         name: 'Pumpkin',
         variety: 'Kaddu',
         price: 75,
-        image: '../images/vegetables/pumpkin.png',
+        image: '/static/images/vegetables/pumpkin.png',
         category: 'vegetables',
         season: 'year-round',
         inStock: true,
@@ -129,7 +129,7 @@ const productsData = [
         name: 'Beetroot',
         variety: 'Chukandar',
         price: 110,
-        image: '../images/vegetables/beetroot.png',
+        image: '/static/images/vegetables/beetroot.png',
         category: 'vegetables',
         season: 'winter',
         inStock: true,
@@ -140,7 +140,7 @@ const productsData = [
         name: 'Radish',
         variety: 'Mooli',
         price: 65,
-        image: '../images/vegetables/radish.png',
+        image: '/static/images/vegetables/radish.png',
         category: 'vegetables',
         season: 'winter',
         inStock: true,
@@ -151,7 +151,7 @@ const productsData = [
         name: 'Turnip',
         variety: 'Shaljam',
         price: 70,
-        image: '../images/vegetables/turnips.png',
+        image: '/static/images/vegetables/turnips.png',
         category: 'vegetables',
         season: 'winter',
         inStock: true,
@@ -162,7 +162,7 @@ const productsData = [
         name: 'Green Beans',
         variety: 'Sem',
         price: 140,
-        image: '../images/vegetables/green-beans.png',
+        image: '/static/images/vegetables/green-beans.png',
         category: 'vegetables',
         season: 'year-round',
         inStock: true,
@@ -173,7 +173,7 @@ const productsData = [
         name: 'Peas',
         variety: 'Matar',
         price: 130,
-        image: '../images/vegetables/peas.png',
+        image: '/static/images/vegetables/peas.png',
         category: 'vegetables',
         season: 'winter',
         inStock: true,
@@ -184,7 +184,7 @@ const productsData = [
         name: 'Lettuce',
         variety: 'Salad Patta',
         price: 80,
-        image: '../images/vegetables/lettuce.png',
+        image: '/static/images/vegetables/lettuce.png',
         category: 'vegetables',
         season: 'winter',
         inStock: true,
@@ -195,7 +195,7 @@ const productsData = [
         name: 'Green Onions',
         variety: 'Hara Pyaz',
         price: 50,
-        image: '../images/vegetables/greenonins.png',
+        image: '/static/images/vegetables/greenonins.png',
         category: 'vegetables',
         season: 'year-round',
         inStock: true,
@@ -206,7 +206,7 @@ const productsData = [
         name: 'Red Chillies',
         variety: 'Lal Mirch',
         price: 350,
-        image: '../images/vegetables/red-chillies.png',
+        image: '/static/images/vegetables/red-chillies.png',
         category: 'vegetables',
         season: 'year-round',
         inStock: true,
@@ -217,7 +217,7 @@ const productsData = [
         name: 'Green Mustard',
         variety: 'Sarson',
         price: 90,
-        image: '../images/vegetables/greenmustard.png',
+        image: '/static/images/vegetables/greenmustard.png',
         category: 'vegetables',
         season: 'winter',
         inStock: true,
@@ -228,7 +228,7 @@ const productsData = [
         name: 'Sweet Potato',
         variety: 'Shakarkandi',
         price: 95,
-        image: '../images/vegetables/sweetpotato.png',
+        image: '/static/images/vegetables/sweetpotato.png',
         category: 'vegetables',
         season: 'winter',
         inStock: true,
@@ -239,7 +239,7 @@ const productsData = [
         name: 'Taro Root',
         variety: 'Arvi',
         price: 110,
-        image: '../images/vegetables/taroo-root.png',
+        image: '/static/images/vegetables/taroo-root.png',
         category: 'vegetables',
         season: 'year-round',
         inStock: true,
@@ -250,7 +250,7 @@ const productsData = [
         name: 'Zucchini',
         variety: 'Zucchini',
         price: 180,
-        image: '../images/vegetables/zucchini.png',
+        image: '/static/images/vegetables/zucchini.png',
         category: 'vegetables',
         season: 'summer',
         inStock: true,
@@ -261,7 +261,7 @@ const productsData = [
         name: 'Artichoke',
         variety: 'Artichoke',
         price: 400,
-        image: '../images/vegetables/artichoke.png',
+        image: '/static/images/vegetables/artichoke.png',
         category: 'vegetables',
         season: 'year-round',
         inStock: true,
@@ -274,7 +274,7 @@ const productsData = [
         name: 'Watermelon',
         variety: 'Tarbooz',
         price: 60,
-        image: '../images/fruits/watermelon.png',
+        image: '/static/images/fruits/watermelon.png',
         category: 'fruits',
         season: 'summer',
         inStock: true,
@@ -285,7 +285,7 @@ const productsData = [
         name: 'Melon',
         variety: 'Kharboza',
         price: 70,
-        image: '../images/fruits/melon.png',
+        image: '/static/images/fruits/melon.png',
         category: 'fruits',
         season: 'summer',
         inStock: true,
@@ -296,7 +296,7 @@ const productsData = [
         name: 'Sweet Melon',
         variety: 'Garam',
         price: 55,
-        image: '../images/fruits/sweetmelon.png',
+        image: '/static/images/fruits/sweetmelon.png',
         category: 'fruits',
         season: 'summer',
         inStock: true,
@@ -307,7 +307,7 @@ const productsData = [
         name: 'Guava',
         variety: 'Amrood',
         price: 120,
-        image: '../images/fruits/guava.png',
+        image: '/static/images/fruits/guava.png',
         category: 'fruits',
         season: 'winter',
         inStock: true,
@@ -318,7 +318,7 @@ const productsData = [
         name: 'Green Apple',
         variety: 'Hara Seb',
         price: 350,
-        image: '../images/fruits/green-apples.png',
+        image: '/static/images/fruits/green-apples.png',
         category: 'fruits',
         season: 'winter',
         inStock: true,
@@ -329,7 +329,7 @@ const productsData = [
         name: 'Pomegranate',
         variety: 'Anar',
         price: 280,
-        image: '../images/fruits/pomegranate.png',
+        image: '/static/images/fruits/pomegranate.png',
         category: 'fruits',
         season: 'winter',
         inStock: true,
@@ -340,7 +340,7 @@ const productsData = [
         name: 'Papaya',
         variety: 'Papita',
         price: 90,
-        image: '../images/fruits/papaya.png',
+        image: '/static/images/fruits/papaya.png',
         category: 'fruits',
         season: 'year-round',
         inStock: true,
@@ -351,7 +351,7 @@ const productsData = [
         name: 'Pineapple',
         variety: 'Ananas',
         price: 150,
-        image: '../images/fruits/pineapple.png',
+        image: '/static/images/fruits/pineapple.png',
         category: 'fruits',
         season: 'summer',
         inStock: true,
@@ -362,7 +362,7 @@ const productsData = [
         name: 'Grapefruit',
         variety: 'Chakotra',
         price: 200,
-        image: '../images/fruits/grapefruit.png',
+        image: '/static/images/fruits/grapefruit.png',
         category: 'fruits',
         season: 'winter',
         inStock: true,
@@ -373,7 +373,7 @@ const productsData = [
         name: 'Mosambi',
         variety: 'Sweet Lime',
         price: 140,
-        image: '../images/fruits/mosambi.png',
+        image: '/static/images/fruits/mosambi.png',
         category: 'fruits',
         season: 'winter',
         inStock: true,
@@ -384,7 +384,7 @@ const productsData = [
         name: 'Apricot',
         variety: 'Khubani',
         price: 450,
-        image: '../images/fruits/apricot.png',
+        image: '/static/images/fruits/apricot.png',
         category: 'fruits',
         season: 'summer',
         inStock: true,
@@ -395,7 +395,7 @@ const productsData = [
         name: 'Peaches',
         variety: 'Aaru',
         price: 320,
-        image: '../images/fruits/peaches.png',
+        image: '/static/images/fruits/peaches.png',
         category: 'fruits',
         season: 'summer',
         inStock: true,
@@ -406,7 +406,7 @@ const productsData = [
         name: 'Plums',
         variety: 'Alubukhara',
         price: 380,
-        image: '../images/fruits/plums.png',
+        image: '/static/images/fruits/plums.png',
         category: 'fruits',
         season: 'summer',
         inStock: true,
@@ -417,7 +417,7 @@ const productsData = [
         name: 'Cherries',
         variety: 'Cherry',
         price: 850,
-        image: '../images/fruits/cherries.png',
+        image: '/static/images/fruits/cherries.png',
         category: 'fruits',
         season: 'summer',
         inStock: true,
@@ -428,7 +428,7 @@ const productsData = [
         name: 'Lychee',
         variety: 'Leechi',
         price: 420,
-        image: '../images/fruits/lychees.png',
+        image: '/static/images/fruits/lychees.png',
         category: 'fruits',
         season: 'summer',
         inStock: true,
@@ -439,7 +439,7 @@ const productsData = [
         name: 'Pear',
         variety: 'Nashpati',
         price: 250,
-        image: '../images/fruits/pear.png',
+        image: '/static/images/fruits/pear.png',
         category: 'fruits',
         season: 'winter',
         inStock: true,
@@ -450,7 +450,7 @@ const productsData = [
         name: 'Persimmon',
         variety: 'Japani Phal',
         price: 380,
-        image: '../images/fruits/persimmon.png',
+        image: '/static/images/fruits/persimmon.png',
         category: 'fruits',
         season: 'winter',
         inStock: true,
@@ -461,7 +461,7 @@ const productsData = [
         name: 'Avocado',
         variety: 'Avocado',
         price: 600,
-        image: '../images/fruits/avacado.png',
+        image: '/static/images/fruits/avacado.png',
         category: 'fruits',
         season: 'year-round',
         inStock: true,
@@ -472,7 +472,7 @@ const productsData = [
         name: 'Jackfruit',
         variety: 'Kathal',
         price: 120,
-        image: '../images/fruits/jackfruit.png',
+        image: '/static/images/fruits/jackfruit.png',
         category: 'fruits',
         season: 'summer',
         inStock: true,
@@ -483,7 +483,7 @@ const productsData = [
         name: 'Custard Apple',
         variety: 'Sharifa',
         price: 220,
-        image: '../images/fruits/custard-apple.png',
+        image: '/static/images/fruits/custard-apple.png',
         category: 'fruits',
         season: 'winter',
         inStock: true,
@@ -494,7 +494,7 @@ const productsData = [
         name: 'Sapodilla',
         variety: 'Chikoo',
         price: 180,
-        image: '../images/fruits/Sapodilla.png',
+        image: '/static/images/fruits/Sapodilla.png',
         category: 'fruits',
         season: 'year-round',
         inStock: true,
@@ -505,7 +505,7 @@ const productsData = [
         name: 'Dates',
         variety: 'Khajoor',
         price: 550,
-        image: '../images/fruits/dates.png',
+        image: '/static/images/fruits/dates.png',
         category: 'fruits',
         season: 'year-round',
         inStock: true,
@@ -516,7 +516,7 @@ const productsData = [
         name: 'Figs',
         variety: 'Anjeer',
         price: 750,
-        image: '../images/fruits/figs.png',
+        image: '/static/images/fruits/figs.png',
         category: 'fruits',
         season: 'summer',
         inStock: true,
@@ -527,7 +527,7 @@ const productsData = [
         name: 'Mulberries',
         variety: 'Shahtoot',
         price: 320,
-        image: '../images/fruits/mulberries.png',
+        image: '/static/images/fruits/mulberries.png',
         category: 'fruits',
         season: 'summer',
         inStock: true,
@@ -540,7 +540,7 @@ const productsData = [
         name: 'Curry Leaves',
         variety: 'Kari Patta',
         price: 40,
-        image: '../images/herbs/curry-leaves.png',
+        image: '/static/images/herbs/curry-leaves.png',
         category: 'herbs',
         season: 'year-round',
         inStock: true,
@@ -551,7 +551,7 @@ const productsData = [
         name: 'Basil',
         variety: 'Tulsi',
         price: 60,
-        image: '../images/herbs/basil.png',
+        image: '/static/images/herbs/basil.png',
         category: 'herbs',
         season: 'year-round',
         inStock: true,
@@ -562,7 +562,7 @@ const productsData = [
         name: 'Ginger',
         variety: 'Adrak',
         price: 200,
-        image: '../images/herbs/ginger.png',
+        image: '/static/images/herbs/ginger.png',
         category: 'herbs',
         season: 'year-round',
         inStock: true,
@@ -573,7 +573,7 @@ const productsData = [
         name: 'Lemongrass',
         variety: 'Lemon Ghaas',
         price: 80,
-        image: '../images/herbs/lemon-grass.png',
+        image: '/static/images/herbs/lemon-grass.png',
         category: 'herbs',
         season: 'year-round',
         inStock: true,
@@ -584,7 +584,7 @@ const productsData = [
         name: 'Fenugreek',
         variety: 'Methi',
         price: 50,
-        image: '../images/herbs/fenugreek.png',
+        image: '/static/images/herbs/fenugreek.png',
         category: 'herbs',
         season: 'winter',
         inStock: true,
@@ -595,7 +595,7 @@ const productsData = [
         name: 'Celery',
         variety: 'Celery',
         price: 120,
-        image: '../images/herbs/celery.png',
+        image: '/static/images/herbs/celery.png',
         category: 'herbs',
         season: 'year-round',
         inStock: true,
@@ -606,7 +606,7 @@ const productsData = [
         name: 'Rosemary',
         variety: 'Rosemary',
         price: 150,
-        image: '../images/herbs/rosemarry.png',
+        image: '/static/images/herbs/rosemarry.png',
         category: 'herbs',
         season: 'year-round',
         inStock: true,
@@ -617,7 +617,7 @@ const productsData = [
         name: 'Thyme',
         variety: 'Thyme',
         price: 140,
-        image: '../images/herbs/thyme.png',
+        image: '/static/images/herbs/thyme.png',
         category: 'herbs',
         season: 'year-round',
         inStock: true,
@@ -802,7 +802,7 @@ function addToCart(productId) {
     const quantity = productQuantities[productId];
     
     if (quantity === 0) {
-        alert('Please select quantity first!');
+        notifications.warning('Please select quantity first!');
         return;
     }
     
@@ -845,7 +845,7 @@ function updateCartCount() {
 }
 
 function showCartFeedback(productName, quantity) {
-    alert(`Added ${quantity} kg of ${productName} to cart!`);
+    notifications.success(`✅ Added ${quantity} kg of ${productName} to cart!`);
 }
 
 // ===============================================
@@ -1139,10 +1139,7 @@ function createProductListItem(product) {
     item.dataset.productId = product.id;
     
     const quantity = productQuantities[product.id] || 0;
-    
-    // Create star rating (mock)
-    const stars = '★★★★★';
-    const reviews = Math.floor(Math.random() * 50) + 5; // Mock review count
+    const seasonBadge = getSeasonBadge(product.season);
     
     item.innerHTML = `
         <img src="${product.image}" alt="${product.name}" class="product-list-image" onerror="this.src='https://via.placeholder.com/150/6b8e23/ffffff?text=${product.name}'">
@@ -1150,9 +1147,9 @@ function createProductListItem(product) {
         <div class="product-list-middle">
             <div class="product-list-name">${product.name}</div>
             <div class="product-list-variety">${product.variety}</div>
-            <div class="product-list-rating">
-                <span class="stars">${stars}</span>
-                <span class="review-count">${reviews} reviews</span>
+            <div class="product-list-badges">
+                <span class="badge stock">In Stock</span>
+                ${seasonBadge}
             </div>
             <div class="product-list-description">Fresh ${product.category} from Pakistani farms, ${product.season === 'year-round' ? 'available all year' : 'seasonal produce'}.</div>
             <a href="#" class="product-list-link">View details →</a>
@@ -1160,6 +1157,11 @@ function createProductListItem(product) {
         
         <div class="product-list-right">
             <div class="product-list-price">Rs. ${product.price}/kg</div>
+            <div class="quantity-selector">
+                <button class="quantity-btn" onclick="decreaseQuantity(${product.id})">−</button>
+                <span class="quantity-value" id="qty-${product.id}">${quantity}</span>
+                <button class="quantity-btn" onclick="increaseQuantity(${product.id})">+</button>
+            </div>
             <button class="product-list-cart-btn" onclick="addToCart(${product.id})">Add to Cart</button>
         </div>
     `;
@@ -1178,7 +1180,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Cart close button
-    const cartCloseBtn = document.querySelector('.cart-close');
+    const cartCloseBtn = document.getElementById('cartCloseBtn');
     if (cartCloseBtn) {
         cartCloseBtn.addEventListener('click', closeCart);
     }
@@ -1194,7 +1196,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', function() {
             if (cart.length === 0) {
-                alert('Your cart is empty. Add some items before checking out.');
+                notifications.warning('Your cart is empty. Add some items before checking out.');
                 return;
             }
             // Save cart to localStorage before redirecting
@@ -1209,7 +1211,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (clearCartBtn) {
         clearCartBtn.addEventListener('click', function() {
             if (cart.length === 0) {
-                alert('Your cart is already empty.');
+                notifications.info('Your cart is already empty.');
                 return;
             }
             if (confirm('Are you sure you want to clear all items from your cart?')) {

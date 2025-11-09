@@ -28,6 +28,7 @@ body {
     line-height: 1.6;
     color: var(--text-dark);
     background-color: var(--bg-cream);
+    zoom: 0.9;
 }
 
 .container {
@@ -370,6 +371,20 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
+/* Products Section with Grass Background */
+.products-section.with-grass-bg {
+    background: linear-gradient(180deg, #d4e4a8 0%, #c5daa0 30%, #b8cf98 60%, #aac490 100%);
+    background-image: 
+        linear-gradient(180deg, #d4e4a8 0%, #c5daa0 30%, #b8cf98 60%, #aac490 100%),
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><defs><pattern id="grass" x="0" y="350" width="40" height="50" patternUnits="userSpaceOnUse"><path d="M5,350 Q10,330 8,320 M12,350 Q15,340 18,320 M20,350 Q22,335 25,315 M30,350 Q32,340 35,325 M35,350 Q38,330 40,310" stroke="%238fbc3e" stroke-width="2" fill="none" opacity="0.8"/></pattern></defs><rect width="1200" height="400" fill="url(%23grass)"/></svg>');
+    background-size: 100% 100%, auto;
+    background-position: center, bottom left;
+    background-repeat: no-repeat, repeat-x;
+    background-attachment: fixed;
+    position: relative;
+    min-height: 600px;
+}
+
 /* Controls Bar */
 .controls-bar {
     display: flex;
@@ -637,21 +652,11 @@ body {
     color: var(--text-gray);
 }
 
-.product-list-rating {
+.product-list-badges {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 13px;
-}
-
-.stars {
-    color: #ffc107;
-    font-size: 12px;
-}
-
-.review-count {
-    color: var(--text-light);
-    font-size: 13px;
+    margin-top: 4px;
 }
 
 .product-list-description {
@@ -1180,6 +1185,7 @@ body {
     flex-direction: column;
     transition: right 0.3s ease;
     overflow: hidden;
+    max-height: 100vh;
 }
 
 .side-cart.active {
@@ -1278,7 +1284,9 @@ body {
 .cart-items {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 20px;
+    min-height: 0;
 }   
 
 .cart-item {
