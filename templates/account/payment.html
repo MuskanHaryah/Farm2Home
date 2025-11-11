@@ -255,48 +255,197 @@
             <div class="modal-body">
                 <form id="paymentForm">
                     <div class="form-group">
-                        <label for="paymentType">Payment Type</label>
+                        <label for="paymentType">PAYMENT TYPE</label>
                         <select id="paymentType" name="paymentType" required>
+                            <option value="">Debit/Credit Card</option>
                             <option value="debit">Debit Card</option>
                             <option value="credit">Credit Card</option>
                             <option value="jazzcash">JazzCash</option>
                             <option value="easypaisa">EasyPaisa</option>
                         </select>
                     </div>
-                    <div class="form-group" id="cardNumberGroup">
-                        <label for="cardNumber">Card Number</label>
+                    
+                    <div class="form-group">
+                        <label for="cardHolder">CARD HOLDER NAME</label>
+                        <input type="text" id="cardHolder" name="cardHolder" placeholder="Ahmed Khan">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cardNumber">CARD NUMBER</label>
                         <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
                     </div>
-                    <div class="form-group" id="cardHolderGroup">
-                        <label for="cardHolder">Card Holder Name</label>
-                        <input type="text" id="cardHolder" name="cardHolder" placeholder="AHMED KHAN">
-                    </div>
-                    <div class="form-row" id="cardDetailsRow">
-                        <div class="form-group">
-                            <label for="expiryDate">Expiry Date</label>
+                    
+                    <div class="form-row">
+                        <div class="form-group form-group-half">
+                            <label for="expiryDate">EXPIRY DATE</label>
                             <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group form-group-half">
                             <label for="cvv">CVV</label>
-                            <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="3">
+                            <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4">
                         </div>
                     </div>
-                    <div class="form-group" id="bankGroup">
-                        <label for="bankName">Bank Name</label>
-                        <input type="text" id="bankName" name="bankName" placeholder="e.g., HBL, MCB, UBL">
+                    
+                    <div class="form-group">
+                        <label for="bankName">BANK NAME</label>
+                        <select id="bankName" name="bankName">
+                            <option value="">Select Bank</option>
+                            <option value="hbl">HBL</option>
+                            <option value="mcb">MCB</option>
+                            <option value="ubl">UBL</option>
+                            <option value="allied">Allied Bank</option>
+                            <option value="meezan">Meezan Bank</option>
+                            <option value="other">Other</option>
+                        </select>
                     </div>
-                    <div class="form-group checkbox-group">
-                        <input type="checkbox" id="setDefaultPayment" name="setDefaultPayment">
-                        <label for="setDefaultPayment">Set as default payment method</label>
-                    </div>
+                    
                     <div class="modal-actions">
                         <button type="button" class="btn-cancel" id="cancelBtn">CANCEL</button>
                         <button type="submit" class="btn-save">
-                            <i class="fas fa-save"></i>
-                            SAVE PAYMENT METHOD
+                            ADD PAYMENT METHOD
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Funds to Wallet Modal -->
+    <div class="modal" id="walletModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="walletModalTitle">ADD FUNDS TO WALLET</h2>
+                <button class="modal-close" id="closeWalletModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="walletForm">
+                    <div class="form-group">
+                        <label for="walletAmount">AMOUNT (PKR)</label>
+                        <input type="number" id="walletAmount" name="walletAmount" placeholder="1000" min="100" step="100">
+                        <p class="form-hint">Minimum amount: Rs.100</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>QUICK SELECT</label>
+                        <div class="quick-select-grid">
+                            <button type="button" class="quick-select-btn" data-amount="500">Rs.500</button>
+                            <button type="button" class="quick-select-btn" data-amount="1000">Rs.1,000</button>
+                            <button type="button" class="quick-select-btn" data-amount="2000">Rs.2,000</button>
+                            <button type="button" class="quick-select-btn" data-amount="5000">Rs.5,000</button>
+                            <button type="button" class="quick-select-btn" data-amount="10000">Rs.10,000</button>
+                            <button type="button" class="quick-select-btn" data-amount="20000">Rs.20,000</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="walletPaymentMethod">PAYMENT METHOD</label>
+                        <select id="walletPaymentMethod" name="walletPaymentMethod" required>
+                            <option value="">Select Payment Method</option>
+                            <option value="hbl">HBL Debit Card (••4242)</option>
+                            <option value="mcb">MCB Credit Card (••8888)</option>
+                            <option value="jazzcash">JazzCash Account</option>
+                        </select>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" id="cancelWalletBtn">CANCEL</button>
+                        <button type="submit" class="btn-save btn-add-funds">
+                            ADD FUNDS
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wallet Transaction History Modal -->
+    <div class="modal" id="walletHistoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2>WALLET TRANSACTION HISTORY</h2>
+                    <p class="wallet-history-subtitle">VIEW ALL YOUR WALLET TRANSACTIONS AND ACTIVITIES</p>
+                </div>
+                <button class="modal-close" id="closeWalletHistoryModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body wallet-history-body">
+                <div class="transaction-list">
+                    <!-- Transaction 1 -->
+                    <div class="transaction-item">
+                        <div class="transaction-icon added">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <h4 class="transaction-title">Added funds via HBL Card</h4>
+                            <p class="transaction-date">
+                                <i class="fas fa-clock"></i>
+                                2025-11-10 AT 02:34 PM
+                            </p>
+                        </div>
+                        <div class="transaction-amount">
+                            <span class="amount added">+Rs.2,000</span>
+                            <span class="status-badge completed">COMPLETED</span>
+                        </div>
+                    </div>
+
+                    <!-- Transaction 2 -->
+                    <div class="transaction-item">
+                        <div class="transaction-icon spent">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <h4 class="transaction-title">Order #ORD-2025-047</h4>
+                            <p class="transaction-date">
+                                <i class="fas fa-clock"></i>
+                                2025-11-09 AT 11:20 AM
+                            </p>
+                        </div>
+                        <div class="transaction-amount">
+                            <span class="amount spent">-Rs.650</span>
+                            <span class="status-badge completed">COMPLETED</span>
+                        </div>
+                    </div>
+
+                    <!-- Transaction 3 -->
+                    <div class="transaction-item">
+                        <div class="transaction-icon added">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <h4 class="transaction-title">Added funds via JazzCash</h4>
+                            <p class="transaction-date">
+                                <i class="fas fa-clock"></i>
+                                2025-11-05 AT 04:15 PM
+                            </p>
+                        </div>
+                        <div class="transaction-amount">
+                            <span class="amount added">+Rs.1,500</span>
+                            <span class="status-badge completed">COMPLETED</span>
+                        </div>
+                    </div>
+
+                    <!-- Transaction 4 -->
+                    <div class="transaction-item">
+                        <div class="transaction-icon spent">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <h4 class="transaction-title">Order #ORD-2025-042</h4>
+                            <p class="transaction-date">
+                                <i class="fas fa-clock"></i>
+                                2025-11-04 AT 09:45 AM
+                            </p>
+                        </div>
+                        <div class="transaction-amount">
+                            <span class="amount spent">-Rs.1,200</span>
+                            <span class="status-badge completed">COMPLETED</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -305,3 +454,5 @@
     <script src="{% static 'js/payment.js' %}"></script>
 </body>
 </html>
+
+

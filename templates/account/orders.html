@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/account.css' %}">
     <link rel="stylesheet" href="{% static 'css/orders.css' %}">
+    <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
 </head>
 <body>
     <!-- Header -->
@@ -137,24 +138,19 @@
                         <div class="order-items">
                             <div class="items-grid">
                                 <div class="product-thumb">
-                                    <img src="../images/vegetables/tomato.png" alt="Tomato">
+                                    <img src="{% static 'images/vegetables/tomato.png' %}" alt="Tomato">
                                     <span class="item-name">TOMATO</span>
                                     <span class="item-qty">Qty: 2kg</span>
                                 </div>
                                 <div class="product-thumb">
-                                    <img src="../images/vegetables/greenmustard.png" alt="Mustard Greens">
-                                    <span class="item-name">MUSTARD GREENS</span>
+                                    <img src="{% static 'images/vegetables/lettuce.png' %}" alt="Lettuce">
+                                    <span class="item-name">LETTUCE</span>
                                     <span class="item-qty">Qty: 1kg</span>
                                 </div>
                                 <div class="product-thumb">
-                                    <img src="../images/vegetables/potatoes.png" alt="Potato">
+                                    <img src="{% static 'images/vegetables/potatoes.png' %}" alt="Potato">
                                     <span class="item-name">POTATO</span>
-                                    <span class="item-qty">Qty: 3kg</span>
-                                </div>
-                                <div class="product-thumb">
-                                    <img src="../images/vegetables/onions.png" alt="Onion">
-                                    <span class="item-name">ONION</span>
-                                    <span class="item-qty">Qty: 2kg</span>
+                                    <span class="item-qty">Qty: 1kg</span>
                                 </div>
                             </div>
                         </div>
@@ -195,19 +191,19 @@
                         <div class="order-items">
                             <div class="items-grid">
                                 <div class="product-thumb">
-                                    <img src="../images/vegetables/okra.png" alt="Okra">
-                                    <span class="item-name">OKRA (BHINDI)</span>
-                                    <span class="item-qty">Qty: 1.5kg</span>
+                                    <img src="{% static 'images/vegetables/okra.png' %}" alt="Okra">
+                                    <span class="item-name">OKRA</span>
+                                    <span class="item-qty">Qty: 1kg</span>
                                 </div>
                                 <div class="product-thumb">
-                                    <img src="../images/fruits/papaya.png" alt="Papaya">
+                                    <img src="{% static 'images/fruits/papaya.png' %}" alt="Papaya">
                                     <span class="item-name">PAPAYA</span>
-                                    <span class="item-qty">Qty: 2pcs</span>
+                                    <span class="item-qty">Qty: 1kg</span>
                                 </div>
                                 <div class="product-thumb">
-                                    <img src="../images/vegetables/carrot.png" alt="Carrot">
-                                    <span class="item-name">CARROT (GAJAR)</span>
-                                    <span class="item-qty">Qty: 2kg</span>
+                                    <img src="{% static 'images/fruits/pineapple.png' %}" alt="Pineapple">
+                                    <span class="item-name">PINEAPPLE</span>
+                                    <span class="item-qty">Qty: 1kg</span>
                                 </div>
                             </div>
                         </div>                        <div class="order-footer">
@@ -246,14 +242,14 @@
                         <div class="order-items">
                             <div class="items-grid">
                                 <div class="product-thumb">
-                                    <img src="../images/fruits/mosambi.png" alt="Mosambi">
-                                    <span class="item-name">MOSAMBI</span>
-                                    <span class="item-qty">Qty: 3kg</span>
+                                    <img src="{% static 'images/fruits/orange.png' %}" alt="Orange">
+                                    <span class="item-name">ORANGE</span>
+                                    <span class="item-qty">Qty: 1kg</span>
                                 </div>
                                 <div class="product-thumb">
-                                    <img src="../images/fruits/guava.png" alt="Guava">
-                                    <span class="item-name">GUAVA (AMROOD)</span>
-                                    <span class="item-qty">Qty: 2kg</span>
+                                    <img src="{% static 'images/fruits/guava.png' %}" alt="Guava">
+                                    <span class="item-name">GUAVA</span>
+                                    <span class="item-qty">Qty: 1kg</span>
                                 </div>
                             </div>
                         </div>
@@ -290,14 +286,14 @@
                         <div class="order-items">
                             <div class="items-grid">
                                 <div class="product-thumb">
-                                    <img src="../images/vegetables/bitter-gourd.png" alt="Bitter Gourd">
+                                    <img src="{% static 'images/vegetables/bitter-gourd.png' %}" alt="Bitter Gourd">
                                     <span class="item-name">BITTER GOURD</span>
-                                    <span class="item-qty">Qty: 1.5kg</span>
+                                    <span class="item-qty">Qty: 1kg</span>
                                 </div>
                                 <div class="product-thumb">
-                                    <img src="../images/herbs/ginger.png" alt="Ginger">
-                                    <span class="item-name">GINGER (ADRAK)</span>
-                                    <span class="item-qty">Qty: 500g</span>
+                                    <img src="{% static 'images/herbs/ginger.png' %}" alt="Ginger">
+                                    <span class="item-name">GINGER</span>
+                                    <span class="item-qty">Qty: 1kg</span>
                                 </div>
                             </div>
                         </div>
@@ -333,6 +329,8 @@
         </main>
     </div>
 
+    <script src="{% static 'js/notifications.js' %}"></script>
+    <script src="{% static 'js/account-overview.js' %}"></script>
     <script src="{% static 'js/account.js' %}"></script>
     <script src="{% static 'js/orders.js' %}"></script>
 </body>

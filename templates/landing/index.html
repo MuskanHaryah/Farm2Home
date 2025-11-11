@@ -46,10 +46,10 @@
                 </h1>
                 <p class="hero-subtitle">Directly to your table, no middleman. Just pure, organic goodness.</p>
                 <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="window.location.href='{% url 'main:catalog' %}'">
+                    <a href="{% url 'main:catalog' %}" class="btn btn-primary">
                         Explore Products
                         <i class="fas fa-arrow-right"></i>
-                    </button>
+                    </a>
                     <button class="btn btn-secondary">
                         Learn More
                     </button>
@@ -165,10 +165,10 @@
         </div>
 
         <div class="showcase-cta">
-            <button class="btn btn-primary" onclick="window.location.href='{% url 'main:catalog' %}'">
+            <a href="{% url 'main:catalog' %}" class="btn btn-primary">
                 Browse All Products
                 <i class="fas fa-arrow-right"></i>
-            </button>
+            </a>
         </div>
     </section>
 
@@ -197,10 +197,10 @@
         <div class="cta-content">
             <h2>Ready to Experience Fresh?</h2>
             <p>Join thousands of happy customers enjoying farm-fresh produce delivered to their door</p>
-            <button class="btn btn-primary btn-large" onclick="window.location.href='{% url 'main:catalog' %}'">
+            <a href="{% url 'main:catalog' %}" class="btn btn-primary btn-large">
                 Start Shopping
                 <i class="fas fa-arrow-right"></i>
-            </button>
+            </a>
         </div>
     </section>
 

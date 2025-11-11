@@ -118,7 +118,7 @@
             <div class="orders-section">
                 <div class="section-header">
                     <h2 class="section-title">RECENT ORDERS</h2>
-                    <a href="orders.html" class="view-all-link">
+                    <a href="{% url 'main:account_orders' %}" class="view-all-link" id="viewAllOrdersBtn">
                         VIEW ALL
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -213,6 +213,7 @@
     </div>
 
     <script src="{% static 'js/notifications.js' %}"></script>
+    <script src="{% static 'js/account-overview.js' %}"></script>
     <script src="{% static 'js/account.js' %}"></script>
 </body>
 </html>

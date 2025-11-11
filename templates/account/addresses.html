@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/account.css' %}">
     <link rel="stylesheet" href="{% static 'css/addresses.css' %}">
+    <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
 </head>
 <body>
     <!-- Header -->
@@ -209,7 +210,7 @@
     <div class="modal" id="addressModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">ADD NEW ADDRESS</h2>
+                <h2 id="modalTitle">ADD DELIVERY ADDRESS</h2>
                 <button class="modal-close" id="closeModal">
                     <i class="fas fa-times"></i>
                 </button>
@@ -217,49 +218,57 @@
             <div class="modal-body">
                 <form id="addressForm">
                     <div class="form-group">
-                        <label for="addressType">Address Type</label>
+                        <label for="addressType">ADDRESS TYPE</label>
                         <select id="addressType" name="addressType" required>
+                            <option value="">Home</option>
                             <option value="home">Home</option>
                             <option value="work">Work</option>
                             <option value="other">Other</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="fullName">Full Name</label>
-                        <input type="text" id="fullName" name="fullName" placeholder="Enter full name" required>
+                        <label for="fullName">FULL NAME</label>
+                        <input type="text" id="fullName" name="fullName" placeholder="Ahmed Khan" required>
                     </div>
                     <div class="form-group">
-                        <label for="addressLine">Address Line</label>
-                        <input type="text" id="addressLine" name="addressLine" placeholder="House/Plot no, Street, Area" required>
+                        <label for="phone">PHONE NUMBER</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+92 300 1234567" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addressLine">STREET ADDRESS</label>
+                        <input type="text" id="addressLine" name="addressLine" placeholder="House 123, Street 5, F-7 Markaz" required>
                     </div>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="city">City</label>
-                            <input type="text" id="city" name="city" placeholder="City" required>
+                        <div class="form-group form-group-half">
+                            <label for="city">CITY</label>
+                            <select id="city" name="city" required>
+                                <option value="">Islamabad</option>
+                                <option value="islamabad">Islamabad</option>
+                                <option value="karachi">Karachi</option>
+                                <option value="lahore">Lahore</option>
+                                <option value="peshawar">Peshawar</option>
+                                <option value="quetta">Quetta</option>
+                            </select>
                         </div>
-                        <div class="form-group">
-                            <label for="province">Province</label>
-                            <input type="text" id="province" name="province" placeholder="Province" required>
+                        <div class="form-group form-group-half">
+                            <label for="province">PROVINCE</label>
+                            <select id="province" name="province" required>
+                                <option value="">Punjab</option>
+                                <option value="punjab">Punjab</option>
+                                <option value="sindh">Sindh</option>
+                                <option value="kpk">KPK</option>
+                                <option value="balochistan">Balochistan</option>
+                                <option value="ict">ICT</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="postalCode">Postal Code</label>
-                            <input type="text" id="postalCode" name="postalCode" placeholder="Postal Code" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" placeholder="+92 (XXX) XXXXXXX" required>
-                        </div>
-                    </div>
-                    <div class="form-group checkbox-group">
-                        <input type="checkbox" id="setDefault" name="setDefault">
-                        <label for="setDefault">Set as default address</label>
+                    <div class="form-group">
+                        <label for="postalCode">POSTAL CODE</label>
+                        <input type="text" id="postalCode" name="postalCode" placeholder="44000" required>
                     </div>
                     <div class="modal-actions">
                         <button type="button" class="btn-cancel" id="cancelBtn">CANCEL</button>
                         <button type="submit" class="btn-save">
-                            <i class="fas fa-save"></i>
                             SAVE ADDRESS
                         </button>
                     </div>
@@ -268,6 +277,7 @@
         </div>
     </div>
 
+    <script src="{% static 'js/notifications.js' %}"></script>
     <script src="{% static 'js/account.js' %}"></script>
     <script src="{% static 'js/addresses.js' %}"></script>
 </body>
