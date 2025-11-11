@@ -1,9 +1,21 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
 
 app_name = 'main'
 
+# API Router
+router = DefaultRouter()
+router.register(r'products', views.ProductViewSet, basename='product')
+router.register(r'cart', views.CartViewSet, basename='cart')
+router.register(r'orders', views.OrderViewSet, basename='order')
+router.register(r'customers', views.CustomerViewSet, basename='customer')
+router.register(r'inventory', views.InventoryViewSet, basename='inventory')
+
 urlpatterns = [
+    # API endpoints
+    path('api/', include(router.urls)),
+    
     # Home and landing
     path('', views.home, name='home'),
     path('landing/', views.landing, name='landing'),
