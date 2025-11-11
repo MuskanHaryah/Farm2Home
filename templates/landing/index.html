@@ -5,10 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farm2Home - Fresh Farm to Your Door</title>
-    <link rel="stylesheet" href="{% static 'css/global-typography.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
-    <link rel="stylesheet" href="{% static 'css/notifications.css' %}"
+    <link rel="stylesheet" href="{% static 'css/landing-new.css' %}">
+    <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
 </head>
 <body>
     <!-- Navigation -->
@@ -36,27 +35,26 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with Background Image -->
     <section class="hero" id="home">
+        <div class="hero-bg">
+            <img src="{% static 'images/main.png' %}" alt="Farm Background" class="hero-bg-image">
+        </div>
+        <div class="hero-overlay"></div>
         <div class="hero-content">
-            <div class="hero-text">
-                <h1 class="hero-title">
-                    FRESH
-                    <span class="highlight">FROM FARM</span>
-                </h1>
-                <p class="hero-subtitle">Directly to your table, no middleman. Just pure, organic goodness.</p>
-                <div class="hero-buttons">
-                    <a href="{% url 'main:catalog' %}" class="btn btn-primary">
-                        Explore Products
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                    <button class="btn btn-secondary">
-                        Learn More
-                    </button>
-                </div>
-            </div>
-            <div class="hero-image">
-                <img src="{% static 'images/vegetables/carrot.png' %}" alt="Fresh Vegetables" class="hero-img">
+            <h1 class="hero-title">
+                FRESH
+                <span class="highlight">FROM FARM</span>
+            </h1>
+            <p class="hero-subtitle">Directly to your table, no middleman. Just pure, organic goodness.</p>
+            <div class="hero-buttons">
+                <a href="{% url 'main:catalog' %}" class="btn btn-primary">
+                    Explore Products
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <button class="btn btn-secondary">
+                    Learn More
+                </button>
             </div>
         </div>
         <div class="scroll-indicator">
@@ -66,196 +64,284 @@
     </section>
 
     <!-- Features Section -->
-    <section class="features" id="benefits">
-        <div class="features-header">
-            <h2>PURE NATURE</h2>
-            <p>Farm-Fresh Quality, Uncompromised</p>
-        </div>
-
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-leaf"></i>
-                </div>
-                <h3>100% Organic</h3>
-                <p>No pesticides, no chemicals. Just nature's best grown with care and responsibility.</p>
+    <section class="features-section" id="benefits">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Choose Farm2Home?</h2>
+                <p>Direct from farm to your table with guaranteed freshness</p>
             </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-truck"></i>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>100% Organic</h3>
+                    <p>Certified organic produce grown without harmful pesticides or chemicals</p>
                 </div>
-                <h3>Fresh Delivery</h3>
-                <p>Harvested fresh and delivered to your door within 24 hours. Farm to table, truly.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-seedling"></i>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-truck-fast"></i>
+                    </div>
+                    <h3>Fast Delivery</h3>
+                    <p>Farm-fresh products delivered to your doorstep within 24 hours</p>
                 </div>
-                <h3>Sustainable</h3>
-                <p>Supporting local farmers and sustainable farming practices for a better tomorrow.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-heart"></i>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Fair Trade</h3>
+                    <p>Supporting local farmers with fair prices and sustainable practices</p>
                 </div>
-                <h3>Health First</h3>
-                <p>Rich in nutrients, vitamins, and minerals. Naturally grown for your wellness.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-lock"></i>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-check"></i>
+                    </div>
+                    <h3>Quality Assured</h3>
+                    <p>Every product is inspected for quality and freshness before delivery</p>
                 </div>
-                <h3>Quality Assured</h3>
-                <p>Every product inspected and verified. Your food safety is our top priority.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-handshake"></i>
-                </div>
-                <h3>Fair Trade</h3>
-                <p>Farmers paid fairly. Direct partnerships ensuring everyone wins.</p>
             </div>
         </div>
     </section>
 
-    <!-- Product Showcase -->
-    <section class="showcase" id="products">
-        <div class="showcase-header">
-            <h2>OUR COLLECTION</h2>
-            <p>Explore our fresh, handpicked selection</p>
-        </div>
-
-        <div class="showcase-container">
-            <div class="showcase-slider">
-                <div class="slider-item active">
-                    <img src="{% static 'images/vegetables/tomato.png' %}" alt="Tomato">
+    <!-- Products Section -->
+    <section class="products-section" id="products">
+        <div class="container">
+            <div class="section-header">
+                <h2>Fresh Products</h2>
+                <p>Explore our selection of farm-fresh organic produce</p>
+            </div>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <img src="{% static 'images/vegetables/tomato.png' %}" alt="Fresh Tomatoes">
                     <h3>Fresh Tomatoes</h3>
-                    <p>Juicy and red, perfect for salads and cooking</p>
+                    <p>Juicy and ripe tomatoes</p>
                 </div>
-                <div class="slider-item">
-                    <img src="{% static 'images/fruits/pineapple.png' %}" alt="Pineapple">
-                    <h3>Tropical Pineapple</h3>
-                    <p>Sweet and refreshing tropical goodness</p>
-                </div>
-                <div class="slider-item">
-                    <img src="{% static 'images/vegetables/carrot.png' %}" alt="Carrot">
+                
+                <div class="product-card">
+                    <img src="{% static 'images/vegetables/carrot.png' %}" alt="Organic Carrots">
                     <h3>Organic Carrots</h3>
-                    <p>Crunchy and nutritious for healthy living</p>
+                    <p>Crunchy and sweet carrots</p>
                 </div>
-                <div class="slider-item">
-                    <img src="{% static 'images/herbs/basil.png' %}" alt="Basil">
+                
+                <div class="product-card">
+                    <img src="{% static 'images/fruits/pineapple.png' %}" alt="Tropical Pineapple">
+                    <h3>Tropical Pineapple</h3>
+                    <p>Sweet and juicy pineapples</p>
+                </div>
+                
+                <div class="product-card">
+                    <img src="{% static 'images/herbs/basil.png' %}" alt="Fresh Basil">
                     <h3>Fresh Basil</h3>
-                    <p>Aromatic herbs for your favorite dishes</p>
+                    <p>Aromatic herb for cooking</p>
                 </div>
             </div>
-
-            <div class="slider-dots" id="sliderDots"></div>
-
-            <button class="slider-arrow prev" onclick="prevSlide()">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="slider-arrow next" onclick="nextSlide()">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
-
-        <div class="showcase-cta">
-            <a href="{% url 'main:catalog' %}" class="btn btn-primary">
-                Browse All Products
-                <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="about" id="about">
-        <div class="about-content">
-            <div class="about-text">
-                <h2>Why Farm2Home?</h2>
-                <p>We believe in the power of fresh, farm-grown produce. Our mission is simple: connect you directly with farmers who care about quality, sustainability, and your health.</p>
-                <p>No middlemen. No compromises. Just pure, organic goodness delivered straight from the farm to your home.</p>
-                <ul class="about-list">
-                    <li><i class="fas fa-check"></i> Direct from certified organic farms</li>
-                    <li><i class="fas fa-check"></i> 24-hour fresh delivery guarantee</li>
-                    <li><i class="fas fa-check"></i> 100% money-back guarantee</li>
-                    <li><i class="fas fa-check"></i> Supporting local farmers</li>
-                </ul>
-            </div>
-            <div class="about-image">
-                <img src="{% static 'images/fruits/guava.png' %}" alt="Fresh Produce" class="about-img">
+            
+            <div class="products-cta">
+                <a href="{% url 'main:catalog' %}" class="btn-primary-large">
+                    Shop All Products
+                    <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="cta-content">
-            <h2>Ready to Experience Fresh?</h2>
-            <p>Join thousands of happy customers enjoying farm-fresh produce delivered to their door</p>
-            <a href="{% url 'main:catalog' %}" class="btn btn-primary btn-large">
-                Start Shopping
-                <i class="fas fa-arrow-right"></i>
-            </a>
+    <!-- Featured Categories Section -->
+    <section class="featured-categories-section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>Featured Categories</h2>
+                <a href="{% url 'main:catalog' %}" class="view-all-link">View All Categories →</a>
+            </div>
+            
+            <div class="categories-grid">
+                <div class="category-card circular">
+                    <div class="category-circle">
+                        <img src="{% static 'images/vegetables/carrot.png' %}" alt="Fresh Vegetables">
+                    </div>
+                    <h3>Vegetables</h3>
+                </div>
+                
+                <div class="category-card circular">
+                    <div class="category-circle">
+                        <img src="{% static 'images/fruits/pineapple.png' %}" alt="Fresh Fruits">
+                    </div>
+                    <h3>Fresh Fruits</h3>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="contact-header">
-            <h2>Get In Touch</h2>
-            <p>We'd love to hear from you</p>
-        </div>
-
-        <div class="contact-container">
-            <div class="contact-info">
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <div>
-                        <h4>Address</h4>
-                        <p>123 Farm Road, Fresh Valley, FV 12345</p>
+    <!-- Promotional Cards Section -->
+    <section class="promo-section">
+        <div class="container">
+            <div class="promo-cards-grid">
+                <!-- Discount Card 1 -->
+                <div class="discount-card discount-card-1">
+                    <div class="discount-badge">Flat 20% Discount</div>
+                    <h3>Purely Fresh Vegetables</h3>
+                    <p>Premium quality vegetables at special price</p>
+                    <a href="{% url 'main:catalog' %}" class="promo-btn">
+                        Shop Now →
+                    </a>
+                    <div class="promo-image">
+                        <img src="{% static 'images/vegetables/carrot.png' %}" alt="Fresh Vegetables">
                     </div>
                 </div>
-
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <div>
-                        <h4>Email</h4>
-                        <p><a href="mailto:hello@farm2home.com">hello@farm2home.com</a></p>
-                    </div>
-                </div>
-
-                <div class="contact-item">
-                    <i class="fas fa-phone"></i>
-                    <div>
-                        <h4>Phone</h4>
-                        <p><a href="tel:+1234567890">+1 (234) 567-890</a></p>
+                
+                <!-- Discount Card 2 -->
+                <div class="discount-card discount-card-2">
+                    <div class="discount-badge">Flat 25% Discount</div>
+                    <h3>Fresh Fruits, Pure Quality</h3>
+                    <p>Handpicked fresh fruits directly from farms</p>
+                    <a href="{% url 'main:catalog' %}" class="promo-btn">
+                        Shop Now →
+                    </a>
+                    <div class="promo-image">
+                        <img src="{% static 'images/fruits/pineapple.png' %}" alt="Fresh Fruits">
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <form class="contact-form">
-                <input type="text" placeholder="Your Name" required>
-                <input type="email" placeholder="Your Email" required>
-                <textarea placeholder="Your Message" rows="5" required></textarea>
-                <button type="submit" class="btn btn-primary">Send Message</button>
-            </form>
+    <!-- Summer Discount Section -->
+    <section class="summer-discount-section">
+        <div class="container">
+            <div class="summer-discount-card">
+                <div class="discount-content">
+                    <h2>Summer Discount</h2>
+                    <p>SPECIAL OFFER ON FRESH PRODUCE</p>
+                    
+                    <div class="countdown-timer">
+                        <div class="timer-item">
+                            <span class="timer-number">04</span>
+                            <span class="timer-label">Days</span>
+                        </div>
+                        <div class="timer-item">
+                            <span class="timer-number">14</span>
+                            <span class="timer-label">Hours</span>
+                        </div>
+                        <div class="timer-item">
+                            <span class="timer-number">48</span>
+                            <span class="timer-label">Minutes</span>
+                        </div>
+                        <div class="timer-item">
+                            <span class="timer-number">18</span>
+                            <span class="timer-label">Seconds</span>
+                        </div>
+                    </div>
+                    
+                    <a href="{% url 'main:catalog' %}" class="summer-btn">
+                        Shop Now
+                    </a>
+                </div>
+                <div class="discount-image">
+                    <img src="{% static 'images/vegetables/tomato.png' %}" alt="Summer Vegetables">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deals of the Day Section -->
+    <section class="deals-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Deals of the Day</h2>
+            </div>
+            
+            <div class="deals-grid">
+                <div class="deal-card">
+                    <div class="deal-image">
+                        <img src="{% static 'images/vegetables/tomato.png' %}" alt="Fresh Tomatoes">
+                    </div>
+                    <h4>Fresh Tomatoes</h4>
+                    <div class="deal-price">
+                        <span class="original-price">Rs. 350</span>
+                        <span class="deal-price-value">Rs. 199</span>
+                    </div>
+                    <div class="deal-discount">Save 43%</div>
+                    <button class="deal-btn">Add to Cart</button>
+                </div>
+                
+                <div class="deal-card">
+                    <div class="deal-image">
+                        <img src="{% static 'images/vegetables/carrot.png' %}" alt="Organic Carrots">
+                    </div>
+                    <h4>Organic Carrots</h4>
+                    <div class="deal-price">
+                        <span class="original-price">Rs. 280</span>
+                        <span class="deal-price-value">Rs. 179</span>
+                    </div>
+                    <div class="deal-discount">Save 36%</div>
+                    <button class="deal-btn">Add to Cart</button>
+                </div>
+                
+                <div class="deal-card">
+                    <div class="deal-image">
+                        <img src="{% static 'images/fruits/pineapple.png' %}" alt="Tropical Pineapple">
+                    </div>
+                    <h4>Tropical Pineapple</h4>
+                    <div class="deal-price">
+                        <span class="original-price">Rs. 450</span>
+                        <span class="deal-price-value">Rs. 299</span>
+                    </div>
+                    <div class="deal-discount">Save 34%</div>
+                    <button class="deal-btn">Add to Cart</button>
+                </div>
+                
+                <div class="deal-card">
+                    <div class="deal-image">
+                        <img src="{% static 'images/herbs/basil.png' %}" alt="Fresh Basil">
+                    </div>
+                    <h4>Fresh Basil</h4>
+                    <div class="deal-price">
+                        <span class="original-price">Rs. 180</span>
+                        <span class="deal-price-value">Rs. 119</span>
+                    </div>
+                    <div class="deal-discount">Save 34%</div>
+                    <button class="deal-btn">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- B2B Bulk Buying Section -->
+    <section class="b2b-section">
+        <div class="container">
+            <div class="b2b-card">
+                <div class="b2b-content">
+                    <h2>Business to Business</h2>
+                    <h3>Buy in Bulk</h3>
+                    <p>Get exclusive wholesale prices for your business. Direct from farm to your store.</p>
+                    <ul class="b2b-features">
+                        <li><i class="fas fa-check"></i> Wholesale Pricing</li>
+                        <li><i class="fas fa-check"></i> Bulk Orders</li>
+                        <li><i class="fas fa-check"></i> Dedicated Support</li>
+                        <li><i class="fas fa-check"></i> Fast Delivery</li>
+                    </ul>
+                    <a href="#contact" class="b2b-btn">Contact Sales Team</a>
+                </div>
+                <div class="b2b-image">
+                    <img src="{% static 'images/vegetables/okra.png' %}" alt="Bulk Vegetables">
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Login Modal -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+            <button class="modal-close" onclick="closeLoginModal()">&times;</button>
             <div class="modal-header">
-                <h2>Login to Farm2Home</h2>
-                <p>Welcome back! Sign in to your account</p>
+                <h2>Welcome Back</h2>
+                <p>Login to your Farm2Home account</p>
             </div>
-            <form class="auth-form" id="loginForm">
+            <form class="auth-form">
                 <div class="form-group">
                     <label>Email Address</label>
                     <input type="email" placeholder="your@email.com" required>
@@ -269,9 +355,9 @@
                         <input type="checkbox">
                         Remember me
                     </label>
-                    <a href="#" class="forgot-link">Forgot password?</a>
+                    <a href="#" class="forgot-password">Forgot password?</a>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                <button type="submit" class="btn-primary">Login</button>
                 <p class="auth-switch">
                     Don't have an account? <a href="#" onclick="switchToSignup()">Sign Up</a>
                 </p>
@@ -282,12 +368,12 @@
     <!-- Signup Modal -->
     <div id="signupModal" class="modal">
         <div class="modal-content">
-            <button class="close-btn" onclick="closeSignupModal()">&times;</button>
+            <button class="modal-close" onclick="closeSignupModal()">&times;</button>
             <div class="modal-header">
-                <h2>Create Your Farm2Home Account</h2>
-                <p>Join us and get fresh produce delivered to your door</p>
+                <h2>Create Account</h2>
+                <p>Join Farm2Home today</p>
             </div>
-            <form class="auth-form" id="signupForm">
+            <form class="auth-form">
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" placeholder="John Doe" required>
@@ -302,7 +388,7 @@
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" placeholder="Create a strong password" required>
+                    <input type="password" placeholder="Create a password" required>
                 </div>
                 <div class="form-group">
                     <label>Confirm Password</label>
@@ -312,47 +398,78 @@
                     <input type="checkbox" required>
                     I agree to the Terms & Conditions
                 </label>
-                <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                <button type="submit" class="btn-primary">Create Account</button>
                 <p class="auth-switch">
-                    Already have an account? <a href="#" onclick="switchToLogin()">Sign In</a>
+                    Already have an account? <a href="#" onclick="switchToLogin()">Login</a>
                 </p>
             </form>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Farm2Home</h4>
-                <p>Bringing fresh, organic produce from farm to your table.</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#products">Products</a></li>
-                    <li><a href="{% url 'main:catalog' %}">Shop</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Follow Us</h4>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
+    <footer class="footer" id="footerSection">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-leaf"></i>
+                        <span>FARM2HOME</span>
+                    </div>
+                    <p>Bringing fresh, organic produce directly from farm to your table.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="{% url 'main:catalog' %}">Products</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="{% url 'main:account_home' %}">My Account</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Get In Touch</h4>
+                    <form class="footer-contact-form">
+                        <input type="text" placeholder="Your Name" required>
+                        <input type="email" placeholder="Your Email" required>
+                        <textarea placeholder="Your Message" rows="3" required></textarea>
+                        <button type="submit" class="btn-primary">Send Message</button>
+                    </form>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> hello@farm2home.com</li>
+                        <li><i class="fas fa-phone"></i> +92 (300) 567-890</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Karachi, Pakistan</li>
+                    </ul>
                 </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 Farm2Home. All Rights Reserved.</p>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Farm2Home. All Rights Reserved.</p>
+            </div>
         </div>
     </footer>
 
     <script src="{% static 'js/notifications.js' %}"></script>
     <script src="{% static 'js/authentication.js' %}"></script>
-    <script src="{% static 'js/landing.js' %}"></script>
+    <script src="{% static 'js/landing-countdown.js' %}"></script>
+    <script>
+        // Apply footer background image
+        document.getElementById('footerSection').style.backgroundImage = "url('{% static 'images/footer.png' %}')";
+        document.getElementById('footerSection').style.backgroundSize = "cover";
+        document.getElementById('footerSection').style.backgroundPosition = "center";
+        document.getElementById('footerSection').style.backgroundAttachment = "fixed";
+    </script>
 </body>
 </html>
+
