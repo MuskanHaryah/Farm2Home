@@ -87,18 +87,6 @@ body {
     border: 1px solid var(--border-color);
 }
 
-.search-category {
-    padding: 12px 16px;
-    border: none;
-    background-color: transparent;
-    color: var(--text-gray);
-    font-size: 14px;
-    cursor: pointer;
-    outline: none;
-    border-right: 1px solid var(--border-color);
-    min-width: 150px;
-}
-
 .search-input {
     flex: 1;
     padding: 12px 16px;
@@ -243,6 +231,15 @@ body {
     color: var(--accent-orange);
     font-size: 15px;
     font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.season-indicator.summer {
+    color: var(--accent-orange);
+}
+
+.season-indicator.winter {
+    color: #5da9e9; /* Light blue for winter */
 }
 
 .season-indicator i {

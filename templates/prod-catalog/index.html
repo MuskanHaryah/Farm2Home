@@ -22,12 +22,6 @@
 
             <!-- Search Bar -->
             <div class="search-bar">
-                <select class="search-category" id="searchCategory">
-                    <option value="all">All categories</option>
-                    <option value="vegetables">Vegetables</option>
-                    <option value="fruits">Fruits</option>
-                    <option value="herbs">Herbs</option>
-                </select>
                 <input type="text" class="search-input" id="headerSearch" placeholder="What are you looking for?">
                 <button class="search-button">
                     <i class="fas fa-search"></i>
@@ -68,7 +62,7 @@
             <!-- Page Header -->
             <div class="page-header">
                 <h1 class="page-title">Fresh Produce from Pakistani Farms</h1>
-                <p class="season-indicator">
+                <p class="season-indicator" id="currentSeasonIndicator">
                     <i class="fas fa-sun"></i> Currently Summer Season
                 </p>
             </div>
@@ -95,19 +89,19 @@
                                 <input type="checkbox" name="season" value="winter">
                                 <span class="checkmark"></span>
                                 <span class="label-text">❄️ Winter</span>
-                                <span class="filter-count">(17)</span>
+                                <span class="filter-count" id="count-winter">(0)</span>
                             </label>
                             <label class="filter-checkbox">
                                 <input type="checkbox" name="season" value="summer">
                                 <span class="checkmark"></span>
                                 <span class="label-text">☀️ Summer</span>
-                                <span class="filter-count">(21)</span>
+                                <span class="filter-count" id="count-summer">(0)</span>
                             </label>
                             <label class="filter-checkbox">
                                 <input type="checkbox" name="season" value="year-round">
                                 <span class="checkmark"></span>
                                 <span class="label-text">🔄 Year-round</span>
-                                <span class="filter-count">(18)</span>
+                                <span class="filter-count" id="count-year-round">(0)</span>
                             </label>
                         </div>
 
@@ -118,19 +112,19 @@
                                 <input type="checkbox" name="category" value="vegetables">
                                 <span class="checkmark"></span>
                                 <span class="label-text">Vegetables</span>
-                                <span class="filter-count">(24)</span>
+                                <span class="filter-count" id="count-vegetables">(0)</span>
                             </label>
                             <label class="filter-checkbox">
                                 <input type="checkbox" name="category" value="fruits">
                                 <span class="checkmark"></span>
                                 <span class="label-text">Fruits</span>
-                                <span class="filter-count">(24)</span>
+                                <span class="filter-count" id="count-fruits">(0)</span>
                             </label>
                             <label class="filter-checkbox">
                                 <input type="checkbox" name="category" value="herbs">
                                 <span class="checkmark"></span>
                                 <span class="label-text">Herbs</span>
-                                <span class="filter-count">(8)</span>
+                                <span class="filter-count" id="count-herbs">(0)</span>
                             </label>
                         </div>
 
@@ -264,6 +258,6 @@
     </div>
 
     <script src="{% static 'js/notifications.js' %}"></script>
-    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/catalog.js' %}"></script>
 </body>
 </html>

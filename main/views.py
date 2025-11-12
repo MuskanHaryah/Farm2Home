@@ -1,17 +1,111 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from django.db.models import Q
 from .models import Product, Inventory, Customer, Order, OrderItem, Cart
 from .serializers import (
     ProductSerializer, ProductListSerializer, 
+    ProductCatalogSerializer,
     InventorySerializer, CustomerSerializer,
     OrderSerializer, OrderCreateSerializer,
     CartSerializer
 )
 
 # ==================== API VIEWS ====================
+
+@api_view(['GET'])
+def catalog_products_api(request):
+    """
+    API endpoint specifically for product catalog page
+    Returns products in the exact format expected by script.js
+    
+    Supported Query Parameters:
+    - category: Filter by category (vegetables, fruits, herbs)
+    - season: Filter by season (summer, winter, year-round)
+    - in_stock: Filter only in-stock items (true/false)
+    - search: Search by name or local name
+    - price_min: Minimum price filter
+    - price_max: Maximum price filter
+    - sort: Sort order (price_low, price_high, name_asc, name_desc, featured)
+    
+    Returns: JSON array of products matching frontend structure
+    """
+    # Start with active products and optimize query with select_related
+    products = Product.objects.filter(is_active=True).select_related('inventory')
+    
+    # ===== CATEGORY FILTER =====
+    category = request.GET.get('category')
+    if category and category != 'all':
+        products = products.filter(category__iexact=category)
+    
+    # ===== SEASON FILTER =====
+    # Convert frontend format (summer, winter, year-round) to DB format (SUMMER, WINTER, ALL_YEAR)
+    season = request.GET.get('season')
+    if season:
+        season_mapping = {
+            'summer': 'SUMMER',
+            'winter': 'WINTER',
+            'year-round': 'ALL_YEAR'
+        }
+        db_season = season_mapping.get(season.lower())
+        if db_season:
+            products = products.filter(season=db_season)
+    
+    # ===== IN STOCK FILTER =====
+    in_stock = request.GET.get('in_stock')
+    if in_stock and in_stock.lower() == 'true':
+        products = products.filter(inventory__stock_available__gt=0)
+    
+    # ===== SEARCH FILTER =====
+    # Search in both English name and local name (variety)
+    search = request.GET.get('search')
+    if search:
+        search_term = search.strip()
+        if search_term:
+            products = products.filter(
+                Q(name__icontains=search_term) | Q(local_name__icontains=search_term)
+            )
+    
+    # ===== PRICE RANGE FILTERS =====
+    price_min = request.GET.get('price_min')
+    if price_min:
+        try:
+            products = products.filter(price__gte=float(price_min))
+        except (ValueError, TypeError):
+            pass  # Ignore invalid price values
+    
+    price_max = request.GET.get('price_max')
+    if price_max:
+        try:
+            products = products.filter(price__lte=float(price_max))
+        except (ValueError, TypeError):
+            pass
+    
+    # ===== SORTING =====
+    sort_by = request.GET.get('sort', 'featured')
+    
+    if sort_by == 'price_low':
+        products = products.order_by('price', 'name')
+    elif sort_by == 'price_high':
+        products = products.order_by('-price', 'name')
+    elif sort_by == 'name_asc':
+        products = products.order_by('name')
+    elif sort_by == 'name_desc':
+        products = products.order_by('-name')
+    elif sort_by == 'date_new':
+        # Sort by newest first (using product_id as proxy for creation order)
+        products = products.order_by('-product_id')
+    else:  # featured or default
+        # Default sorting: by category and name
+        products = products.order_by('category', 'name')
+    
+    # ===== SERIALIZE AND RETURN =====
+    serializer = ProductCatalogSerializer(products, many=True)
+    
+    # Return the data with proper JSON response
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     """

@@ -16,6 +16,10 @@ urlpatterns = [
     # API endpoints
     path('api/', include(router.urls)),
     
+    # Custom API endpoint for product catalog page
+    # This endpoint returns products in the exact format expected by script.js
+    path('api/catalog/products/', views.catalog_products_api, name='catalog_products_api'),
+    
     # Home and landing
     path('', views.home, name='home'),
     path('landing/', views.landing, name='landing'),

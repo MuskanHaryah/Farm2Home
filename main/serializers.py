@@ -28,6 +28,96 @@ class InventorySerializer(serializers.ModelSerializer):
         read_only_fields = ['inventory_id']
 
 
+class ProductCatalogSerializer(serializers.ModelSerializer):
+    """
+    Enhanced serializer for Product Catalog page
+    Matches the frontend data structure for seamless integration
+    """
+    # Map database fields to frontend expected fields
+    id = serializers.IntegerField(source='product_id', read_only=True)
+    variety = serializers.CharField(source='local_name')
+    image = serializers.SerializerMethodField()
+    inStock = serializers.SerializerMethodField()
+    inSeasonNow = serializers.SerializerMethodField()
+    stock_available = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Product
+        fields = [
+            'id',               # Maps to product_id
+            'name',             # English name
+            'variety',          # Maps to local_name (Urdu/local)
+            'price',            # Price per kg
+            'image',            # Image path
+            'category',         # vegetables/fruits/herbs
+            'season',           # SUMMER/WINTER/ALL_YEAR
+            'inStock',          # Computed from inventory
+            'inSeasonNow',      # Computed based on current season
+            'stock_available',  # Quantity available
+            'discount',         # Discount percentage
+            'slug',             # URL slug
+        ]
+        read_only_fields = ['id', 'slug']
+    
+    def get_image(self, obj):
+        """Return the image path with static prefix"""
+        if obj.image:
+            return obj.image
+        # Default image based on category
+        return f'/static/images/{obj.category}/default.png'
+    
+    def get_inStock(self, obj):
+        """Check if product is in stock"""
+        try:
+            return obj.inventory.stock_available > 0
+        except Inventory.DoesNotExist:
+            return False
+    
+    def get_inSeasonNow(self, obj):
+        """
+        Determine if product is in season now
+        For demo: Summer = May-September, Winter = October-April
+        """
+        import datetime
+        current_month = datetime.datetime.now().month
+        
+        # Summer months: 5-9 (May to September)
+        is_summer = current_month in [5, 6, 7, 8, 9]
+        
+        if obj.season == 'ALL_YEAR':
+            return True
+        elif obj.season == 'SUMMER':
+            return is_summer
+        elif obj.season == 'WINTER':
+            return not is_summer
+        
+        return False
+    
+    def get_stock_available(self, obj):
+        """Get available stock from related inventory"""
+        try:
+            return obj.inventory.stock_available
+        except Inventory.DoesNotExist:
+            return 0
+    
+    def to_representation(self, instance):
+        """
+        Customize the output to match frontend structure
+        Convert season choices to frontend format
+        """
+        data = super().to_representation(instance)
+        
+        # Convert season from SUMMER/WINTER/ALL_YEAR to summer/winter/year-round
+        season_mapping = {
+            'SUMMER': 'summer',
+            'WINTER': 'winter',
+            'ALL_YEAR': 'year-round'
+        }
+        data['season'] = season_mapping.get(data['season'], 'year-round')
+        
+        return data
+
+
 class ProductSerializer(serializers.ModelSerializer):
     """Serializer for Product model with inventory details"""
     inventory = InventorySerializer(read_only=True)
@@ -219,6 +309,23 @@ class CartSerializer(serializers.ModelSerializer):
         if value <= 0:
             raise serializers.ValidationError("Quantity must be greater than 0.")
         return value
+
+
+class CartItemCatalogSerializer(serializers.Serializer):
+    """
+    Serializer for catalog page cart items (matches frontend structure)
+    Used for sending cart data in the format expected by script.js
+    """
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    variety = serializers.CharField()
+    price = serializers.DecimalField(max_digits=10, decimal_places=2)
+    image = serializers.CharField()
+    category = serializers.CharField()
+    season = serializers.CharField()
+    inStock = serializers.BooleanField()
+    inSeasonNow = serializers.BooleanField()
+    quantity = serializers.IntegerField()
 
 
 class CartSummarySerializer(serializers.Serializer):
