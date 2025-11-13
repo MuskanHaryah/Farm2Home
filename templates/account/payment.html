@@ -80,6 +80,10 @@
             <!-- Page Title -->
             <div class="payment-header">
                 <div class="payment-title-section">
+                    <a href="{% url 'main:account_home' %}" class="back-btn-link">
+                        <i class="fas fa-chevron-left"></i>
+                        Back to Overview
+                    </a>
                     <h1 class="page-title payment-title">PAYMENT METHODS</h1>
                     <p class="payment-subtitle">MANAGE YOUR PAYMENT OPTIONS SECURELY</p>
                 </div>
@@ -224,20 +228,20 @@
                 </div>
             </div>
 
-            <!-- Farm2Home Wallet Section -->
-            <div class="wallet-section">
-                <div class="wallet-card">
-                    <div class="wallet-icon">
-                        <i class="fas fa-wallet"></i>
+            <!-- Contact Support Section -->
+            <div class="contact-support-section">
+                <div class="contact-support-card">
+                    <div class="contact-support-icon">
+                        <i class="fas fa-headset"></i>
                     </div>
-                    <div class="wallet-info">
-                        <h3>FARM2HOME WALLET</h3>
-                        <p class="wallet-balance">Available Balance: <strong>Rs.1,850</strong></p>
+                    <div class="contact-support-info">
+                        <h3>NEED HELP?</h3>
+                        <p>Having issues with payments? Contact our support team through the form on our website.</p>
                     </div>
-                    <div class="wallet-actions">
-                        <button class="wallet-btn add-funds-btn">ADD FUNDS</button>
-                        <button class="wallet-btn view-history-btn">VIEW HISTORY</button>
-                    </div>
+                    <a href="{% url 'main:landing' %}#footerSection" class="contact-support-btn">
+                        <i class="fas fa-envelope"></i>
+                        CONTACT SUPPORT
+                    </a>
                 </div>
             </div>
         </main>
@@ -306,146 +310,6 @@
                         </button>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Funds to Wallet Modal -->
-    <div class="modal" id="walletModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="walletModalTitle">ADD FUNDS TO WALLET</h2>
-                <button class="modal-close" id="closeWalletModal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="walletForm">
-                    <div class="form-group">
-                        <label for="walletAmount">AMOUNT (PKR)</label>
-                        <input type="number" id="walletAmount" name="walletAmount" placeholder="1000" min="100" step="100">
-                        <p class="form-hint">Minimum amount: Rs.100</p>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>QUICK SELECT</label>
-                        <div class="quick-select-grid">
-                            <button type="button" class="quick-select-btn" data-amount="500">Rs.500</button>
-                            <button type="button" class="quick-select-btn" data-amount="1000">Rs.1,000</button>
-                            <button type="button" class="quick-select-btn" data-amount="2000">Rs.2,000</button>
-                            <button type="button" class="quick-select-btn" data-amount="5000">Rs.5,000</button>
-                            <button type="button" class="quick-select-btn" data-amount="10000">Rs.10,000</button>
-                            <button type="button" class="quick-select-btn" data-amount="20000">Rs.20,000</button>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="walletPaymentMethod">PAYMENT METHOD</label>
-                        <select id="walletPaymentMethod" name="walletPaymentMethod" required>
-                            <option value="">Select Payment Method</option>
-                            <option value="hbl">HBL Debit Card (••4242)</option>
-                            <option value="mcb">MCB Credit Card (••8888)</option>
-                            <option value="jazzcash">JazzCash Account</option>
-                        </select>
-                    </div>
-                    
-                    <div class="modal-actions">
-                        <button type="button" class="btn-cancel" id="cancelWalletBtn">CANCEL</button>
-                        <button type="submit" class="btn-save btn-add-funds">
-                            ADD FUNDS
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Wallet Transaction History Modal -->
-    <div class="modal" id="walletHistoryModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div>
-                    <h2>WALLET TRANSACTION HISTORY</h2>
-                    <p class="wallet-history-subtitle">VIEW ALL YOUR WALLET TRANSACTIONS AND ACTIVITIES</p>
-                </div>
-                <button class="modal-close" id="closeWalletHistoryModal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body wallet-history-body">
-                <div class="transaction-list">
-                    <!-- Transaction 1 -->
-                    <div class="transaction-item">
-                        <div class="transaction-icon added">
-                            <i class="fas fa-arrow-down"></i>
-                        </div>
-                        <div class="transaction-info">
-                            <h4 class="transaction-title">Added funds via HBL Card</h4>
-                            <p class="transaction-date">
-                                <i class="fas fa-clock"></i>
-                                2025-11-10 AT 02:34 PM
-                            </p>
-                        </div>
-                        <div class="transaction-amount">
-                            <span class="amount added">+Rs.2,000</span>
-                            <span class="status-badge completed">COMPLETED</span>
-                        </div>
-                    </div>
-
-                    <!-- Transaction 2 -->
-                    <div class="transaction-item">
-                        <div class="transaction-icon spent">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                        <div class="transaction-info">
-                            <h4 class="transaction-title">Order #ORD-2025-047</h4>
-                            <p class="transaction-date">
-                                <i class="fas fa-clock"></i>
-                                2025-11-09 AT 11:20 AM
-                            </p>
-                        </div>
-                        <div class="transaction-amount">
-                            <span class="amount spent">-Rs.650</span>
-                            <span class="status-badge completed">COMPLETED</span>
-                        </div>
-                    </div>
-
-                    <!-- Transaction 3 -->
-                    <div class="transaction-item">
-                        <div class="transaction-icon added">
-                            <i class="fas fa-arrow-down"></i>
-                        </div>
-                        <div class="transaction-info">
-                            <h4 class="transaction-title">Added funds via JazzCash</h4>
-                            <p class="transaction-date">
-                                <i class="fas fa-clock"></i>
-                                2025-11-05 AT 04:15 PM
-                            </p>
-                        </div>
-                        <div class="transaction-amount">
-                            <span class="amount added">+Rs.1,500</span>
-                            <span class="status-badge completed">COMPLETED</span>
-                        </div>
-                    </div>
-
-                    <!-- Transaction 4 -->
-                    <div class="transaction-item">
-                        <div class="transaction-icon spent">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                        <div class="transaction-info">
-                            <h4 class="transaction-title">Order #ORD-2025-042</h4>
-                            <p class="transaction-date">
-                                <i class="fas fa-clock"></i>
-                                2025-11-04 AT 09:45 AM
-                            </p>
-                        </div>
-                        <div class="transaction-amount">
-                            <span class="amount spent">-Rs.1,200</span>
-                            <span class="status-badge completed">COMPLETED</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

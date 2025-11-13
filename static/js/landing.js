@@ -71,6 +71,13 @@ document.querySelector('.contact-form')?.addEventListener('submit', (e) => {
     e.target.reset();
 });
 
+// Handle footer contact form submission
+document.querySelector('.footer-contact-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    notifications.success('📧 Thank you for contacting us! We will get back to you soon.');
+    e.target.reset();
+});
+
 // Mobile hamburger menu
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links');

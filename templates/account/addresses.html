@@ -81,6 +81,10 @@
             <!-- Page Title -->
             <div class="addresses-header">
                 <div class="addresses-title-section">
+                    <a href="{% url 'main:account_home' %}" class="back-btn-link">
+                        <i class="fas fa-chevron-left"></i>
+                        Back to Overview
+                    </a>
                     <h1 class="page-title addresses-title">DELIVERY ADDRESSES</h1>
                     <p class="addresses-subtitle">MANAGE YOUR SAVED DELIVERY LOCATIONS</p>
                 </div>
@@ -117,9 +121,8 @@
                         </div>
                     </div>
                     <div class="address-card-body">
-                        <p class="address-name">Ahmed Khan</p>
                         <p class="address-line">House 123, Street 5, F-7 Markaz</p>
-                        <p class="address-city">Islamabad, ICT 44000</p>
+                        <p class="address-city">Karachi 74000</p>
                         <p class="address-phone">+92 (300) 1234567</p>
                     </div>
                 </div>
@@ -145,9 +148,8 @@
                         </div>
                     </div>
                     <div class="address-card-body">
-                        <p class="address-name">Ahmed Khan</p>
                         <p class="address-line">Office 204, Blue Area, Jinnah Avenue</p>
-                        <p class="address-city">Islamabad, ICT 44000</p>
+                        <p class="address-city">Karachi 74000</p>
                         <p class="address-phone">+92 (321) 9876543</p>
                     </div>
                     <div class="address-card-footer">
@@ -179,9 +181,8 @@
                         </div>
                     </div>
                     <div class="address-card-body">
-                        <p class="address-name">Ahmed Khan</p>
                         <p class="address-line">Plot 45, DHA Phase 6, Main Boulevard</p>
-                        <p class="address-city">Karachi, Sindh 75500</p>
+                        <p class="address-city">Karachi 74500</p>
                         <p class="address-phone">+92 (333) 4567890</p>
                     </div>
                     <div class="address-card-footer">
@@ -227,10 +228,6 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="fullName">FULL NAME</label>
-                        <input type="text" id="fullName" name="fullName" placeholder="Ahmed Khan" required>
-                    </div>
-                    <div class="form-group">
                         <label for="phone">PHONE NUMBER</label>
                         <input type="tel" id="phone" name="phone" placeholder="+92 300 1234567" required>
                     </div>
@@ -238,33 +235,9 @@
                         <label for="addressLine">STREET ADDRESS</label>
                         <input type="text" id="addressLine" name="addressLine" placeholder="House 123, Street 5, F-7 Markaz" required>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group form-group-half">
-                            <label for="city">CITY</label>
-                            <select id="city" name="city" required>
-                                <option value="">Islamabad</option>
-                                <option value="islamabad">Islamabad</option>
-                                <option value="karachi">Karachi</option>
-                                <option value="lahore">Lahore</option>
-                                <option value="peshawar">Peshawar</option>
-                                <option value="quetta">Quetta</option>
-                            </select>
-                        </div>
-                        <div class="form-group form-group-half">
-                            <label for="province">PROVINCE</label>
-                            <select id="province" name="province" required>
-                                <option value="">Punjab</option>
-                                <option value="punjab">Punjab</option>
-                                <option value="sindh">Sindh</option>
-                                <option value="kpk">KPK</option>
-                                <option value="balochistan">Balochistan</option>
-                                <option value="ict">ICT</option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="form-group">
                         <label for="postalCode">POSTAL CODE</label>
-                        <input type="text" id="postalCode" name="postalCode" placeholder="44000" required>
+                        <input type="text" id="postalCode" name="postalCode" placeholder="74000" required>
                     </div>
                     <div class="modal-actions">
                         <button type="button" class="btn-cancel" id="cancelBtn">CANCEL</button>

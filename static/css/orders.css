@@ -20,6 +20,23 @@
     flex: 1;
 }
 
+.back-btn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-green);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.back-btn-link:hover {
+    gap: 0.8rem;
+    color: #4da83d;
+}
+
 .orders-title {
     font-size: 1.75rem;
     font-weight: 700;
@@ -277,6 +294,7 @@
     border-radius: 12px;
     padding: 0.75rem;
     border: 1px solid var(--border-light);
+    display: block;
 }
 
 .item-name {

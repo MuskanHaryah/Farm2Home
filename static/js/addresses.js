@@ -152,13 +152,9 @@ function closeAddressModal() {
  */
 function populateForm(addressData) {
     document.getElementById('addressType').value = addressData.type || 'home';
-    document.getElementById('fullName').value = addressData.name || '';
     document.getElementById('addressLine').value = addressData.line || '';
-    document.getElementById('city').value = addressData.city || '';
-    document.getElementById('province').value = addressData.province || '';
     document.getElementById('postalCode').value = addressData.postalCode || '';
     document.getElementById('phone').value = addressData.phone || '';
-    document.getElementById('setDefault').checked = addressData.isDefault || false;
 }
 
 /**
@@ -167,13 +163,9 @@ function populateForm(addressData) {
 function saveAddress() {
     const formData = {
         type: document.getElementById('addressType').value,
-        name: document.getElementById('fullName').value,
         line: document.getElementById('addressLine').value,
-        city: document.getElementById('city').value,
-        province: document.getElementById('province').value,
         postalCode: document.getElementById('postalCode').value,
-        phone: document.getElementById('phone').value,
-        isDefault: document.getElementById('setDefault').checked
+        phone: document.getElementById('phone').value
     };
 
     console.log('Saving address:', formData);
@@ -202,10 +194,7 @@ function editAddress(addressId) {
     const addressData = {
         id: addressId,
         type: addressCard.querySelector('.address-type h3').textContent.toLowerCase(),
-        name: addressCard.querySelector('.address-name')?.textContent || '',
         line: addressCard.querySelector('.address-line')?.textContent || '',
-        city: addressCard.querySelector('.address-city')?.textContent.split(',')[0] || '',
-        province: addressCard.querySelector('.address-city')?.textContent.split(',')[1]?.split(' ')[1] || '',
         postalCode: addressCard.querySelector('.address-city')?.textContent.split(' ').pop() || '',
         phone: addressCard.querySelector('.address-phone')?.textContent || '',
         isDefault: addressCard.querySelector('.default-badge') !== null
@@ -292,10 +281,7 @@ function formatPhoneNumber(phone) {
  */
 function validateAddressForm() {
     const requiredFields = [
-        'fullName',
         'addressLine',
-        'city',
-        'province',
         'postalCode',
         'phone'
     ];

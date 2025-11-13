@@ -23,7 +23,7 @@
 
 body {
     font-family: var(--font-primary, 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif);
-    background: linear-gradient(135deg, #e8f5e9 0%, #b8e0c2 45%, #a1d6b3 70%, #8ccfa5 100%);
+    background-image: linear-gradient(to right top, #c9b486, #c4ba81, #bbc17f, #afc880, #9ed085, #92d790, #84dd9d, #73e3ab, #6beabd, #64f0d0, #5ff6e2, #5ffbf3);
     background-attachment: fixed;
     color: var(--text-dark);
     overflow-x: hidden;
@@ -34,7 +34,7 @@ body {
 .checkout-container {
     width: 100%;
     min-height: 100vh;
-    background: linear-gradient(135deg, #e8f5e9 0%, #b8e0c2 45%, #a1d6b3 70%, #8ccfa5 100%);
+    background-image: linear-gradient(to right top, #c9b486, #c4ba81, #bbc17f, #afc880, #9ed085, #92d790, #84dd9d, #73e3ab, #6beabd, #64f0d0, #5ff6e2, #5ffbf3);
     background-attachment: fixed;
 }
 

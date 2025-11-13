@@ -21,6 +21,27 @@
     letter-spacing: 0.5px;
 }
 
+.payment-title-section {
+    flex: 1;
+}
+
+.back-btn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-green);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.back-btn-link:hover {
+    gap: 0.8rem;
+    color: #4da83d;
+}
+
 .payment-subtitle {
     font-size: 0.875rem;
     color: var(--text-gray);
@@ -1150,5 +1171,118 @@
 
     .purchase-btn {
         width: 100%;
+    }
+}
+
+/* ========================================
+   CONTACT SUPPORT SECTION
+   ======================================== */
+
+.contact-support-section {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+.contact-support-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e9 100%);
+    border: 2px solid #d4edda;
+    border-radius: 12px;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.contact-support-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.contact-support-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary-green), #7cb342);
+    border-radius: 50%;
+    color: white;
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.contact-support-info {
+    flex: 1;
+}
+
+.contact-support-info h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 0.5rem 0;
+    letter-spacing: 0.5px;
+}
+
+.contact-support-info p {
+    font-size: 0.95rem;
+    color: var(--text-gray);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.contact-support-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--primary-green);
+    color: white;
+    padding: 0.875rem 1.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    border: none;
+    white-space: nowrap;
+}
+
+.contact-support-btn:hover {
+    background: #4da83d;
+    transform: translateX(2px);
+}
+
+.contact-support-btn:active {
+    transform: translateX(0);
+}
+
+.contact-support-btn i {
+    font-size: 1rem;
+}
+
+/* ========================================
+   CONTACT SUPPORT RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .contact-support-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+        gap: 1.5rem;
+    }
+
+    .contact-support-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 2rem;
+    }
+
+    .contact-support-btn {
+        width: 100%;
+        justify-content: center;
     }
 }

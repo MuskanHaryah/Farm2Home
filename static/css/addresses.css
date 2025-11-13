@@ -58,6 +58,23 @@
     box-shadow: 0 4px 12px rgba(139, 188, 62, 0.3);
 }
 
+.back-btn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-green);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.back-btn-link:hover {
+    gap: 0.8rem;
+    color: #4da83d;
+}
+
 /* Addresses Grid */
 .addresses-grid {
     display: grid;

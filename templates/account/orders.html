@@ -88,6 +88,10 @@
             <!-- Orders Header -->
             <div class="orders-header">
                 <div class="orders-title-section">
+                    <a href="{% url 'main:account_home' %}" class="back-btn-link">
+                        <i class="fas fa-chevron-left"></i>
+                        Back to Overview
+                    </a>
                     <h1 class="orders-title">ORDER HISTORY</h1>
                     <p class="orders-subtitle">TRACK AND MANAGE ALL YOUR ORDERS</p>
                 </div>
@@ -138,19 +142,19 @@
                         <div class="order-items">
                             <div class="items-grid">
                                 <div class="product-thumb">
-                                    <img src="{% static 'images/vegetables/tomato.png' %}" alt="Tomato">
+                                    <img src="{% static 'images/vegetables/potatoes.png' %}?v=2" alt="Potatoes" onerror="console.log('Failed to load:', this.src)">
+                                    <span class="item-name">POTATOES</span>
+                                    <span class="item-qty">2kg</span>
+                                </div>
+                                <div class="product-thumb">
+                                    <img src="{% static 'images/vegetables/onions.png' %}?v=2" alt="Onions" onerror="console.log('Failed to load:', this.src)">
+                                    <span class="item-name">ONIONS</span>
+                                    <span class="item-qty">1kg</span>
+                                </div>
+                                <div class="product-thumb">
+                                    <img src="{% static 'images/vegetables/tomato.png' %}?v=2" alt="Tomato" onerror="console.log('Failed to load:', this.src)">
                                     <span class="item-name">TOMATO</span>
-                                    <span class="item-qty">Qty: 2kg</span>
-                                </div>
-                                <div class="product-thumb">
-                                    <img src="{% static 'images/vegetables/lettuce.png' %}" alt="Lettuce">
-                                    <span class="item-name">LETTUCE</span>
-                                    <span class="item-qty">Qty: 1kg</span>
-                                </div>
-                                <div class="product-thumb">
-                                    <img src="{% static 'images/vegetables/potatoes.png' %}" alt="Potato">
-                                    <span class="item-name">POTATO</span>
-                                    <span class="item-qty">Qty: 1kg</span>
+                                    <span class="item-qty">1kg</span>
                                 </div>
                             </div>
                         </div>
@@ -158,7 +162,7 @@
                         <div class="order-footer">
                             <div class="total-amount">
                                 <span class="amount-label">TOTAL AMOUNT</span>
-                                <span class="amount-value">Rs.3,850</span>
+                                <span class="amount-value">Rs.2,850</span>
                             </div>
                             <div class="order-actions">
                                 <button class="action-btn details-btn">
@@ -191,25 +195,27 @@
                         <div class="order-items">
                             <div class="items-grid">
                                 <div class="product-thumb">
-                                    <img src="{% static 'images/vegetables/okra.png' %}" alt="Okra">
+                                    <img src="{% static 'images/vegetables/okra.png' %}?v=2" alt="Okra" onerror="console.log('Failed to load:', this.src)">
                                     <span class="item-name">OKRA</span>
-                                    <span class="item-qty">Qty: 1kg</span>
+                                    <span class="item-qty">1kg</span>
                                 </div>
                                 <div class="product-thumb">
-                                    <img src="{% static 'images/fruits/papaya.png' %}" alt="Papaya">
+                                    <img src="{% static 'images/fruits/papaya.png' %}?v=2" alt="Papaya" onerror="console.log('Failed to load:', this.src)">
                                     <span class="item-name">PAPAYA</span>
-                                    <span class="item-qty">Qty: 1kg</span>
+                                    <span class="item-qty">1kg</span>
                                 </div>
                                 <div class="product-thumb">
-                                    <img src="{% static 'images/fruits/pineapple.png' %}" alt="Pineapple">
+                                    <img src="{% static 'images/fruits/pineapple.png' %}?v=2" alt="Pineapple" onerror="console.log('Failed to load:', this.src)">
                                     <span class="item-name">PINEAPPLE</span>
-                                    <span class="item-qty">Qty: 1kg</span>
+                                    <span class="item-qty">1kg</span>
                                 </div>
                             </div>
-                        </div>                        <div class="order-footer">
+                        </div>
+
+                        <div class="order-footer">
                             <div class="total-amount">
                                 <span class="amount-label">TOTAL AMOUNT</span>
-                                <span class="amount-value">Rs.5,200</span>
+                                <span class="amount-value">Rs.3,950</span>
                             </div>
                             <div class="order-actions">
                                 <button class="action-btn details-btn">
@@ -233,7 +239,7 @@
                         </div>
                         <div class="order-info">
                             <h3 class="order-number">ORD-2024-1102</h3>
-                            <p class="order-date">Placed on Nov 02, 2024</p>
+                            <p class="order-date">PLACED ON NOV 02, 2024</p>
                         </div>
                         <span class="order-status-badge active-badge">IN TRANSIT</span>
                     </div>
@@ -242,14 +248,14 @@
                         <div class="order-items">
                             <div class="items-grid">
                                 <div class="product-thumb">
-                                    <img src="{% static 'images/fruits/orange.png' %}" alt="Orange">
-                                    <span class="item-name">ORANGE</span>
-                                    <span class="item-qty">Qty: 1kg</span>
+                                    <img src="{% static 'images/fruits/guava.png' %}?v=2" alt="Guava" onerror="console.log('Failed to load:', this.src)">
+                                    <span class="item-name">GUAVA</span>
+                                    <span class="item-qty">1kg</span>
                                 </div>
                                 <div class="product-thumb">
-                                    <img src="{% static 'images/fruits/guava.png' %}" alt="Guava">
-                                    <span class="item-name">GUAVA</span>
-                                    <span class="item-qty">Qty: 1kg</span>
+                                    <img src="{% static 'images/fruits/mosambi.png' %}?v=2" alt="Mosambi" onerror="console.log('Failed to load:', this.src)">
+                                    <span class="item-name">MOSAMBI</span>
+                                    <span class="item-qty">2kg</span>
                                 </div>
                             </div>
                         </div>
@@ -257,7 +263,7 @@
                         <div class="order-footer">
                             <div class="total-amount">
                                 <span class="amount-label">TOTAL AMOUNT</span>
-                                <span class="amount-value">Rs.2,890</span>
+                                <span class="amount-value">Rs.2,450</span>
                             </div>
                             <div class="order-actions">
                                 <button class="action-btn details-btn">
@@ -277,7 +283,7 @@
                         </div>
                         <div class="order-info">
                             <h3 class="order-number">ORD-2024-1020</h3>
-                            <p class="order-date">Placed on Oct 20, 2024</p>
+                            <p class="order-date">PLACED ON OCT 20, 2024</p>
                         </div>
                         <span class="order-status-badge cancelled-badge">CANCELLED</span>
                     </div>
@@ -286,14 +292,14 @@
                         <div class="order-items">
                             <div class="items-grid">
                                 <div class="product-thumb">
-                                    <img src="{% static 'images/vegetables/bitter-gourd.png' %}" alt="Bitter Gourd">
-                                    <span class="item-name">BITTER GOURD</span>
-                                    <span class="item-qty">Qty: 1kg</span>
+                                    <img src="{% static 'images/vegetables/carrot.png' %}?v=2" alt="Carrot" onerror="console.log('Failed to load:', this.src)">
+                                    <span class="item-name">CARROT</span>
+                                    <span class="item-qty">1kg</span>
                                 </div>
                                 <div class="product-thumb">
-                                    <img src="{% static 'images/herbs/ginger.png' %}" alt="Ginger">
+                                    <img src="{% static 'images/herbs/ginger.png' %}?v=2" alt="Ginger" onerror="console.log('Failed to load:', this.src)">
                                     <span class="item-name">GINGER</span>
-                                    <span class="item-qty">Qty: 1kg</span>
+                                    <span class="item-qty">500g</span>
                                 </div>
                             </div>
                         </div>
@@ -301,7 +307,7 @@
                         <div class="order-footer">
                             <div class="total-amount">
                                 <span class="amount-label">TOTAL AMOUNT</span>
-                                <span class="amount-value">Rs.2,500</span>
+                                <span class="amount-value">Rs.1,850</span>
                             </div>
                             <div class="order-actions">
                                 <button class="action-btn details-btn">
