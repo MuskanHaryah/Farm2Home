@@ -13,9 +13,7 @@
     <div class="auth-container">
         <!-- Left Side - Illustration -->
         <div class="auth-left">
-            <div class="illustration-section">
-                <img src="{% static 'images/left.png' %}" alt="Farm illustration" class="auth-illustration" loading="lazy" decoding="async">
-            </div>
+            <img src="{% static 'images/left.png' %}" alt="Farm illustration" class="auth-illustration" loading="lazy" decoding="async">
         </div>
 
         <!-- Right Side - Form -->
@@ -23,10 +21,7 @@
             <div class="auth-form-wrapper">
                 <!-- Logo/Brand -->
                 <div class="auth-header">
-                    <div class="auth-logo">
-                        <i class="fas fa-leaf"></i>
-                        <span>farm2home</span>
-                    </div>
+                    <h2 class="auth-logo">farm2home</h2>
                 </div>
 
                 <!-- Form Title -->
@@ -34,7 +29,8 @@
                 <p class="auth-subtitle">Join Farm2Home and start shopping fresh produce</p>
 
                 <!-- Signup Form -->
-                <form id="signupForm" class="auth-form" onsubmit="authFunctions.handleSignupSubmit(event)">
+                <form id="signupForm" class="auth-form" method="POST" action="{% url 'main:signup' %}">
+                    {% csrf_token %}
                     <!-- Full Name Field -->
                     <div class="form-group">
                         <label for="fullName">Full Name</label>
@@ -88,7 +84,7 @@
                                 name="password" 
                                 placeholder="Create a password" 
                                 required>
-                            <button type="button" class="toggle-password" onclick="authFunctions.togglePassword('password')">
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('password')">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
@@ -105,7 +101,7 @@
                                 name="confirmPassword" 
                                 placeholder="Confirm your password" 
                                 required>
-                            <button type="button" class="toggle-password" onclick="authFunctions.togglePassword('confirmPassword')">
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirmPassword')">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
@@ -132,9 +128,21 @@
     </div>
 
     <script src="{% static 'js/notifications.js' %}" defer></script>
-    <script src="{% static 'js/auth.min.js' %}" defer></script>
     <script defer>
-        document.getElementById('signupForm').addEventListener('submit', authFunctions.handleSignupSubmit);
+        function togglePasswordVisibility(fieldId) {
+            const input = document.getElementById(fieldId);
+            const icon = event.target.closest('.toggle-password').querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
     </script>
 </body>
 </html>
