@@ -28,6 +28,21 @@
                 <h1 class="auth-title">Create an Account</h1>
                 <p class="auth-subtitle">Join Farm2Home and start shopping fresh produce</p>
 
+                <!-- Django Messages -->
+                {% if messages %}
+                    <div class="messages-container" style="margin-bottom: 1.5rem;">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" style="padding: 0.875rem 1rem; border-radius: 8px; margin-bottom: 0.5rem; 
+                                {% if message.tags == 'error' %}background-color: #fee; border-left: 4px solid #dc3545; color: #721c24;{% endif %}
+                                {% if message.tags == 'success' %}background-color: #d4edda; border-left: 4px solid #28a745; color: #155724;{% endif %}
+                                {% if message.tags == 'warning' %}background-color: #fff3cd; border-left: 4px solid #ffc107; color: #856404;{% endif %}
+                                {% if message.tags == 'info' %}background-color: #d1ecf1; border-left: 4px solid #17a2b8; color: #0c5460;{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
                 <!-- Signup Form -->
                 <form id="signupForm" class="auth-form" method="POST" action="{% url 'main:signup' %}">
                     {% csrf_token %}
@@ -128,21 +143,6 @@
     </div>
 
     <script src="{% static 'js/notifications.js' %}" defer></script>
-    <script defer>
-        function togglePasswordVisibility(fieldId) {
-            const input = document.getElementById(fieldId);
-            const icon = event.target.closest('.toggle-password').querySelector('i');
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                input.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        }
-    </script>
+    <script src="{% static 'js/auth.js' %}" defer></script>
 </body>
 </html>

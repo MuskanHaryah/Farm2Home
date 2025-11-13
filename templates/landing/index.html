@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farm2Home - Fresh Farm to Your Door</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/landing-new.css' %}">
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
     <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal-auth.css' %}">
 </head>
 <body>
     <!-- Navigation -->
@@ -23,8 +24,8 @@
                 <li><a href="#benefits">Benefits</a></li>
                 <li><a href="#products">Products</a></li>
                 <li><a href="#contact">Contact</a></li>
-                <li><button class="auth-btn login-btn" onclick="openLoginModal()">Login</button></li>
-                <li><button class="auth-btn signup-btn" onclick="openSignupModal()">Sign Up</button></li>
+                <li><button type="button" class="auth-btn login-btn" onclick="event.preventDefault(); openLoginModal();">Login</button></li>
+                <li><button type="button" class="auth-btn signup-btn" onclick="event.preventDefault(); openSignupModal();">Sign Up</button></li>
                 <li><a href="{% url 'main:catalog' %}" class="shop-btn">Shop Now</a></li>
             </ul>
             <div class="hamburger">
@@ -333,76 +334,159 @@
         </div>
     </section>
 
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeLoginModal()">&times;</button>
-            <div class="modal-header">
-                <h2>Welcome Back</h2>
-                <p>Login to your Farm2Home account</p>
-            </div>
-            <form class="auth-form">
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" placeholder="your@email.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" placeholder="Enter your password" required>
-                </div>
-                <div class="form-options">
-                    <label class="checkbox">
-                        <input type="checkbox">
-                        Remember me
-                    </label>
-                    <a href="#" class="forgot-password">Forgot password?</a>
-                </div>
-                <button type="submit" class="btn-primary">Login</button>
-                <p class="auth-switch">
-                    Don't have an account? <a href="#" onclick="switchToSignup()">Sign Up</a>
-                </p>
-            </form>
-        </div>
-    </div>
+    <!-- Modal Backdrop -->
+    <div id="modalBackdrop" class="modal-backdrop"></div>
 
-    <!-- Signup Modal -->
-    <div id="signupModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeSignupModal()">&times;</button>
-            <div class="modal-header">
-                <h2>Create Account</h2>
-                <p>Join Farm2Home today</p>
+    <!-- Fresh Login & Signup Modal -->
+    <div id="authModal" class="auth-modal-new">
+        <div class="modal-container">
+            <!-- Left Side - Illustration -->
+            <div class="modal-left-side">
+                <img src="{% static 'images/left.png' %}" alt="Farm Illustration" class="modal-illustration">
             </div>
-            <form class="auth-form">
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" placeholder="John Doe" required>
+
+            <!-- Right Side - Form -->
+            <div class="modal-right-side">
+                <button type="button" class="modal-close-btn" onclick="closeAuthModal()">&times;</button>
+                
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form-section">
+                    <div class="form-header">
+                        <h1 class="form-title">Login</h1>
+                        <p class="form-subtitle">Welcome back to Farm2Home</p>
+                    </div>
+
+                    <form id="loginFormElement" method="POST" action="{% url 'main:login' %}" class="form-container">
+                        {% csrf_token %}
+                        
+                        <!-- Django Messages -->
+                        {% if messages %}
+                            <div class="messages-box">
+                                {% for message in messages %}
+                                    <div class="message message-{{ message.tags }}">
+                                        <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %}"></i>
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="form-group">
+                            <label for="login_email">Email Address</label>
+                            <div class="input-field">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="login_email" name="email" placeholder="your@email.com" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="login_password">Password</label>
+                            <div class="input-field password-field">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="login_password" name="password" placeholder="Enter your password" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('login_password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="checkbox-field">
+                                <input type="checkbox" name="rememberMe">
+                                <span>Remember me</span>
+                            </label>
+                            <a href="#" class="forgot-password-link">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Login</button>
+                    </form>
+
+                    <div class="form-footer">
+                        <p>Don't have an account? <button type="button" class="switch-form-btn" onclick="switchToSignup()">Sign up</button></p>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" placeholder="your@email.com" required>
+
+                <!-- Signup Form (Hidden by default) -->
+                <div id="signupForm" class="auth-form-section" style="display: none;">
+                    <div class="form-header">
+                        <h1 class="form-title">Sign Up</h1>
+                        <p class="form-subtitle">Create your Farm2Home account</p>
+                    </div>
+
+                    <form id="signupFormElement" method="POST" action="{% url 'main:signup' %}" class="form-container">
+                        {% csrf_token %}
+                        
+                        <!-- Django Messages -->
+                        {% if messages %}
+                            <div class="messages-box">
+                                {% for message in messages %}
+                                    <div class="message message-{{ message.tags }}">
+                                        <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %}"></i>
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="form-group">
+                            <label for="signup_fullname">Full Name</label>
+                            <div class="input-field">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="signup_fullname" name="fullName" placeholder="John Doe" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup_email">Email Address</label>
+                            <div class="input-field">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="signup_email" name="email" placeholder="your@email.com" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup_phone">Phone Number</label>
+                            <div class="input-field">
+                                <i class="fas fa-phone"></i>
+                                <input type="tel" id="signup_phone" name="phone" placeholder="+92 300 1234567" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup_password">Password</label>
+                            <div class="input-field password-field">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="signup_password" name="password" placeholder="Create a strong password" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('signup_password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup_confirm_password">Confirm Password</label>
+                            <div class="input-field password-field">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="signup_confirm_password" name="confirmPassword" placeholder="Confirm your password" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('signup_confirm_password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <label class="checkbox-field">
+                            <input type="checkbox" name="agreeTerms" required>
+                            <span>I agree to the Terms & Conditions</span>
+                        </label>
+
+                        <button type="submit" class="submit-btn">Create Account</button>
+                    </form>
+
+                    <div class="form-footer">
+                        <p>Already have an account? <button type="button" class="switch-form-btn" onclick="switchToLogin()">Login</button></p>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Phone Number</label>
-                    <input type="tel" placeholder="+1 (234) 567-890" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" placeholder="Create a password" required>
-                </div>
-                <div class="form-group">
-                    <label>Confirm Password</label>
-                    <input type="password" placeholder="Confirm your password" required>
-                </div>
-                <label class="checkbox">
-                    <input type="checkbox" required>
-                    I agree to the Terms & Conditions
-                </label>
-                <button type="submit" class="btn-primary">Create Account</button>
-                <p class="auth-switch">
-                    Already have an account? <a href="#" onclick="switchToLogin()">Login</a>
-                </p>
-            </form>
+            </div>
         </div>
     </div>
 
@@ -461,14 +545,171 @@
     </footer>
 
     <script src="{% static 'js/notifications.js' %}"></script>
-    <script src="{% static 'js/authentication.js' %}"></script>
-    <script src="{% static 'js/landing-countdown.js' %}"></script>
+    <script src="{% static 'js/countdown.js' %}"></script>
     <script>
         // Apply footer background image
         document.getElementById('footerSection').style.backgroundImage = "url('{% static 'images/footer.png' %}')";
         document.getElementById('footerSection').style.backgroundSize = "cover";
         document.getElementById('footerSection').style.backgroundPosition = "center";
         document.getElementById('footerSection').style.backgroundAttachment = "fixed";
+
+        // ================================
+        // FRESH AUTH MODAL FUNCTIONS
+        // ================================
+
+        function openLoginModal() {
+            const modal = document.getElementById('authModal');
+            const backdrop = document.getElementById('modalBackdrop');
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            
+            // Show login form, hide signup form
+            loginForm.style.display = 'block';
+            signupForm.style.display = 'none';
+            
+            // Show modal
+            modal.classList.add('active');
+            backdrop.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openSignupModal() {
+            const modal = document.getElementById('authModal');
+            const backdrop = document.getElementById('modalBackdrop');
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            
+            // Show signup form, hide login form
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'block';
+            
+            // Show modal
+            modal.classList.add('active');
+            backdrop.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAuthModal(event) {
+            // If event exists and it's not the backdrop, don't close
+            if (event && event.target !== document.getElementById('modalBackdrop')) {
+                return;
+            }
+            
+            const modal = document.getElementById('authModal');
+            const backdrop = document.getElementById('modalBackdrop');
+            
+            modal.classList.remove('active');
+            backdrop.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchToLogin() {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            
+            loginForm.style.display = 'block';
+            signupForm.style.display = 'none';
+        }
+
+        function switchToSignup() {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'block';
+        }
+
+        function togglePassword(fieldId) {
+            const input = document.getElementById(fieldId);
+            const button = event.currentTarget;
+            const icon = button.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Close modal on backdrop click
+        document.getElementById('modalBackdrop').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAuthModal(e);
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('authModal');
+                if (modal.classList.contains('active')) {
+                    closeAuthModal();
+                }
+            }
+        });
+
+        // Form validation and submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginFormElement = document.getElementById('loginFormElement');
+            const signupFormElement = document.getElementById('signupFormElement');
+
+            // Login form validation
+            if (loginFormElement) {
+                loginFormElement.addEventListener('submit', function(e) {
+                    const email = document.getElementById('login_email').value.trim();
+                    const password = document.getElementById('login_password').value.trim();
+                    
+                    if (!email || !password) {
+                        e.preventDefault();
+                        alert('Please fill in all fields');
+                    }
+                });
+            }
+
+            // Signup form validation
+            if (signupFormElement) {
+                signupFormElement.addEventListener('submit', function(e) {
+                    const fullname = document.getElementById('signup_fullname').value.trim();
+                    const email = document.getElementById('signup_email').value.trim();
+                    const phone = document.getElementById('signup_phone').value.trim();
+                    const password = document.getElementById('signup_password').value.trim();
+                    const confirmPassword = document.getElementById('signup_confirm_password').value.trim();
+                    const agreeTerms = document.getElementById('agreeTerms').checked;
+                    
+                    if (!fullname || !email || !phone || !password || !confirmPassword) {
+                        e.preventDefault();
+                        alert('Please fill in all fields');
+                        return;
+                    }
+                    
+                    if (password !== confirmPassword) {
+                        e.preventDefault();
+                        alert('Passwords do not match');
+                        return;
+                    }
+                    
+                    if (!agreeTerms) {
+                        e.preventDefault();
+                        alert('Please agree to Terms & Conditions');
+                        return;
+                    }
+                });
+            }
+
+            // Auto-open modal if there are messages from server
+            const messagesBox = document.querySelector('.messages-box');
+            if (messagesBox && messagesBox.textContent.trim()) {
+                // Check which form should be shown
+                if (document.getElementById('loginForm').style.display !== 'none' || 
+                    document.getElementById('loginForm').style.display === '') {
+                    setTimeout(() => openLoginModal(), 100);
+                }
+            }
+        });
     </script>
 </body>
 </html>
