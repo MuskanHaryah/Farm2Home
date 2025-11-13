@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
 </head>
 <body>
+    {% csrf_token %}
     <!-- Header -->
     <header class="header">
         <div class="header-container">
@@ -36,14 +37,14 @@
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="profile-info">
-                    <h3>AHMED KHAN</h3>
-                    <p>AHMED.KHAN@EMAIL.COM</p>
+                    <h3 id="profileName">AHMED KHAN</h3>
+                    <p id="profileEmail">AHMED.KHAN@EMAIL.COM</p>
                 </div>
             </div>
 
             <div class="stats-card">
                 <div class="stat-label">TOTAL ORDERS</div>
-                <div class="stat-value">47 Orders</div>
+                <div class="stat-value" id="sidebarTotalOrders">47 Orders</div>
             </div>
 
             <nav class="sidebar-nav">
@@ -95,7 +96,7 @@
             </div>
 
             <!-- Addresses Grid -->
-            <div class="addresses-grid">
+            <div class="addresses-grid" id="addressesContainer">
                 <!-- Address Card 1 - HOME (Default) -->
                 <div class="address-card" data-address-id="home-address">
                     <div class="address-card-header">
@@ -193,6 +194,13 @@
                     </div>
                 </div>
 
+                <!-- Empty State (hidden by default) -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>NO ADDRESSES SAVED</h3>
+                    <p>Add your first delivery address to get started</p>
+                </div>
+
                 <!-- Add New Address Card -->
                 <div class="address-card add-new-card">
                     <div class="add-new-content">
@@ -236,8 +244,18 @@
                         <input type="text" id="addressLine" name="addressLine" placeholder="House 123, Street 5, F-7 Markaz" required>
                     </div>
                     <div class="form-group">
+                        <label for="city">CITY</label>
+                        <input type="text" id="city" name="city" placeholder="Karachi" required>
+                    </div>
+                    <div class="form-group">
                         <label for="postalCode">POSTAL CODE</label>
                         <input type="text" id="postalCode" name="postalCode" placeholder="74000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="isDefault">
+                            <input type="checkbox" id="isDefault" name="isDefault">
+                            SET AS DEFAULT ADDRESS
+                        </label>
                     </div>
                     <div class="modal-actions">
                         <button type="button" class="btn-cancel" id="cancelBtn">CANCEL</button>

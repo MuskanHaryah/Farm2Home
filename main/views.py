@@ -3,13 +3,15 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from django.db.models import Q
-from .models import Product, Inventory, Customer, Order, OrderItem, Cart
+from .models import Product, Inventory, Customer, Order, OrderItem, Cart, Address
 from .serializers import (
     ProductSerializer, ProductListSerializer, 
     ProductCatalogSerializer,
-    InventorySerializer, CustomerSerializer,
-    OrderSerializer, OrderCreateSerializer,
-    CartSerializer
+    InventorySerializer, CustomerSerializer, CustomerProfileSerializer,
+    OrderSerializer, OrderCreateSerializer, OrderSummarySerializer,
+    CartSerializer, CheckoutCartItemSerializer,
+    CheckoutOrderCreateSerializer, OrderConfirmationSerializer,
+    AddressSerializer
 )
 
 # ==================== API VIEWS ====================
@@ -282,6 +284,648 @@ class InventoryViewSet(viewsets.ModelViewSet):
     serializer_class = InventorySerializer
 
 
+# ==================== CHECKOUT API VIEWS ====================
+
+@api_view(['GET'])
+def checkout_cart_api(request):
+    """
+    API endpoint to get cart items formatted for checkout page
+    Returns cart items in the exact structure expected by checkout.js
+    
+    Query Parameters:
+    - customer_id (required): The ID of the customer whose cart to retrieve
+    
+    Returns:
+    {
+        "items": [
+            {
+                "id": 1,
+                "name": "Tomatoes",
+                "price": "3.99",
+                "quantity": 2,
+                "image": "/static/images/vegetables/tomatoes.png",
+                "category": "vegetables"
+            },
+            ...
+        ],
+        "total": 21.48,
+        "count": 2
+    }
+    
+    Use Case: Called when checkout page loads to populate the carousel with cart items
+    """
+    customer_id = request.GET.get('customer_id')
+    
+    # Validate customer_id parameter
+    if not customer_id:
+        return Response({
+            'error': 'Customer ID is required',
+            'items': [],
+            'total': 0,
+            'count': 0
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # Verify customer exists
+        try:
+            customer = Customer.objects.get(customer_id=customer_id)
+        except Customer.DoesNotExist:
+            return Response({
+                'error': f'Customer with ID {customer_id} not found',
+                'items': [],
+                'total': 0,
+                'count': 0
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Fetch cart items with related product and inventory data
+        cart_items = Cart.objects.filter(
+            customer_id=customer_id
+        ).select_related('product', 'product__inventory')
+        
+        # Check if cart is empty
+        if not cart_items.exists():
+            return Response({
+                'message': 'Cart is empty',
+                'items': [],
+                'total': 0,
+                'count': 0
+            }, status=status.HTTP_200_OK)
+        
+        # Serialize cart items using CheckoutCartItemSerializer
+        serializer = CheckoutCartItemSerializer(cart_items, many=True)
+        
+        # Calculate total price (quantity * price for each item)
+        total = sum(
+            float(item['price']) * item['quantity'] 
+            for item in serializer.data
+        )
+        
+        # Return formatted response
+        return Response({
+            'items': serializer.data,
+            'total': round(total, 2),
+            'count': len(serializer.data)
+        }, status=status.HTTP_200_OK)
+    
+    except Exception as e:
+        # Catch any unexpected errors
+        return Response({
+            'error': f'Failed to retrieve cart: {str(e)}',
+            'items': [],
+            'total': 0,
+            'count': 0
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def create_checkout_order(request):
+    """
+    API endpoint to create a complete order from checkout
+    Handles shipping, billing, and cart items in a single transaction
+    
+    Expected POST data structure:
+    {
+        "shipping": {
+            "fullName": "John Doe",
+            "email": "john@example.com",
+            "phone": "1234567890",
+            "address": "123 Farm Road",
+            "city": "Springfield",
+            "zipCode": "12345"
+        },
+        "billing": {
+            "cardName": "John Doe",
+            "cardNumber": "1234567890123456",
+            "expiryDate": "12/25",
+            "cvv": "123",
+            "billingAddress": "123 Farm Road",
+            "billingCity": "Springfield",
+            "billingZip": "12345"
+        },
+        "items": [
+            {"product_id": 1, "quantity": 2},
+            {"product_id": 3, "quantity": 1}
+        ],
+        "customer_id": 1  // optional - if not provided, creates new customer
+    }
+    
+    Returns: Order confirmation data with order number, items, total, and shipping info
+    
+    What this endpoint does:
+    1. Validates all input data (shipping, billing, items)
+    2. Checks product availability and stock levels
+    3. Creates or updates Customer record
+    4. Creates Order record with PENDING status
+    5. Creates OrderItem records for each cart item
+    6. Updates Inventory (decreases stock)
+    7. Clears customer's Cart
+    8. Returns order confirmation data
+    """
+    # Validate request data using CheckoutOrderCreateSerializer
+    serializer = CheckoutOrderCreateSerializer(data=request.data)
+    
+    if serializer.is_valid():
+        try:
+            # Create the order (serializer handles all the logic)
+            # This includes: customer creation/update, order creation, 
+            # order items creation, inventory updates, and cart clearing
+            order = serializer.save()
+            
+            # Prepare order confirmation response
+            confirmation_serializer = OrderConfirmationSerializer(order)
+            
+            return Response(
+                confirmation_serializer.data, 
+                status=status.HTTP_201_CREATED
+            )
+        
+        except Inventory.DoesNotExist as e:
+            # Handle case where product has no inventory record
+            return Response({
+                'error': 'Product inventory not found',
+                'detail': str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Product.DoesNotExist as e:
+            # Handle case where product doesn't exist
+            return Response({
+                'error': 'Product not found',
+                'detail': str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Exception as e:
+            # Handle any other unexpected errors during order creation
+            return Response({
+                'error': 'Failed to create order',
+                'detail': str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    # Return validation errors if serializer validation failed
+    return Response({
+        'error': 'Invalid order data',
+        'details': serializer.errors
+    }, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_order_confirmation(request, order_id):
+    """
+    API endpoint to retrieve order confirmation details
+    Used for displaying order confirmation page or order history
+    
+    URL Parameters:
+    - order_id: The ID of the order to retrieve
+    
+    Returns: Complete order details including items, total, and shipping information
+    
+    Use Cases:
+    1. Display confirmation page after successful order
+    2. Allow users to view past order details
+    3. Generate order receipts
+    """
+    try:
+        # Fetch order with related items and product data
+        order = Order.objects.prefetch_related(
+            'order_items__product'
+        ).get(order_id=order_id)
+        
+        # Serialize order data for confirmation display
+        serializer = OrderConfirmationSerializer(order)
+        
+        return Response(
+            serializer.data, 
+            status=status.HTTP_200_OK
+        )
+    
+    except Order.DoesNotExist:
+        # Handle case where order doesn't exist
+        return Response({
+            'error': 'Order not found',
+            'detail': f'No order exists with ID {order_id}'
+        }, status=status.HTTP_404_NOT_FOUND)
+    
+    except Exception as e:
+        # Handle any unexpected errors
+        return Response({
+            'error': 'Failed to retrieve order',
+            'detail': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# ==================== AUTHENTICATION API VIEWS ====================
+
+@api_view(['POST'])
+def api_login(request):
+    """
+    API endpoint for user login authentication
+    
+    Expected POST data:
+    {
+        "email": "user@example.com",
+        "password": "user123"
+    }
+    
+    Returns on success:
+    {
+        "success": true,
+        "message": "Login successful",
+        "customer_id": 1,
+        "name": "John Doe",
+        "email": "user@example.com"
+    }
+    
+    Returns on failure:
+    {
+        "success": false,
+        "error": "Invalid email or password"
+    }
+    
+    Use Case: Called from modal login form to authenticate user
+    """
+    from django.contrib.auth.hashers import check_password
+    
+    # Extract email and password from request
+    email = request.data.get('email', '').strip()
+    password = request.data.get('password', '')
+    
+    # Validate required fields
+    if not email or not password:
+        return Response({
+            'success': False,
+            'error': 'Email and password are required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # Find customer by email
+        customer = Customer.objects.get(email__iexact=email)
+        
+        # Verify password using Django's check_password
+        if check_password(password, customer.password):
+            # Password is correct - return customer data
+            return Response({
+                'success': True,
+                'message': 'Login successful',
+                'customer_id': customer.customer_id,
+                'name': customer.name,
+                'email': customer.email,
+                'phone': customer.phone
+            }, status=status.HTTP_200_OK)
+        else:
+            # Password is incorrect
+            return Response({
+                'success': False,
+                'error': 'Invalid email or password'
+            }, status=status.HTTP_401_UNAUTHORIZED)
+    
+    except Customer.DoesNotExist:
+        # Customer with this email doesn't exist
+        return Response({
+            'success': False,
+            'error': 'Invalid email or password'
+        }, status=status.HTTP_401_UNAUTHORIZED)
+    
+    except Exception as e:
+        # Handle unexpected errors
+        return Response({
+            'success': False,
+            'error': 'Login failed. Please try again.',
+            'detail': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def api_signup(request):
+    """
+    API endpoint for user registration
+    
+    Expected POST data:
+    {
+        "name": "John Doe",
+        "email": "user@example.com",
+        "phone": "1234567890",
+        "address": "123 Farm Road, City",
+        "password": "user123"
+    }
+    
+    Returns on success:
+    {
+        "success": true,
+        "message": "Account created successfully",
+        "customer_id": 1,
+        "name": "John Doe",
+        "email": "user@example.com"
+    }
+    
+    Returns on failure:
+    {
+        "success": false,
+        "error": "Email already exists"
+    }
+    
+    Use Case: Called from modal signup form to register new user
+    """
+    from django.contrib.auth.hashers import make_password
+    
+    # Extract data from request
+    name = request.data.get('name', '').strip()
+    email = request.data.get('email', '').strip()
+    phone = request.data.get('phone', '').strip()
+    password = request.data.get('password', '')
+    
+    # Validate required fields
+    if not all([name, email, phone, password]):
+        return Response({
+            'success': False,
+            'error': 'All fields are required',
+            'missing_fields': [
+                field for field, value in {
+                    'name': name, 'email': email, 'phone': phone,
+                    'password': password
+                }.items() if not value
+            ]
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Validate email format
+    if '@' not in email or '.' not in email:
+        return Response({
+            'success': False,
+            'error': 'Invalid email format'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Validate password length
+    if len(password) < 6:
+        return Response({
+            'success': False,
+            'error': 'Password must be at least 6 characters long'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # Check if email already exists
+        if Customer.objects.filter(email__iexact=email).exists():
+            return Response({
+                'success': False,
+                'error': 'Email already exists. Please login instead.'
+            }, status=status.HTTP_409_CONFLICT)
+        
+        # Hash password using Django's make_password
+        hashed_password = make_password(password)
+        
+        # Create new customer
+        customer = Customer.objects.create(
+            name=name,
+            email=email,
+            phone=phone,
+            password=hashed_password
+        )
+        
+        # Return success response with customer data
+        return Response({
+            'success': True,
+            'message': 'Account created successfully',
+            'customer_id': customer.customer_id,
+            'name': customer.name,
+            'email': customer.email,
+            'phone': customer.phone
+        }, status=status.HTTP_201_CREATED)
+    
+    except Exception as e:
+        # Handle unexpected errors
+        return Response({
+            'success': False,
+            'error': 'Failed to create account. Please try again.',
+            'detail': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# ==================== CUSTOMER PROFILE API VIEWS ====================
+
+@api_view(['GET'])
+def customer_profile_api(request):
+    """
+    API endpoint to get customer profile with statistics
+    
+    Query Parameters:
+    - customer_id (required): The ID of the customer
+    
+    Returns:
+    {
+        "customer_id": 1,
+        "name": "John Doe",
+        "email": "john@example.com",
+        "phone": "1234567890",
+        "address": "123 Farm Road",
+        "total_spent": 15420.50,
+        "total_orders": 12,
+        "growth_percentage": 15.5
+    }
+    
+    Use Case: Called by account overview page to populate profile info and stats
+    """
+    customer_id = request.GET.get('customer_id')
+    
+    # Validate customer_id parameter
+    if not customer_id:
+        return Response({
+            'status': 'error',
+            'message': 'Customer ID is required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # Get customer with prefetch for optimization
+        customer = Customer.objects.prefetch_related('orders').get(customer_id=customer_id)
+        
+        # Serialize customer data with statistics
+        from .serializers import CustomerProfileSerializer
+        serializer = CustomerProfileSerializer(customer)
+        
+        return Response({
+            'status': 'success',
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
+    
+    except Customer.DoesNotExist:
+        return Response({
+            'status': 'error',
+            'message': f'Customer with ID {customer_id} not found'
+        }, status=status.HTTP_404_NOT_FOUND)
+    
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': 'Failed to retrieve customer profile',
+            'detail': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+def customer_orders_summary_api(request):
+    """
+    API endpoint to get recent orders summary for customer
+    
+    Query Parameters:
+    - customer_id (required): The ID of the customer
+    - limit (optional): Number of recent orders to return (default: 3)
+    
+    Returns:
+    {
+        "status": "success",
+        "data": [
+            {
+                "order_id": 1128,
+                "status": "DELIVERED",
+                "status_display": "Delivered",
+                "total_amount": "3850.00",
+                "order_date": "2024-11-28T10:30:00Z",
+                "order_date_formatted": "Nov 28, 2024",
+                "product_names": "Tomato, Spinach, Potato"
+            },
+            ...
+        ],
+        "count": 3
+    }
+    
+    Use Case: Called by account overview page to populate recent orders list
+    """
+    customer_id = request.GET.get('customer_id')
+    limit = request.GET.get('limit', 3)
+    
+    # Validate customer_id parameter
+    if not customer_id:
+        return Response({
+            'status': 'error',
+            'message': 'Customer ID is required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # Validate limit parameter
+        try:
+            limit = int(limit)
+            if limit <= 0:
+                limit = 3
+        except (ValueError, TypeError):
+            limit = 3
+        
+        # Verify customer exists
+        try:
+            customer = Customer.objects.get(customer_id=customer_id)
+        except Customer.DoesNotExist:
+            return Response({
+                'status': 'error',
+                'message': f'Customer with ID {customer_id} not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Get recent orders with prefetch for optimization
+        orders = Order.objects.filter(
+            customer_id=customer_id
+        ).prefetch_related(
+            'order_items__product'
+        ).order_by('-order_date')[:limit]
+        
+        # Serialize orders
+        from .serializers import OrderSummarySerializer
+        serializer = OrderSummarySerializer(orders, many=True)
+        
+        return Response({
+            'status': 'success',
+            'data': serializer.data,
+            'count': len(serializer.data)
+        }, status=status.HTTP_200_OK)
+    
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': 'Failed to retrieve orders summary',
+            'detail': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+def customer_orders_api(request):
+    """
+    API endpoint to get ALL orders for customer (for Orders page)
+    
+    Query Parameters:
+    - customer_id (required): The ID of the customer
+    
+    Returns:
+    {
+        "status": "success",
+        "data": [
+            {
+                "order_id": 1128,
+                "order_id_formatted": "ORD-2024-1128",
+                "status": "DELIVERED",
+                "status_display": "Delivered",
+                "total_amount": "2850.00",
+                "order_date": "2024-11-28T10:30:00Z",
+                "order_date_formatted": "NOV 28, 2024",
+                "payment": "Card ending in 1234",
+                "order_items": [
+                    {
+                        "item_id": 1,
+                        "product": 5,
+                        "product_name": "Tomato",
+                        "product_image": "/static/images/vegetables/tomato.png",
+                        "product_category": "vegetables",
+                        "quantity": 1,
+                        "price": "95.00"
+                    },
+                    ...
+                ],
+                "items_count": 3
+            },
+            ...
+        ],
+        "count": 47
+    }
+    
+    Use Case: Called by orders page to display complete order history with all details
+    Difference from orders-summary: Returns ALL orders (not just 3) with complete order_items data
+    """
+    customer_id = request.GET.get('customer_id')
+    
+    # Validate customer_id parameter
+    if not customer_id:
+        return Response({
+            'status': 'error',
+            'message': 'Customer ID is required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # Verify customer exists
+        try:
+            customer = Customer.objects.get(customer_id=customer_id)
+        except Customer.DoesNotExist:
+            return Response({
+                'status': 'error',
+                'message': f'Customer with ID {customer_id} not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Get ALL orders for this customer with prefetch for optimization
+        orders = Order.objects.filter(
+            customer_id=customer_id
+        ).prefetch_related(
+            'order_items__product'
+        ).order_by('-order_date')  # Most recent first
+        
+        # Serialize orders with complete details
+        from .serializers import OrderDetailSerializer
+        serializer = OrderDetailSerializer(orders, many=True)
+        
+        return Response({
+            'status': 'success',
+            'data': serializer.data,
+            'count': len(serializer.data)
+        }, status=status.HTTP_200_OK)
+    
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': 'Failed to retrieve orders',
+            'detail': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 # ==================== HTML VIEWS ====================
 
 def home(request):
@@ -346,6 +990,16 @@ def signup(request):
     return render(request, 'auth/signup.html')
 
 
+def logout_view(request):
+    """Render logout page or handle logout"""
+    return render(request, 'auth/login.html')
+
+
+def forgot_password(request):
+    """Render forgot password page"""
+    return render(request, 'auth/forgot_password.html')
+
+
 # Checkout pages
 def checkout(request):
     """Render checkout page"""
@@ -360,3 +1014,341 @@ def checkout_payment(request):
 def checkout_confirmation(request):
     """Render checkout confirmation page"""
     return render(request, 'checkout/confirmation.html')
+
+
+# ==================== ADDRESS API ENDPOINTS ====================
+
+@api_view(['GET'])
+def customer_addresses_api(request):
+    """
+    Get all addresses for a customer
+    GET /api/customer/addresses/?customer_id=1
+    
+    Returns:
+        - 200: Success with addresses list
+        - 400: Missing customer_id
+        - 404: Customer not found
+        - 500: Server error
+    """
+    customer_id = request.query_params.get('customer_id')
+    
+    if not customer_id:
+        return Response({
+            'status': 'error',
+            'message': 'customer_id is required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # Verify customer exists
+        customer = Customer.objects.get(customer_id=customer_id)
+        
+        # Get all addresses for this customer
+        addresses = Address.objects.filter(customer=customer).order_by('-is_default', '-created_at')
+        
+        # Serialize the data
+        serializer = AddressSerializer(addresses, many=True)
+        
+        return Response({
+            'status': 'success',
+            'data': serializer.data,
+            'count': addresses.count()
+        }, status=status.HTTP_200_OK)
+        
+    except Customer.DoesNotExist:
+        return Response({
+            'status': 'error',
+            'message': 'Customer not found'
+        }, status=status.HTTP_404_NOT_FOUND)
+        
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def add_address_api(request):
+    """
+    Add a new address for a customer
+    POST /api/customer/addresses/add/
+    
+    Body:
+        - customer_id: int (required)
+        - label: str (HOME/WORK/OTHER)
+        - address_line: str (required)
+        - city: str (required)
+        - postal_code: str (required)
+        - phone: str (required)
+        - is_default: bool (optional, default False)
+    
+    Returns:
+        - 201: Address created successfully
+        - 400: Validation error
+        - 404: Customer not found
+        - 500: Server error
+    """
+    try:
+        customer_id = request.data.get('customer_id')
+        
+        if not customer_id:
+            return Response({
+                'status': 'error',
+                'message': 'customer_id is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Verify customer exists
+        try:
+            customer = Customer.objects.get(customer_id=customer_id)
+        except Customer.DoesNotExist:
+            return Response({
+                'status': 'error',
+                'message': 'Customer not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Prepare data for serializer
+        address_data = {
+            'customer': customer_id,
+            'label': request.data.get('label', 'HOME'),
+            'address_line': request.data.get('address_line'),
+            'city': request.data.get('city'),
+            'postal_code': request.data.get('postal_code'),
+            'phone': request.data.get('phone'),
+            'is_default': request.data.get('is_default', False)
+        }
+        
+        # Validate and create address
+        serializer = AddressSerializer(data=address_data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            
+            return Response({
+                'status': 'success',
+                'message': 'Address added successfully',
+                'data': serializer.data
+            }, status=status.HTTP_201_CREATED)
+        else:
+            return Response({
+                'status': 'error',
+                'message': 'Validation failed',
+                'errors': serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['PUT'])
+def update_address_api(request, address_id):
+    """
+    Update an existing address
+    PUT /api/customer/addresses/<address_id>/
+    
+    Body:
+        - customer_id: int (required for ownership validation)
+        - label: str (optional)
+        - address_line: str (optional)
+        - city: str (optional)
+        - postal_code: str (optional)
+        - phone: str (optional)
+        - is_default: bool (optional)
+    
+    Returns:
+        - 200: Address updated successfully
+        - 400: Validation error
+        - 403: Not authorized (address doesn't belong to customer)
+        - 404: Address not found
+        - 500: Server error
+    """
+    try:
+        customer_id = request.data.get('customer_id')
+        
+        if not customer_id:
+            return Response({
+                'status': 'error',
+                'message': 'customer_id is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get the address
+        try:
+            address = Address.objects.get(address_id=address_id)
+        except Address.DoesNotExist:
+            return Response({
+                'status': 'error',
+                'message': 'Address not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Verify ownership
+        if address.customer.customer_id != int(customer_id):
+            return Response({
+                'status': 'error',
+                'message': 'You are not authorized to update this address'
+            }, status=status.HTTP_403_FORBIDDEN)
+        
+        # Update address with partial data
+        serializer = AddressSerializer(address, data=request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            
+            return Response({
+                'status': 'success',
+                'message': 'Address updated successfully',
+                'data': serializer.data
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'status': 'error',
+                'message': 'Validation failed',
+                'errors': serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['DELETE'])
+def delete_address_api(request, address_id):
+    """
+    Delete an address
+    DELETE /api/customer/addresses/<address_id>/
+    
+    Query Parameters:
+        - customer_id: int (required for ownership validation)
+    
+    Returns:
+        - 200: Address deleted successfully
+        - 400: Cannot delete (only address or is default)
+        - 403: Not authorized
+        - 404: Address not found
+        - 500: Server error
+    """
+    try:
+        customer_id = request.query_params.get('customer_id')
+        
+        if not customer_id:
+            return Response({
+                'status': 'error',
+                'message': 'customer_id is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get the address
+        try:
+            address = Address.objects.get(address_id=address_id)
+        except Address.DoesNotExist:
+            return Response({
+                'status': 'error',
+                'message': 'Address not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Verify ownership
+        if address.customer.customer_id != int(customer_id):
+            return Response({
+                'status': 'error',
+                'message': 'You are not authorized to delete this address'
+            }, status=status.HTTP_403_FORBIDDEN)
+        
+        # Check if this is the only address
+        customer_addresses_count = Address.objects.filter(customer=address.customer).count()
+        
+        if customer_addresses_count == 1:
+            return Response({
+                'status': 'error',
+                'message': 'Cannot delete the only address. Please add another address first.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # If deleting default address, set another as default
+        if address.is_default:
+            # Get another address to set as default
+            another_address = Address.objects.filter(
+                customer=address.customer
+            ).exclude(address_id=address_id).first()
+            
+            if another_address:
+                another_address.is_default = True
+                another_address.save()
+        
+        # Delete the address
+        address.delete()
+        
+        return Response({
+            'status': 'success',
+            'message': 'Address deleted successfully'
+        }, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def set_default_address_api(request, address_id):
+    """
+    Set an address as default
+    POST /api/customer/addresses/<address_id>/set-default/
+    
+    Body:
+        - customer_id: int (required for ownership validation)
+    
+    Returns:
+        - 200: Default address updated successfully
+        - 403: Not authorized
+        - 404: Address not found
+        - 500: Server error
+    """
+    try:
+        customer_id = request.data.get('customer_id')
+        
+        if not customer_id:
+            return Response({
+                'status': 'error',
+                'message': 'customer_id is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get the address
+        try:
+            address = Address.objects.get(address_id=address_id)
+        except Address.DoesNotExist:
+            return Response({
+                'status': 'error',
+                'message': 'Address not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Verify ownership
+        if address.customer.customer_id != int(customer_id):
+            return Response({
+                'status': 'error',
+                'message': 'You are not authorized to modify this address'
+            }, status=status.HTTP_403_FORBIDDEN)
+        
+        # Remove default from all other addresses
+        Address.objects.filter(customer=address.customer).update(is_default=False)
+        
+        # Set this address as default
+        address.is_default = True
+        address.save()
+        
+        # Serialize and return updated address
+        serializer = AddressSerializer(address)
+        
+        return Response({
+            'status': 'success',
+            'message': 'Default address updated successfully',
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

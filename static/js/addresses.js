@@ -1,331 +1,696 @@
-// Addresses Page Functionality
+﻿// Addresses Page - Steps 10-26 Implementation
+let allAddressesData = [];
 
+// Helper function to get CSRF token from cookies
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Get CSRF token
+const csrftoken = getCookie('csrftoken');
+
+// Step 10: Initialize with authentication check
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize addresses page
-    initializeAddressesPage();
+    const customerId = localStorage.getItem('customer_id');
+    if (!customerId) {
+        window.location.replace('/landing/');
+        return;
+    }
+    updateSidebarProfile();
+    fetchCustomerAddresses();
     initializeAddressModal();
     initializeAddressActions();
 });
 
-/**
- * Initialize addresses page
- */
-function initializeAddressesPage() {
-    const pageTitle = document.querySelector('.page-title');
-    if (pageTitle) {
-        pageTitle.textContent = 'Addresses';
+// Step 11: Fetch addresses from API
+async function fetchCustomerAddresses() {
+    const customerId = localStorage.getItem('customer_id');
+    if (!customerId) {
+        handleAuthError();
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/customer/addresses/?customer_id=${customerId}`);
+        if (!response.ok) {
+            if (response.status === 404 || response.status === 401 || response.status === 403) {
+                handleAuthError();
+                return;
+            }
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        if (data.status === 'success') {
+            allAddressesData = data.data || [];
+            renderAddressesUI(allAddressesData);
+        } else {
+            allAddressesData = [];
+            renderAddressesUI([]);
+        }
+    } catch (error) {
+        console.error('Error fetching addresses:', error);
+        allAddressesData = [];
+        renderAddressesUI([]);
     }
 }
 
-/**
- * Initialize address modal
- */
+// Step 12: Render addresses UI
+function renderAddressesUI(addresses) {
+    const container = document.getElementById('addressesContainer');
+    const emptyState = document.getElementById('emptyState');
+    if (!container) return;
+    
+    const existingCards = container.querySelectorAll('.address-card:not(.add-new-card)');
+    existingCards.forEach(card => card.remove());
+    
+    if (!addresses || addresses.length === 0) {
+        if (emptyState) emptyState.style.display = 'block';
+        return;
+    }
+    
+    if (emptyState) emptyState.style.display = 'none';
+    const addNewCard = container.querySelector('.add-new-card');
+    
+    addresses.forEach((address, index) => {
+        const card = renderAddressCard(address);
+        card.style.animation = `fadeIn 0.4s ease forwards`;
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.style.opacity = '0';
+        
+        if (addNewCard) {
+            container.insertBefore(card, addNewCard);
+        } else {
+            container.appendChild(card);
+        }
+    });
+}
+
+// Step 13: Render individual address card
+function renderAddressCard(address) {
+    const card = document.createElement('div');
+    card.className = 'address-card';
+    card.setAttribute('data-address-id', address.address_id);
+    
+    const iconClass = getAddressIconClass(address.label);
+    const iconType = address.label ? address.label.toLowerCase() : 'other';
+    
+    const cardHeader = document.createElement('div');
+    cardHeader.className = 'address-card-header';
+    
+    const iconLabel = document.createElement('div');
+    iconLabel.className = 'address-icon-label';
+    
+    const iconDiv = document.createElement('div');
+    iconDiv.className = `address-icon ${iconType}-icon`;
+    iconDiv.innerHTML = `<i class="${iconClass}"></i>`;
+    
+    const typeDiv = document.createElement('div');
+    typeDiv.className = 'address-type';
+    
+    const typeHeading = document.createElement('h3');
+    typeHeading.textContent = address.label ? address.label.toUpperCase() : 'OTHER';
+    typeDiv.appendChild(typeHeading);
+    
+    if (address.is_default) {
+        const badge = document.createElement('span');
+        badge.className = 'default-badge';
+        badge.innerHTML = '<i class="fas fa-star"></i> DEFAULT';
+        typeDiv.appendChild(badge);
+    }
+    
+    iconLabel.appendChild(iconDiv);
+    iconLabel.appendChild(typeDiv);
+    
+    const actionsDiv = document.createElement('div');
+    actionsDiv.className = 'address-actions';
+    
+    const editBtn = document.createElement('button');
+    editBtn.className = 'icon-btn edit-btn';
+    editBtn.title = 'Edit address';
+    editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+    editBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        editAddress(address.address_id);
+    });
+    
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'icon-btn delete-btn';
+    deleteBtn.title = 'Delete address';
+    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+    deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteAddress(address.address_id);
+    });
+    
+    actionsDiv.appendChild(editBtn);
+    actionsDiv.appendChild(deleteBtn);
+    cardHeader.appendChild(iconLabel);
+    cardHeader.appendChild(actionsDiv);
+    
+    const cardBody = document.createElement('div');
+    cardBody.className = 'address-card-body';
+    
+    const addressLine = document.createElement('p');
+    addressLine.className = 'address-line';
+    addressLine.textContent = address.address_line || 'No address';
+    
+    const cityPostal = document.createElement('p');
+    cityPostal.className = 'address-city';
+    cityPostal.textContent = `${address.city || ''} ${address.postal_code || ''}`;
+    
+    const phone = document.createElement('p');
+    phone.className = 'address-phone';
+    phone.textContent = formatPhoneNumber(address.phone || '');
+    
+    cardBody.appendChild(addressLine);
+    cardBody.appendChild(cityPostal);
+    cardBody.appendChild(phone);
+    
+    card.appendChild(cardHeader);
+    card.appendChild(cardBody);
+    
+    if (!address.is_default) {
+        const footer = document.createElement('div');
+        footer.className = 'address-card-footer';
+        
+        const setDefaultBtn = document.createElement('button');
+        setDefaultBtn.className = 'set-default-btn';
+        setDefaultBtn.innerHTML = '<i class="far fa-star"></i> SET AS DEFAULT';
+        setDefaultBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setDefaultAddress(address.address_id);
+        });
+        
+        footer.appendChild(setDefaultBtn);
+        card.appendChild(footer);
+    }
+    
+    return card;
+}
+
+// Step 14: Update sidebar profile
+function updateSidebarProfile() {
+    const name = localStorage.getItem('customer_name');
+    const email = localStorage.getItem('customer_email');
+    
+    const nameEl = document.getElementById('profileName');
+    const emailEl = document.getElementById('profileEmail');
+    
+    if (nameEl && name) nameEl.textContent = name.toUpperCase();
+    if (emailEl && email) emailEl.textContent = email.toUpperCase();
+    
+    updateOrdersCount();
+}
+
+function updateOrdersCount() {
+    const el = document.getElementById('sidebarTotalOrders');
+    const customerId = localStorage.getItem('customer_id');
+    if (!el || !customerId) return;
+    
+    fetch(`/api/customer/orders/?customer_id=${customerId}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'success' && data.data) {
+                const count = data.data.length;
+                el.textContent = `${count} ${count === 1 ? 'Order' : 'Orders'}`;
+            }
+        })
+        .catch(err => console.log('Could not fetch orders:', err));
+}
+
+function handleAuthError() {
+    localStorage.removeItem('customer_id');
+    localStorage.removeItem('customer_name');
+    localStorage.removeItem('customer_email');
+    window.location.replace('/landing/');
+}
+
+function getAddressIconClass(label) {
+    const icons = {
+        'HOME': 'fas fa-home',
+        'WORK': 'fas fa-briefcase',
+        'OTHER': 'fas fa-map-marker-alt'
+    };
+    return icons[label] || 'fas fa-map-marker-alt';
+}
+
+function formatPhoneNumber(phone) {
+    if (!phone) return '';
+    const cleaned = phone.replace(/\D/g, '');
+    if (cleaned.length >= 11 && cleaned.startsWith('92')) {
+        return `+${cleaned.slice(0, 2)} (${cleaned.slice(2, 5)}) ${cleaned.slice(5)}`;
+    } else if (cleaned.length >= 10) {
+        return `+92 (${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+    }
+    return phone;
+}
+
+// Steps 15-26: Modal and CRUD Operations
+
 function initializeAddressModal() {
     const modal = document.getElementById('addressModal');
     const addNewCard = document.querySelector('.add-new-card');
     const addHeaderBtn = document.querySelector('.add-address-btn-header');
-    const closeModalBtn = document.getElementById('closeModal');
+    const closeBtn = document.getElementById('closeModal');
     const cancelBtn = document.getElementById('cancelBtn');
-    const addressForm = document.getElementById('addressForm');
-
-    // Open modal when clicking add new card
+    const form = document.getElementById('addressForm');
+    
     if (addNewCard) {
-        addNewCard.addEventListener('click', function() {
-            openAddressModal();
-        });
+        addNewCard.addEventListener('click', () => showAddAddressModal());
     }
-
-    // Open modal when clicking header button
     if (addHeaderBtn) {
-        addHeaderBtn.addEventListener('click', function() {
-            openAddressModal();
-        });
+        addHeaderBtn.addEventListener('click', () => showAddAddressModal());
     }
-
-    // Close modal
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', closeAddressModal);
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
     }
-
     if (cancelBtn) {
-        cancelBtn.addEventListener('click', closeAddressModal);
+        cancelBtn.addEventListener('click', closeModal);
     }
-
-    // Close modal when clicking outside
     if (modal) {
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                closeAddressModal();
-            }
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
         });
     }
-
-    // Handle form submission
-    if (addressForm) {
-        addressForm.addEventListener('submit', function(e) {
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('addressModal');
+            if (modal && modal.classList.contains('active')) closeModal();
+        }
+    });
+    
+    if (form) {
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
-            saveAddress();
+            const addressId = form.getAttribute('data-address-id');
+            if (addressId) {
+                handleUpdateAddress(addressId);
+            } else {
+                handleAddAddress();
+            }
         });
+    }
+    
+    const logoutBtn = document.querySelector('.logout-btn');
+    if (logoutBtn) {
+        const newBtn = logoutBtn.cloneNode(true);
+        logoutBtn.parentNode.replaceChild(newBtn, logoutBtn);
+        newBtn.addEventListener('click', handleLogout);
     }
 }
 
-/**
- * Initialize address actions (edit, delete, set default)
- */
 function initializeAddressActions() {
-    // Edit buttons
-    const editButtons = document.querySelectorAll('.edit-btn');
-    editButtons.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const addressCard = this.closest('.address-card');
-            const addressId = addressCard?.getAttribute('data-address-id');
-            if (addressId) {
-                editAddress(addressId);
-            }
-        });
-    });
-
-    // Delete buttons
-    const deleteButtons = document.querySelectorAll('.delete-btn');
-    deleteButtons.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const addressCard = this.closest('.address-card');
-            const addressId = addressCard?.getAttribute('data-address-id');
-            if (addressId) {
-                deleteAddress(addressId);
-            }
-        });
-    });
-
-    // Set default buttons
-    const setDefaultButtons = document.querySelectorAll('.set-default-btn');
-    setDefaultButtons.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const addressCard = this.closest('.address-card');
-            const addressId = addressCard?.getAttribute('data-address-id');
-            if (addressId) {
-                setDefaultAddress(addressId);
-            }
-        });
-    });
+    console.log('Address actions initialized');
 }
 
-/**
- * Open address modal (add new or edit)
- */
-function openAddressModal(addressData = null) {
+// Step 15: Show add modal
+function showAddAddressModal() {
     const modal = document.getElementById('addressModal');
-    const modalTitle = document.getElementById('modalTitle');
+    const title = document.getElementById('modalTitle');
     const form = document.getElementById('addressForm');
-
-    if (addressData) {
-        // Edit mode
-        modalTitle.textContent = 'EDIT ADDRESS';
-        populateForm(addressData);
-    } else {
-        // Add new mode
-        modalTitle.textContent = 'ADD NEW ADDRESS';
-        form.reset();
-    }
-
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-/**
- * Close address modal
- */
-function closeAddressModal() {
-    const modal = document.getElementById('addressModal');
-    const form = document.getElementById('addressForm');
+    if (!modal || !title || !form) return;
     
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
+    title.textContent = 'ADD DELIVERY ADDRESS';
     form.reset();
+    form.removeAttribute('data-address-id');
+    openModal();
 }
 
-/**
- * Populate form with address data (for editing)
- */
-function populateForm(addressData) {
-    document.getElementById('addressType').value = addressData.type || 'home';
-    document.getElementById('addressLine').value = addressData.line || '';
-    document.getElementById('postalCode').value = addressData.postalCode || '';
-    document.getElementById('phone').value = addressData.phone || '';
-}
-
-/**
- * Save address (add new or update existing)
- */
-function saveAddress() {
-    const formData = {
-        type: document.getElementById('addressType').value,
-        line: document.getElementById('addressLine').value,
-        postalCode: document.getElementById('postalCode').value,
-        phone: document.getElementById('phone').value
-    };
-
-    console.log('Saving address:', formData);
-
-    // TODO: Implement actual save logic (API call)
-    // For now, show success message
-    notifications.success('✅ Address saved successfully!');
-    closeAddressModal();
-
-    // In a real app, you would:
-    // 1. Send data to backend API
-    // 2. Reload addresses list or add new card to DOM
-    // 3. Update UI accordingly
-}
-
-/**
- * Edit address
- */
-function editAddress(addressId) {
-    console.log('Editing address:', addressId);
-
-    // Get address data from card (in real app, fetch from API)
-    const addressCard = document.querySelector(`[data-address-id="${addressId}"]`);
-    if (!addressCard) return;
-
-    const addressData = {
-        id: addressId,
-        type: addressCard.querySelector('.address-type h3').textContent.toLowerCase(),
-        line: addressCard.querySelector('.address-line')?.textContent || '',
-        postalCode: addressCard.querySelector('.address-city')?.textContent.split(' ').pop() || '',
-        phone: addressCard.querySelector('.address-phone')?.textContent || '',
-        isDefault: addressCard.querySelector('.default-badge') !== null
-    };
-
-    openAddressModal(addressData);
-}
-
-/**
- * Delete address
- */
-function deleteAddress(addressId) {
-    console.log('Deleting address:', addressId);
-
-    const confirmed = confirm('Are you sure you want to delete this address?');
-    
-    if (confirmed) {
-        // TODO: Implement actual delete logic (API call)
-        const addressCard = document.querySelector(`[data-address-id="${addressId}"]`);
-        if (addressCard) {
-            addressCard.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => {
-                addressCard.remove();
-            }, 300);
-        }
-
-        // Show success message
-        console.log('Address deleted successfully');
-    }
-}
-
-/**
- * Set address as default
- */
-function setDefaultAddress(addressId) {
-    console.log('Setting default address:', addressId);
-
-    // Remove default badge from all addresses
-    const allDefaultBadges = document.querySelectorAll('.default-badge');
-    allDefaultBadges.forEach(badge => {
-        badge.remove();
-    });
-
-    // Remove all set-default buttons
-    const allSetDefaultBtns = document.querySelectorAll('.set-default-btn');
-    allSetDefaultBtns.forEach(btn => {
-        const footer = btn.closest('.address-card-footer');
-        if (footer) footer.remove();
-    });
-
-    // Add default badge to selected address
-    const addressCard = document.querySelector(`[data-address-id="${addressId}"]`);
-    if (addressCard) {
-        const addressType = addressCard.querySelector('.address-type');
-        if (addressType) {
-            const defaultBadge = document.createElement('span');
-            defaultBadge.className = 'default-badge';
-            defaultBadge.innerHTML = '<i class="fas fa-star"></i> DEFAULT';
-            addressType.appendChild(defaultBadge);
-        }
-    }
-
-    // TODO: Implement actual API call to update default address
-    console.log('Default address updated successfully');
-}
-
-/**
- * Helper function to format phone number
- */
-function formatPhoneNumber(phone) {
-    // Remove all non-digits
-    const cleaned = phone.replace(/\D/g, '');
-    
-    // Format as +92 (XXX) XXXXXXX
-    if (cleaned.length >= 11) {
-        return `+${cleaned.slice(0, 2)} (${cleaned.slice(2, 5)}) ${cleaned.slice(5)}`;
+// Step 16: Add address
+async function handleAddAddress() {
+    const customerId = localStorage.getItem('customer_id');
+    if (!customerId) {
+        handleAuthError();
+        return;
     }
     
-    return phone;
-}
-
-/**
- * Helper function to validate form
- */
-function validateAddressForm() {
-    const requiredFields = [
-        'addressLine',
-        'postalCode',
-        'phone'
-    ];
-
-    let isValid = true;
-
-    requiredFields.forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (!field || !field.value.trim()) {
-            isValid = false;
-            field?.classList.add('error');
+    const label = document.getElementById('addressType').value.toUpperCase();
+    const addressLine = document.getElementById('addressLine').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const postalCode = document.getElementById('postalCode').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const isDefault = document.getElementById('isDefault').checked;
+    
+    const validation = validateAddressForm();
+    if (!validation.isValid) {
+        if (typeof notifications !== 'undefined') {
+            notifications.error(validation.errors[0]);
         } else {
-            field?.classList.remove('error');
+            alert(validation.errors[0]);
         }
-    });
-
-    return isValid;
+        return;
+    }
+    
+    showLoadingState();
+    
+    try {
+        const response = await fetch('/api/customer/addresses/add/', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({
+                customer_id: parseInt(customerId),
+                label, address_line: addressLine, city, postal_code: postalCode, phone, is_default: isDefault
+            })
+        });
+        
+        const data = await response.json();
+        if (response.ok && data.status === 'success') {
+            if (typeof notifications !== 'undefined') {
+                notifications.success('✅ Address added successfully!');
+            }
+            closeModal();
+            await fetchCustomerAddresses();
+        } else {
+            if (typeof notifications !== 'undefined') {
+                notifications.error(data.message || 'Failed to add address');
+            } else {
+                alert(data.message || 'Failed to add address');
+            }
+        }
+    } catch (error) {
+        if (typeof notifications !== 'undefined') {
+            notifications.error('Network error. Please try again.');
+        } else {
+            alert('Network error. Please try again.');
+        }
+    } finally {
+        hideLoadingState();
+    }
 }
 
-/**
- * Add fadeOut animation for delete
- */
+// Step 17: Show edit modal
+function showEditAddressModal(addressId) {
+    const address = allAddressesData.find(a => a.address_id === addressId);
+    if (!address) return;
+    
+    const modal = document.getElementById('addressModal');
+    const title = document.getElementById('modalTitle');
+    const form = document.getElementById('addressForm');
+    if (!modal || !title || !form) return;
+    
+    title.textContent = 'EDIT ADDRESS';
+    document.getElementById('addressType').value = address.label ? address.label.toLowerCase() : 'home';
+    document.getElementById('addressLine').value = address.address_line || '';
+    document.getElementById('city').value = address.city || '';
+    document.getElementById('postalCode').value = address.postal_code || '';
+    document.getElementById('phone').value = address.phone || '';
+    document.getElementById('isDefault').checked = address.is_default || false;
+    form.setAttribute('data-address-id', addressId);
+    openModal();
+}
+
+// Step 18: Update address
+async function handleUpdateAddress(addressId) {
+    const customerId = localStorage.getItem('customer_id');
+    if (!customerId) {
+        handleAuthError();
+        return;
+    }
+    
+    const label = document.getElementById('addressType').value.toUpperCase();
+    const addressLine = document.getElementById('addressLine').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const postalCode = document.getElementById('postalCode').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const isDefault = document.getElementById('isDefault').checked;
+    
+    const validation = validateAddressForm();
+    if (!validation.isValid) {
+        if (typeof notifications !== 'undefined') {
+            notifications.error(validation.errors[0]);
+        } else {
+            alert(validation.errors[0]);
+        }
+        return;
+    }
+    
+    showLoadingState();
+    
+    try {
+        const response = await fetch(`/api/customer/addresses/${addressId}/`, {
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({
+                customer_id: parseInt(customerId),
+                label, address_line: addressLine, city, postal_code: postalCode, phone, is_default: isDefault
+            })
+        });
+        
+        const data = await response.json();
+        if (response.ok && data.status === 'success') {
+            if (typeof notifications !== 'undefined') {
+                notifications.success('✅ Address updated successfully!');
+            }
+            closeModal();
+            await fetchCustomerAddresses();
+        } else {
+            if (typeof notifications !== 'undefined') {
+                notifications.error(data.message || 'Failed to update address');
+            } else {
+                alert(data.message || 'Failed to update address');
+            }
+        }
+    } catch (error) {
+        if (typeof notifications !== 'undefined') {
+            notifications.error('Network error. Please try again.');
+        } else {
+            alert('Network error. Please try again.');
+        }
+    } finally {
+        hideLoadingState();
+    }
+}
+
+// Step 19: Delete address
+async function handleDeleteAddress(addressId) {
+    const customerId = localStorage.getItem('customer_id');
+    if (!customerId) {
+        handleAuthError();
+        return;
+    }
+    
+    const address = allAddressesData.find(a => a.address_id === addressId);
+    const label = address ? address.label : 'this address';
+    
+    if (!confirm(`Are you sure you want to delete your ${label} address?`)) return;
+    
+    showLoadingState();
+    
+    try {
+        const response = await fetch(`/api/customer/addresses/${addressId}/delete/?customer_id=${customerId}`, {
+            method: 'DELETE'
+        });
+        
+        const data = await response.json();
+        if (response.ok && data.status === 'success') {
+            if (typeof notifications !== 'undefined') {
+                notifications.success('✅ Address deleted successfully!');
+            }
+            await fetchCustomerAddresses();
+        } else {
+            if (typeof notifications !== 'undefined') {
+                notifications.error(data.message || 'Failed to delete address');
+            } else {
+                alert(data.message || 'Failed to delete address');
+            }
+        }
+    } catch (error) {
+        if (typeof notifications !== 'undefined') {
+            notifications.error('Network error. Please try again.');
+        } else {
+            alert('Network error. Please try again.');
+        }
+    } finally {
+        hideLoadingState();
+    }
+}
+
+// Step 20: Set default address
+async function handleSetDefaultAddress(addressId) {
+    const customerId = localStorage.getItem('customer_id');
+    if (!customerId) {
+        handleAuthError();
+        return;
+    }
+    
+    showLoadingState();
+    
+    try {
+        const response = await fetch(`/api/customer/addresses/${addressId}/set-default/`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({ customer_id: parseInt(customerId) })
+        });
+        
+        const data = await response.json();
+        if (response.ok && data.status === 'success') {
+            if (typeof notifications !== 'undefined') {
+                notifications.success('✅ Default address updated!');
+            }
+            await fetchCustomerAddresses();
+        } else {
+            if (typeof notifications !== 'undefined') {
+                notifications.error(data.message || 'Failed to set default');
+            } else {
+                alert(data.message || 'Failed to set default');
+            }
+        }
+    } catch (error) {
+        if (typeof notifications !== 'undefined') {
+            notifications.error('Network error. Please try again.');
+        } else {
+            alert('Network error. Please try again.');
+        }
+    } finally {
+        hideLoadingState();
+    }
+}
+
+// Step 21: Loading states
+function showLoadingState() {
+    const addBtn = document.querySelector('.add-address-btn-header');
+    const saveBtn = document.querySelector('.btn-save');
+    if (addBtn) {
+        addBtn.disabled = true;
+        addBtn.style.opacity = '0.6';
+    }
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'SAVING...';
+    }
+}
+
+function hideLoadingState() {
+    const addBtn = document.querySelector('.add-address-btn-header');
+    const saveBtn = document.querySelector('.btn-save');
+    if (addBtn) {
+        addBtn.disabled = false;
+        addBtn.style.opacity = '1';
+    }
+    if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'SAVE ADDRESS';
+    }
+}
+
+// Step 22: Validation
+function validateAddressForm() {
+    const errors = [];
+    const type = document.getElementById('addressType').value;
+    const line = document.getElementById('addressLine').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const postal = document.getElementById('postalCode').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    
+    if (!type) errors.push('Address type is required');
+    if (!line) errors.push('Street address is required');
+    if (!city) errors.push('City is required');
+    if (!postal) {
+        errors.push('Postal code is required');
+    } else if (!validatePostalCode(postal)) {
+        errors.push('Postal code must be 5 digits');
+    }
+    if (!phone) {
+        errors.push('Phone number is required');
+    } else if (!validatePhoneNumber(phone)) {
+        errors.push('Invalid phone number format');
+    }
+    
+    return { isValid: errors.length === 0, errors };
+}
+
+function validatePhoneNumber(phone) {
+    const cleaned = phone.replace(/\D/g, '');
+    return cleaned.length >= 10 && cleaned.length <= 15;
+}
+
+function validatePostalCode(postal) {
+    return /^\d{5}$/.test(postal);
+}
+
+// Step 23: Modal utilities
+function openModal() {
+    const modal = document.getElementById('addressModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeModal() {
+    const modal = document.getElementById('addressModal');
+    const form = document.getElementById('addressForm');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    if (form) {
+        form.reset();
+        form.removeAttribute('data-address-id');
+    }
+}
+
+// Step 25: Logout
+function handleLogout() {
+    if (!confirm('Are you sure you want to logout?')) return;
+    localStorage.removeItem('customer_id');
+    localStorage.removeItem('customer_name');
+    localStorage.removeItem('customer_email');
+    window.location.replace('/landing/');
+}
+
+// Step 26: Helper functions
+function getAddressIcon(label) {
+    const icons = {
+        'HOME': 'fas fa-home',
+        'WORK': 'fas fa-briefcase',
+        'OTHER': 'fas fa-map-marker-alt'
+    };
+    return icons[label] || 'fas fa-map-marker-alt';
+}
+
+function getAddressLabel(label) {
+    const labels = { 'HOME': 'Home', 'WORK': 'Work', 'OTHER': 'Other' };
+    return labels[label] || 'Other';
+}
+
+// Step 24: Wrappers for event listeners
+function editAddress(id) { showEditAddressModal(id); }
+function deleteAddress(id) { handleDeleteAddress(id); }
+function setDefaultAddress(id) { handleSetDefaultAddress(id); }
+
+// Animations
 const style = document.createElement('style');
 style.textContent = `
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
     @keyframes fadeOut {
-        from {
-            opacity: 1;
-            transform: scale(1);
-        }
-        to {
-            opacity: 0;
-            transform: scale(0.9);
-        }
+        from { opacity: 1; transform: scale(1); }
+        to { opacity: 0; transform: scale(0.9); }
     }
 `;
 document.head.appendChild(style);
-
-// Export functions for use in other modules if needed
-window.addressesFunctions = {
-    openAddressModal,
-    closeAddressModal,
-    editAddress,
-    deleteAddress,
-    setDefaultAddress,
-    formatPhoneNumber,
-    validateAddressForm
-};

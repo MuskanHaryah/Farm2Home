@@ -13,12 +13,41 @@ router.register(r'customers', views.CustomerViewSet, basename='customer')
 router.register(r'inventory', views.InventoryViewSet, basename='inventory')
 
 urlpatterns = [
-    # API endpoints
+    # ==================== API ENDPOINTS ====================
+    
+    # REST API endpoints (CRUD operations via ViewSets)
     path('api/', include(router.urls)),
     
-    # Custom API endpoint for product catalog page
-    # This endpoint returns products in the exact format expected by script.js
+    # Product catalog API endpoint
+    # Returns products in the exact format expected by script.js on catalog page
     path('api/catalog/products/', views.catalog_products_api, name='catalog_products_api'),
+    
+    # Checkout API endpoints
+    # These endpoints handle the complete checkout flow from cart to order confirmation
+    path('api/checkout/cart/', views.checkout_cart_api, name='checkout_cart_api'),
+    path('api/checkout/create-order/', views.create_checkout_order, name='create_checkout_order'),
+    path('api/checkout/order/<int:order_id>/', views.get_order_confirmation, name='get_order_confirmation'),
+    
+    # Authentication API endpoints
+    # These endpoints handle user login and signup via API (returns JSON)
+    path('api/auth/login/', views.api_login, name='api_login'),
+    path('api/auth/signup/', views.api_signup, name='api_signup'),
+    
+    # Customer Profile API endpoints
+    # These endpoints provide customer profile data and order summaries for account pages
+    path('api/customer/profile/', views.customer_profile_api, name='customer_profile_api'),
+    path('api/customer/orders-summary/', views.customer_orders_summary_api, name='customer_orders_summary_api'),
+    path('api/customer/orders/', views.customer_orders_api, name='customer_orders_api'),
+    
+    # Customer Address API endpoints
+    # These endpoints handle CRUD operations for customer addresses
+    path('api/customer/addresses/', views.customer_addresses_api, name='customer_addresses_api'),
+    path('api/customer/addresses/add/', views.add_address_api, name='add_address_api'),
+    path('api/customer/addresses/<int:address_id>/', views.update_address_api, name='update_address_api'),
+    path('api/customer/addresses/<int:address_id>/delete/', views.delete_address_api, name='delete_address_api'),
+    path('api/customer/addresses/<int:address_id>/set-default/', views.set_default_address_api, name='set_default_address_api'),
+    
+    # ==================== HTML PAGE ROUTES ====================
     
     # Home and landing
     path('', views.home, name='home'),

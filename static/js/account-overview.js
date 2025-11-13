@@ -262,7 +262,30 @@ function initializeOrdersPage() {
  * Main initialization
  */
 document.addEventListener('DOMContentLoaded', function() {
-    // Update prices based on page
+    // Check if customer is logged in
+    const customerId = localStorage.getItem('customer_id');
+    
+    if (!customerId) {
+        // No customer_id found, redirect to login
+        console.log('No customer_id found, redirecting to login...');
+        window.location.href = '/landing/';
+        return;
+    }
+    
+    // Customer is logged in, fetch profile and orders data
+    console.log('Customer logged in, fetching data for customer_id:', customerId);
+    
+    // Show loading states
+    showLoadingState();
+    
+    // Fetch data
+    fetchCustomerProfile(customerId);
+    fetchOrdersSummary(customerId);
+    
+    // Set up logout button handler
+    setupLogoutHandler();
+    
+    // Update prices based on page (legacy support)
     if (document.querySelector('.orders-list')) {
         updateOverviewOrderPrices();
     } else if (document.querySelector('.orders-container')) {
@@ -272,6 +295,366 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Account overview script initialized');
 });
 
+// ==================== LOADING STATE FUNCTIONS ====================
+
+/**
+ * Show loading indicators
+ */
+function showLoadingState() {
+    // Show loading for stats
+    const totalSpentElement = document.getElementById('totalSpent');
+    const totalOrdersElement = document.getElementById('totalOrders');
+    
+    if (totalSpentElement) {
+        totalSpentElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    }
+    if (totalOrdersElement) {
+        totalOrdersElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    }
+    
+    // Show loading for orders list
+    const ordersListElement = document.getElementById('ordersList');
+    if (ordersListElement) {
+        ordersListElement.innerHTML = '<div style="text-align: center; padding: 2rem;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #4CAF50;"></i><p style="margin-top: 1rem; color: #666;">Loading orders...</p></div>';
+    }
+}
+
+/**
+ * Hide loading indicators
+ */
+function hideLoadingState() {
+    // Loading will be hidden when data is updated
+    console.log('Loading state hidden');
+}
+
+// ==================== API INTEGRATION FUNCTIONS ====================
+
+/**
+ * Fetch customer profile data from API
+ */
+async function fetchCustomerProfile(customerId) {
+    try {
+        const response = await fetch(`/api/customer/profile/?customer_id=${customerId}`);
+        const result = await response.json();
+        
+        if (response.ok && result.status === 'success') {
+            console.log('Customer profile fetched successfully:', result.data);
+            updateProfileUI(result.data);
+            hideLoadingState();
+        } else {
+            console.error('Failed to fetch customer profile:', result.message);
+            
+            // Check if customer not found (404)
+            if (response.status === 404) {
+                handleAuthError('Customer not found. Please login again.');
+            } else {
+                // Keep hardcoded values as fallback
+                hideLoadingState();
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching customer profile:', error);
+        handleNetworkError('Failed to load profile data');
+        hideLoadingState();
+    }
+}
+
+/**
+ * Fetch customer orders summary from API
+ */
+async function fetchOrdersSummary(customerId) {
+    try {
+        const response = await fetch(`/api/customer/orders-summary/?customer_id=${customerId}&limit=3`);
+        const result = await response.json();
+        
+        if (response.ok && result.status === 'success') {
+            console.log('Orders summary fetched successfully:', result.data);
+            updateOrdersUI(result.data);
+        } else {
+            console.error('Failed to fetch orders summary:', result.message);
+            
+            // Check if customer not found (404)
+            if (response.status === 404) {
+                handleAuthError('Customer not found. Please login again.');
+            } else {
+                // Keep hardcoded orders as fallback
+                const ordersListElement = document.getElementById('ordersList');
+                if (ordersListElement && ordersListElement.children.length === 0) {
+                    ordersListElement.innerHTML = '<p style="text-align: center; padding: 2rem; color: #666;">Unable to load orders</p>';
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching orders summary:', error);
+        handleNetworkError('Failed to load orders');
+        
+        // Show error message in orders list
+        const ordersListElement = document.getElementById('ordersList');
+        if (ordersListElement) {
+            ordersListElement.innerHTML = '<p style="text-align: center; padding: 2rem; color: #666;">Unable to load orders</p>';
+        }
+    }
+}
+
+// ==================== ERROR HANDLING FUNCTIONS ====================
+
+/**
+ * Handle authentication errors (invalid customer_id)
+ */
+function handleAuthError(message) {
+    console.error('Authentication error:', message);
+    
+    // Clear localStorage
+    localStorage.removeItem('customer_id');
+    localStorage.removeItem('customer_name');
+    localStorage.removeItem('customer_email');
+    
+    // Show alert
+    alert(message);
+    
+    // Redirect to login
+    window.location.href = '/landing/';
+}
+
+/**
+ * Handle network errors
+ */
+function handleNetworkError(message) {
+    console.error('Network error:', message);
+    // Could show a notification here
+    // For now, just log it and keep fallback values
+}
+
+// ==================== UI UPDATE FUNCTIONS ====================
+
+/**
+ * Update profile UI with data from API
+ */
+function updateProfileUI(data) {
+    // Update profile name (both sidebar and welcome message)
+    const profileNameElements = document.querySelectorAll('#profileName, .profile-name');
+    profileNameElements.forEach(el => {
+        if (el) el.textContent = data.name.toUpperCase();
+    });
+    
+    // Update profile email
+    const profileEmailElement = document.getElementById('profileEmail');
+    if (profileEmailElement) {
+        profileEmailElement.textContent = data.email.toUpperCase();
+    }
+    
+    // Generate and update avatar
+    generateAvatar(data.name);
+    
+    // Update welcome message with first name
+    const welcomeTitle = document.querySelector('.welcome-title');
+    if (welcomeTitle) {
+        const firstName = data.name.split(' ')[0];
+        welcomeTitle.textContent = `WELCOME BACK, ${firstName.toUpperCase()}! 👋`;
+    }
+    
+    // Update total spent
+    const totalSpentElement = document.getElementById('totalSpent');
+    if (totalSpentElement) {
+        totalSpentElement.textContent = formatCurrency(data.total_spent);
+    }
+    
+    // Update total orders
+    const totalOrdersElement = document.getElementById('totalOrders');
+    if (totalOrdersElement) {
+        totalOrdersElement.textContent = data.total_orders;
+    }
+    
+    // Update sidebar total orders
+    const sidebarTotalOrdersElement = document.getElementById('sidebarTotalOrders');
+    if (sidebarTotalOrdersElement) {
+        sidebarTotalOrdersElement.textContent = `${data.total_orders} Orders`;
+    }
+    
+    // Update growth percentage
+    const growthPercentageElement = document.getElementById('growthPercentage');
+    if (growthPercentageElement && data.growth_percentage !== null) {
+        const growth = data.growth_percentage;
+        if (growth > 0) {
+            growthPercentageElement.textContent = `+${growth}%`;
+        } else if (growth < 0) {
+            growthPercentageElement.textContent = `${growth}%`;
+        } else {
+            growthPercentageElement.textContent = '0%';
+        }
+    }
+    
+    console.log('Profile UI updated successfully');
+}
+
+/**
+ * Generate and display avatar initials
+ */
+function generateAvatar(name) {
+    if (!name) return;
+    
+    // Extract initials (first letter of first two words)
+    const words = name.trim().split(' ');
+    let initials = '';
+    
+    if (words.length >= 2) {
+        initials = words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase();
+    } else if (words.length === 1) {
+        initials = words[0].charAt(0).toUpperCase() + words[0].charAt(1).toUpperCase();
+    }
+    
+    // Update avatar in sidebar
+    const profileAvatar = document.getElementById('profileAvatar');
+    if (profileAvatar) {
+        profileAvatar.innerHTML = `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: #4CAF50;">${initials}</div>`;
+    }
+    
+    console.log('Avatar generated:', initials);
+}
+
+/**
+ * Update orders list UI with data from API
+ */
+function updateOrdersUI(orders) {
+    const ordersListElement = document.getElementById('ordersList');
+    if (!ordersListElement) {
+        console.error('Orders list element not found');
+        return;
+    }
+    
+    // Clear existing orders
+    ordersListElement.innerHTML = '';
+    
+    // Check if there are orders
+    if (!orders || orders.length === 0) {
+        ordersListElement.innerHTML = '<p style="text-align: center; padding: 2rem; color: #666;">No orders yet</p>';
+        return;
+    }
+    
+    // Render each order
+    orders.forEach(order => {
+        const orderHTML = renderOrderItem(order);
+        ordersListElement.insertAdjacentHTML('beforeend', orderHTML);
+    });
+    
+    console.log('Orders UI updated successfully');
+}
+
+/**
+ * Render a single order item HTML
+ */
+function renderOrderItem(order) {
+    // Determine status class and icon
+    let statusClass = '';
+    let iconClass = 'fa-box';
+    
+    const status = order.status.toLowerCase();
+    if (status === 'delivered') {
+        statusClass = 'delivered';
+        iconClass = 'fa-box';
+    } else if (status === 'shipped' || status === 'in transit') {
+        statusClass = 'transit';
+        iconClass = 'fa-truck';
+    } else if (status === 'pending') {
+        statusClass = 'pending';
+        iconClass = 'fa-clock';
+    } else if (status === 'cancelled') {
+        statusClass = 'cancelled';
+        iconClass = 'fa-times-circle';
+    } else if (status === 'confirmed') {
+        statusClass = 'confirmed';
+        iconClass = 'fa-check-circle';
+    }
+    
+    return `
+        <div class="order-item">
+            <div class="order-icon-wrapper ${statusClass}">
+                <i class="fas ${iconClass}"></i>
+            </div>
+            <div class="order-details">
+                <div class="order-id-row">
+                    <span class="order-id">ORD-${order.order_id}</span>
+                    <span class="order-status ${statusClass}">${order.status_display}</span>
+                </div>
+                <div class="order-items-text">${order.product_names}</div>
+            </div>
+            <div class="order-meta">
+                <div class="order-price">${formatCurrency(order.total_amount)}</div>
+                <div class="order-date">${order.order_date_formatted}</div>
+            </div>
+        </div>
+    `;
+}
+
+// ==================== LOGOUT FUNCTIONALITY ====================
+
+/**
+ * Setup logout button handler
+ */
+function setupLogoutHandler() {
+    const logoutBtn = document.querySelector('.logout-btn');
+    
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            handleLogout();
+        });
+        console.log('Logout handler set up successfully');
+    } else {
+        console.warn('Logout button not found');
+    }
+}
+
+/**
+ * Handle logout action
+ */
+function handleLogout() {
+    // Confirm logout
+    const confirmLogout = confirm('Are you sure you want to logout?');
+    
+    if (confirmLogout) {
+        // Clear all localStorage
+        localStorage.removeItem('customer_id');
+        localStorage.removeItem('customer_name');
+        localStorage.removeItem('customer_email');
+        
+        console.log('User logged out, localStorage cleared');
+        
+        // Show success message
+        alert('You have been logged out successfully');
+        
+        // Redirect to landing page
+        window.location.href = '/landing/';
+    }
+}
+
+// ==================== UTILITY FUNCTIONS ====================
+
+/**
+ * Format currency to Rs.X,XXX format
+ */
+function formatCurrency(amount) {
+    // Convert to number if it's a string
+    const num = typeof amount === 'string' ? parseFloat(amount) : amount;
+    
+    // Format with thousand separators
+    const formatted = num.toLocaleString('en-PK', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+    
+    return `Rs.${formatted}`;
+}
+
+/**
+ * Format date to 'Nov 28, 2024' format
+ */
+function formatDate(isoDate) {
+    const date = new Date(isoDate);
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}
+
 // Export for use in other scripts
 if (typeof window !== 'undefined') {
     window.accountOverviewFunctions = {
@@ -279,6 +662,17 @@ if (typeof window !== 'undefined') {
         calculateOrderTotal,
         getProductNames,
         updateOverviewOrderPrices,
-        updateOrdersPagePrices
+        updateOrdersPagePrices,
+        fetchCustomerProfile,
+        fetchOrdersSummary,
+        updateProfileUI,
+        updateOrdersUI,
+        renderOrderItem,
+        formatCurrency,
+        formatDate,
+        generateAvatar,
+        handleLogout,
+        showLoadingState,
+        hideLoadingState
     };
 }

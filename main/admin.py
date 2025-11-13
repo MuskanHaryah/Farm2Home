@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Customer, Product, Inventory, Order, OrderItem, Cart
+from .models import Customer, Product, Inventory, Order, OrderItem, Cart, Address
 
 
 # =====================================================
@@ -10,16 +10,16 @@ class CustomerAdmin(admin.ModelAdmin):
     """Enhanced admin interface for Customer model"""
     
     # List display columns
-    list_display = ['customer_id', 'name', 'email', 'phone', 'order_count']
+    list_display = ['customer_id', 'name', 'email', 'phone', 'order_count', 'address_count']
     
     # Search functionality
-    search_fields = ['name', 'email', 'phone', 'address']
+    search_fields = ['name', 'email', 'phone']
     
     # Filters in right sidebar
     list_filter = ['name']
     
     # Fields to display when viewing/editing
-    fields = ['name', 'email', 'phone', 'address']
+    fields = ['name', 'email', 'phone']
     
     # Read-only fields
     readonly_fields = ['customer_id']
@@ -34,6 +34,17 @@ class CustomerAdmin(admin.ModelAdmin):
         """Display number of orders for this customer"""
         return obj.orders.count()
     order_count.short_description = 'Total Orders'
+    
+    def address_count(self, obj):
+        """Display number of addresses for this customer"""
+        count = obj.addresses.count()
+        if count == 0:
+            return '❌ No addresses'
+        elif count == 1:
+            return '✓ 1 address'
+        else:
+            return f'✓ {count} addresses'
+    address_count.short_description = 'Addresses'
 
 
 # =====================================================
@@ -515,6 +526,218 @@ class CartAdmin(admin.ModelAdmin):
             item.save()
         self.message_user(request, f'{queryset.count()} item(s) quantity increased.')
     increase_quantity.short_description = 'Increase quantity (+1)'
+
+
+# =====================================================
+# ADDRESS ADMIN
+# =====================================================
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    """Enhanced admin interface for Address model"""
+    
+    # List display columns
+    list_display = [
+        'address_id',
+        'customer_name',
+        'customer_email',
+        'label',
+        'city',
+        'postal_code',
+        'phone_formatted',
+        'is_default',
+        'created_at',
+        'updated_at'
+    ]
+    
+    # Search functionality - search by customer, city, phone
+    search_fields = [
+        'customer__name',
+        'customer__email',
+        'address_line',
+        'city',
+        'postal_code',
+        'phone'
+    ]
+    
+    # Filters in right sidebar
+    list_filter = [
+        'label',           # Filter by HOME/WORK/OTHER
+        'is_default',      # Filter by default status
+        'city',            # Filter by city
+        'created_at',      # Filter by creation date
+        'updated_at'       # Filter by update date
+    ]
+    
+    # Fields that are clickable to edit
+    list_display_links = ['address_id', 'customer_name']
+    
+    # Editable fields directly in list view (cannot use when field is in list_display_links)
+    # list_editable = ['label', 'is_default']  # Commented out - use detail page to edit
+    
+    # Fieldsets for organized form layout
+    fieldsets = (
+        ('Customer Information', {
+            'fields': ('customer',),
+            'description': 'Select the customer for this address'
+        }),
+        ('Address Details', {
+            'fields': ('label', 'address_line', 'city', 'postal_code'),
+            'description': 'Enter the complete address details'
+        }),
+        ('Contact Information', {
+            'fields': ('phone',)
+        }),
+        ('Default Settings', {
+            'fields': ('is_default',),
+            'description': 'Set as default delivery address for this customer'
+        }),
+        ('Metadata', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),  # Collapsible section
+            'description': 'Timestamp information'
+        }),
+    )
+    
+    # Read-only fields
+    readonly_fields = ['address_id', 'created_at', 'updated_at']
+    
+    # Number of items per page
+    list_per_page = 25
+    
+    # Default ordering (default addresses first, then newest)
+    ordering = ['-is_default', '-created_at']
+    
+    # Date hierarchy navigation
+    date_hierarchy = 'created_at'
+    
+    # Custom actions
+    actions = [
+        'set_as_default',
+        'unset_default',
+        'set_label_home',
+        'set_label_work',
+        'set_label_other'
+    ]
+    
+    # Enable select across all pages
+    actions_selection_counter = True
+    
+    def customer_name(self, obj):
+        """Display customer name with link"""
+        return obj.customer.name
+    customer_name.short_description = 'Customer'
+    customer_name.admin_order_field = 'customer__name'  # Allows column sorting
+    
+    def customer_email(self, obj):
+        """Display customer email"""
+        return obj.customer.email
+    customer_email.short_description = 'Email'
+    customer_email.admin_order_field = 'customer__email'
+    
+    def label_badge(self, obj):
+        """Display label with icon badge"""
+        icons = {
+            'HOME': '🏠',
+            'WORK': '💼',
+            'OTHER': '📍'
+        }
+        icon = icons.get(obj.label, '📍')
+        return f'{icon} {obj.get_label_display()}'
+    label_badge.short_description = 'Type'
+    label_badge.admin_order_field = 'label'
+    
+    def default_badge(self, obj):
+        """Display default status with badge"""
+        if obj.is_default:
+            return '⭐ Default'
+        return '—'
+    default_badge.short_description = 'Status'
+    default_badge.admin_order_field = 'is_default'
+    
+    def phone_formatted(self, obj):
+        """Display formatted phone number"""
+        phone = obj.phone
+        # Format: 0300-1234567 or as-is if already formatted
+        if phone and len(phone) >= 10:
+            if not '-' in phone:
+                return f'{phone[:4]}-{phone[4:]}'
+        return phone
+    phone_formatted.short_description = 'Phone'
+    phone_formatted.admin_order_field = 'phone'
+    
+    # Custom admin actions
+    def set_as_default(self, request, queryset):
+        """Set selected addresses as default (only one per customer)"""
+        updated = 0
+        customers_updated = set()
+        
+        for address in queryset:
+            # First, remove default from all addresses of this customer
+            Address.objects.filter(
+                customer=address.customer,
+                is_default=True
+            ).update(is_default=False)
+            
+            # Then set this address as default
+            address.is_default = True
+            address.save()
+            
+            updated += 1
+            customers_updated.add(address.customer.name)
+        
+        customers_list = ', '.join(customers_updated)
+        self.message_user(
+            request,
+            f'{updated} address(es) set as default for: {customers_list}'
+        )
+    set_as_default.short_description = '⭐ Set as Default Address'
+    
+    def unset_default(self, request, queryset):
+        """Remove default status from selected addresses"""
+        updated = queryset.update(is_default=False)
+        self.message_user(
+            request,
+            f'{updated} address(es) removed from default status.'
+        )
+    unset_default.short_description = '✖️ Remove Default Status'
+    
+    def set_label_home(self, request, queryset):
+        """Change label to HOME for selected addresses"""
+        updated = queryset.update(label='HOME')
+        self.message_user(
+            request,
+            f'{updated} address(es) changed to HOME label.'
+        )
+    set_label_home.short_description = '🏠 Set Label to HOME'
+    
+    def set_label_work(self, request, queryset):
+        """Change label to WORK for selected addresses"""
+        updated = queryset.update(label='WORK')
+        self.message_user(
+            request,
+            f'{updated} address(es) changed to WORK label.'
+        )
+    set_label_work.short_description = '💼 Set Label to WORK'
+    
+    def set_label_other(self, request, queryset):
+        """Change label to OTHER for selected addresses"""
+        updated = queryset.update(label='OTHER')
+        self.message_user(
+            request,
+            f'{updated} address(es) changed to OTHER label.'
+        )
+    set_label_other.short_description = '📍 Set Label to OTHER'
+    
+    # Override get_queryset to optimize database queries
+    def get_queryset(self, request):
+        """Optimize query with select_related to reduce database hits"""
+        queryset = super().get_queryset(request)
+        return queryset.select_related('customer')
+    
+    # Custom list filters
+    class Meta:
+        verbose_name = 'Delivery Address'
+        verbose_name_plural = 'Delivery Addresses'
 
 
 # =====================================================

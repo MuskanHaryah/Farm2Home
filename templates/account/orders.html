@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
 </head>
 <body>
+    {% csrf_token %}
     <!-- Header -->
     <header class="header">
         <div class="header-container">
@@ -36,15 +37,15 @@
                     <i class="fas fa-user-circle"></i>
                 </div>
                 <div class="profile-info">
-                    <h3 class="profile-name">AHMED KHAN</h3>
-                    <p class="profile-email">AHMED.KHAN@EMAIL.COM</p>
+                    <h3 class="profile-name" id="profileName">AHMED KHAN</h3>
+                    <p class="profile-email" id="profileEmail">AHMED.KHAN@EMAIL.COM</p>
                 </div>
             </div>
 
             <!-- Total Orders Card -->
             <div class="orders-card">
                 <div class="orders-label">TOTAL ORDERS</div>
-                <div class="orders-count">47 Orders</div>
+                <div class="orders-count" id="sidebarTotalOrders">47 Orders</div>
             </div>
 
             <!-- Navigation Menu -->
@@ -95,10 +96,6 @@
                     <h1 class="orders-title">ORDER HISTORY</h1>
                     <p class="orders-subtitle">TRACK AND MANAGE ALL YOUR ORDERS</p>
                 </div>
-                            <button class="manage-orders-btn">
-                <i class="fas fa-download"></i>
-                EXPORT ORDERS
-            </button>
             </div>
 
             <!-- Search Bar -->
@@ -124,7 +121,7 @@
             </div>
 
             <!-- Orders Container -->
-            <div class="orders-container">
+            <div class="orders-container" id="ordersContainer">
                 <!-- Order 1 - Delivered -->
                 <div class="order-item delivered-order" data-status="delivered" data-order-id="ORD-2024-1128">
                     <div class="order-header">
@@ -321,7 +318,7 @@
             </div>
 
             <!-- Empty State (hidden by default) -->
-            <div class="empty-state" style="display: none;">
+            <div class="empty-state" id="emptyState" style="display: none;">
                 <div class="empty-icon">
                     <i class="fas fa-shopping-bag"></i>
                 </div>
