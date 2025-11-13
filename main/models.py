@@ -5,7 +5,7 @@ class Customer(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=15)
-    address = models.TextField()
+    password = models.CharField(max_length=128)  # Stores hashed password
 
     def __str__(self):
         return self.name
@@ -98,4 +98,37 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"{self.customer.name} - {self.product.name} (x{self.quantity})"
+
+
+class Address(models.Model):
+    LABEL_CHOICES = [
+        ('HOME', 'Home'),
+        ('WORK', 'Work'),
+        ('OTHER', 'Other'),
+    ]
+    
+    address_id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="addresses")
+    label = models.CharField(max_length=20, choices=LABEL_CHOICES, default='HOME')
+    address_line = models.CharField(max_length=255)
+    city = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=20)
+    phone = models.CharField(max_length=20)
+    is_default = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'Address'
+        verbose_name_plural = 'Addresses'
+        ordering = ['-is_default', '-created_at']
+    
+    def __str__(self):
+        return f"{self.customer.name} - {self.label} ({self.city})"
+    
+    def save(self, *args, **kwargs):
+        # If this address is set as default, remove default from other addresses
+        if self.is_default:
+            Address.objects.filter(customer=self.customer, is_default=True).update(is_default=False)
+        super().save(*args, **kwargs)
 

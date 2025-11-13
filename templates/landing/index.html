@@ -453,6 +453,14 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="signup_address">Address</label>
+                            <div class="input-field">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <input type="text" id="signup_address" name="address" placeholder="123 Street, City" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="signup_password">Password</label>
                             <div class="input-field password-field">
                                 <i class="fas fa-lock"></i>
@@ -657,17 +665,64 @@
             const loginFormElement = document.getElementById('loginFormElement');
             const signupFormElement = document.getElementById('signupFormElement');
 
-            // Login form validation
+            // Login form validation and submission
             if (loginFormElement) {
-                loginFormElement.addEventListener('submit', function(e) {
+                loginFormElement.addEventListener('submit', async function(e) {
+                    e.preventDefault(); // Always prevent default to handle via API
+                    
                     const email = document.getElementById('login_email').value.trim();
                     const password = document.getElementById('login_password').value.trim();
                     
                     if (!email || !password) {
-                        e.preventDefault();
                         alert('Please fill in all fields');
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch('/api/auth/login/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCsrfToken()
+                            },
+                            body: JSON.stringify({ email, password })
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok && data.success === true) {
+                            // Store customer data in localStorage
+                            localStorage.setItem('customer_id', data.customer_id);
+                            localStorage.setItem('customer_name', data.name);
+                            localStorage.setItem('customer_email', data.email);
+                            
+                            // Show success message
+                            alert('Login successful! Welcome back, ' + data.name);
+                            
+                            // Redirect to account page
+                            window.location.href = '/account/';
+                        } else {
+                            // Show error message
+                            alert(data.error || data.message || 'Login failed. Please check your credentials.');
+                        }
+                    } catch (error) {
+                        console.error('Login error:', error);
+                        alert('An error occurred during login. Please try again.');
                     }
                 });
+            }
+
+            // Helper function to get CSRF token
+            function getCsrfToken() {
+                const name = 'csrftoken';
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.startsWith(name + '=')) {
+                        return cookie.substring(name.length + 1);
+                    }
+                }
+                return '';
             }
 
             // Signup form validation

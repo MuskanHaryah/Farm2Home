@@ -647,41 +647,136 @@ function addToCart(productId) {
     
     console.log('Found product:', product.name);
     
-    // Check if product already in cart
+    // Get customer ID from localStorage
+    const customerId = localStorage.getItem('customer_id');
+    
+    if (!customerId) {
+        // User not logged in - show login prompt
+        if (typeof notifications !== 'undefined') {
+            notifications.error('Please log in to add items to cart');
+        }
+        // Redirect to login or open login modal
+        setTimeout(() => {
+            window.location.href = '/login/';
+        }, 1500);
+        return;
+    }
+    
+    // Send to backend API
+    addToCartBackend(customerId, productId, quantity, product.name);
+}
+
+async function addToCartBackend(customerId, productId, quantity, productName) {
+    try {
+        const response = await fetch('/api/cart/add_item/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken()
+            },
+            body: JSON.stringify({
+                customer_id: customerId,
+                product_id: productId,
+                quantity: quantity
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Success - item added to backend cart
+            console.log('Item added to backend cart:', data);
+            
+            // Also update localStorage cart for immediate UI feedback
+            updateLocalCart(productId, quantity);
+            
+            // Show feedback notification
+            showCartFeedback(productName, quantity);
+            
+            // Reset quantity
+            productQuantities[productId] = 0;
+            updateQuantityDisplay(productId);
+            
+            // Update cart count
+            updateCartCountFromBackend(customerId);
+            
+            // Update cart display
+            renderCartItems();
+            updateCartProgress();
+            
+            // Show side cart after a small delay
+            setTimeout(() => {
+                openCart();
+            }, 500);
+        } else {
+            throw new Error(data.error || 'Failed to add item to cart');
+        }
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+        if (typeof notifications !== 'undefined') {
+            notifications.error('Failed to add item to cart. Please try again.');
+        }
+    }
+}
+
+function updateLocalCart(productId, quantity) {
+    // Find product by ID
+    const product = productsData.find(p => p.id === productId);
+    
+    if (!product) return;
+    
+    // Check if product already in local cart
     const existingItem = cart.find(item => item.id === productId);
     
     if (existingItem) {
         existingItem.quantity += quantity;
-        console.log(`Updated existing item. New quantity: ${existingItem.quantity}`);
+        console.log(`Updated existing item in local cart. New quantity: ${existingItem.quantity}`);
     } else {
         cart.push({
             ...product,
             quantity: quantity
         });
-        console.log('Added new item to cart');
+        console.log('Added new item to local cart');
     }
     
     // Save cart to localStorage
     saveCartToStorage();
-    
-    // Show feedback notification
-    showCartFeedback(product.name, quantity);
-    
-    // Reset quantity
-    productQuantities[productId] = 0;
-    updateQuantityDisplay(productId);
-    
-    // Update cart count
-    updateCartCount();
-    
-    // Update cart display
-    renderCartItems();
-    updateCartProgress();
-    
-    // Show side cart after a small delay to see the notification
-    setTimeout(() => {
-        openCart();
-    }, 500);
+}
+
+async function updateCartCountFromBackend(customerId) {
+    try {
+        const response = await fetch(`/api/cart/summary/?customer_id=${customerId}`);
+        const data = await response.json();
+        
+        if (response.ok) {
+            const totalItems = data.total_items || 0;
+            console.log('updateCartCount from backend: Total items =', totalItems);
+            const cartCountElem = document.getElementById('cartCount');
+            if (cartCountElem) {
+                cartCountElem.textContent = totalItems;
+                console.log('Cart count updated in UI from backend');
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching cart count:', error);
+        // Fallback to local cart count
+        updateCartCount();
+    }
+}
+
+function getCsrfToken() {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, 10) === 'csrftoken=') {
+                cookieValue = decodeURIComponent(cookie.substring(10));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }
 
 function updateCartCount() {
@@ -780,7 +875,7 @@ function renderCartItems() {
     
     cartItemsContainer.innerHTML = cart.map(item => `
         <div class="cart-item" data-product-id="${item.id}">
-            <img src="${item.image}" alt="${item.name}" class="cart-item-image" onerror="this.src='https://via.placeholder.com/70/6b8e23/ffffff?text=${item.name}'">
+            <img src="/static/${item.image}" alt="${item.name}" class="cart-item-image" onerror="this.src='https://via.placeholder.com/70/6b8e23/ffffff?text=${item.name}'">
             <div class="cart-item-details">
                 <h4 class="cart-item-name">${item.name}</h4>
                 <p class="cart-item-variety">${item.variety}</p>
