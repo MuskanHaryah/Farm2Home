@@ -252,6 +252,8 @@ class OrderItemInline(admin.TabularInline):
     
     def subtotal(self, obj):
         """Calculate subtotal for this order item"""
+        if obj.price is None or obj.quantity is None:
+            return 'N/A'
         return f'Rs. {obj.quantity * obj.price:.2f}'
     subtotal.short_description = 'Subtotal'
 

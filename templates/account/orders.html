@@ -37,15 +37,15 @@
                     <i class="fas fa-user-circle"></i>
                 </div>
                 <div class="profile-info">
-                    <h3 class="profile-name" id="profileName">AHMED KHAN</h3>
-                    <p class="profile-email" id="profileEmail">AHMED.KHAN@EMAIL.COM</p>
+                    <h3 class="profile-name" id="profileName"><i class="fas fa-spinner fa-spin"></i></h3>
+                    <p class="profile-email" id="profileEmail"><i class="fas fa-spinner fa-spin"></i></p>
                 </div>
             </div>
 
             <!-- Total Orders Card -->
             <div class="orders-card">
                 <div class="orders-label">TOTAL ORDERS</div>
-                <div class="orders-count" id="sidebarTotalOrders">47 Orders</div>
+                <div class="orders-count" id="sidebarTotalOrders"><i class="fas fa-spinner fa-spin"></i></div>
             </div>
 
             <!-- Navigation Menu -->
@@ -122,198 +122,10 @@
 
             <!-- Orders Container -->
             <div class="orders-container" id="ordersContainer">
-                <!-- Order 1 - Delivered -->
-                <div class="order-item delivered-order" data-status="delivered" data-order-id="ORD-2024-1128">
-                    <div class="order-header">
-                        <div class="order-icon-box delivered">
-                            <i class="fas fa-box"></i>
-                        </div>
-                        <div class="order-info">
-                            <h3 class="order-number">ORD-2024-1128</h3>
-                            <p class="order-date">PLACED ON NOV 28, 2024</p>
-                        </div>
-                        <span class="order-status-badge delivered-badge">DELIVERED</span>
-                    </div>
-
-                    <div class="order-content">
-                        <div class="order-items">
-                            <div class="items-grid">
-                                <div class="product-thumb">
-                                    <img src="{% static 'images/vegetables/potatoes.png' %}?v=2" alt="Potatoes" onerror="console.log('Failed to load:', this.src)">
-                                    <span class="item-name">POTATOES</span>
-                                    <span class="item-qty">2kg</span>
-                                </div>
-                                <div class="product-thumb">
-                                    <img src="{% static 'images/vegetables/onions.png' %}?v=2" alt="Onions" onerror="console.log('Failed to load:', this.src)">
-                                    <span class="item-name">ONIONS</span>
-                                    <span class="item-qty">1kg</span>
-                                </div>
-                                <div class="product-thumb">
-                                    <img src="{% static 'images/vegetables/tomato.png' %}?v=2" alt="Tomato" onerror="console.log('Failed to load:', this.src)">
-                                    <span class="item-name">TOMATO</span>
-                                    <span class="item-qty">1kg</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="order-footer">
-                            <div class="total-amount">
-                                <span class="amount-label">TOTAL AMOUNT</span>
-                                <span class="amount-value">Rs.2,850</span>
-                            </div>
-                            <div class="order-actions">
-                                <button class="action-btn details-btn">
-                                    <i class="fas fa-eye"></i>
-                                    DETAILS
-                                </button>
-                                <button class="action-btn reorder-btn">
-                                    <i class="fas fa-redo"></i>
-                                    REORDER
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Order 2 - Delivered -->
-                <div class="order-item delivered-order" data-status="delivered" data-order-id="ORD-2024-1115">
-                    <div class="order-header">
-                        <div class="order-icon-box delivered">
-                            <i class="fas fa-box"></i>
-                        </div>
-                        <div class="order-info">
-                            <h3 class="order-number">ORD-2024-1115</h3>
-                            <p class="order-date">PLACED ON NOV 15, 2024</p>
-                        </div>
-                        <span class="order-status-badge delivered-badge">DELIVERED</span>
-                    </div>
-
-                    <div class="order-content">
-                        <div class="order-items">
-                            <div class="items-grid">
-                                <div class="product-thumb">
-                                    <img src="{% static 'images/vegetables/okra.png' %}?v=2" alt="Okra" onerror="console.log('Failed to load:', this.src)">
-                                    <span class="item-name">OKRA</span>
-                                    <span class="item-qty">1kg</span>
-                                </div>
-                                <div class="product-thumb">
-                                    <img src="{% static 'images/fruits/papaya.png' %}?v=2" alt="Papaya" onerror="console.log('Failed to load:', this.src)">
-                                    <span class="item-name">PAPAYA</span>
-                                    <span class="item-qty">1kg</span>
-                                </div>
-                                <div class="product-thumb">
-                                    <img src="{% static 'images/fruits/pineapple.png' %}?v=2" alt="Pineapple" onerror="console.log('Failed to load:', this.src)">
-                                    <span class="item-name">PINEAPPLE</span>
-                                    <span class="item-qty">1kg</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="order-footer">
-                            <div class="total-amount">
-                                <span class="amount-label">TOTAL AMOUNT</span>
-                                <span class="amount-value">Rs.3,950</span>
-                            </div>
-                            <div class="order-actions">
-                                <button class="action-btn details-btn">
-                                    <i class="fas fa-eye"></i>
-                                    DETAILS
-                                </button>
-                                <button class="action-btn reorder-btn">
-                                    <i class="fas fa-redo"></i>
-                                    REORDER
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Order 3 - Active (In Transit) -->
-                <div class="order-item active-order" data-status="active" data-order-id="ORD-2024-1102">
-                    <div class="order-header">
-                        <div class="order-icon-box active">
-                            <i class="fas fa-box"></i>
-                        </div>
-                        <div class="order-info">
-                            <h3 class="order-number">ORD-2024-1102</h3>
-                            <p class="order-date">PLACED ON NOV 02, 2024</p>
-                        </div>
-                        <span class="order-status-badge active-badge">IN TRANSIT</span>
-                    </div>
-
-                    <div class="order-content">
-                        <div class="order-items">
-                            <div class="items-grid">
-                                <div class="product-thumb">
-                                    <img src="{% static 'images/fruits/guava.png' %}?v=2" alt="Guava" onerror="console.log('Failed to load:', this.src)">
-                                    <span class="item-name">GUAVA</span>
-                                    <span class="item-qty">1kg</span>
-                                </div>
-                                <div class="product-thumb">
-                                    <img src="{% static 'images/fruits/mosambi.png' %}?v=2" alt="Mosambi" onerror="console.log('Failed to load:', this.src)">
-                                    <span class="item-name">MOSAMBI</span>
-                                    <span class="item-qty">2kg</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="order-footer">
-                            <div class="total-amount">
-                                <span class="amount-label">TOTAL AMOUNT</span>
-                                <span class="amount-value">Rs.2,450</span>
-                            </div>
-                            <div class="order-actions">
-                                <button class="action-btn details-btn">
-                                    <i class="fas fa-eye"></i>
-                                    DETAILS
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Order 4 - Cancelled -->
-                <div class="order-item cancelled-order" data-status="cancelled" data-order-id="ORD-2024-1020">
-                    <div class="order-header">
-                        <div class="order-icon-box cancelled">
-                            <i class="fas fa-box"></i>
-                        </div>
-                        <div class="order-info">
-                            <h3 class="order-number">ORD-2024-1020</h3>
-                            <p class="order-date">PLACED ON OCT 20, 2024</p>
-                        </div>
-                        <span class="order-status-badge cancelled-badge">CANCELLED</span>
-                    </div>
-
-                    <div class="order-content">
-                        <div class="order-items">
-                            <div class="items-grid">
-                                <div class="product-thumb">
-                                    <img src="{% static 'images/vegetables/carrot.png' %}?v=2" alt="Carrot" onerror="console.log('Failed to load:', this.src)">
-                                    <span class="item-name">CARROT</span>
-                                    <span class="item-qty">1kg</span>
-                                </div>
-                                <div class="product-thumb">
-                                    <img src="{% static 'images/herbs/ginger.png' %}?v=2" alt="Ginger" onerror="console.log('Failed to load:', this.src)">
-                                    <span class="item-name">GINGER</span>
-                                    <span class="item-qty">500g</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="order-footer">
-                            <div class="total-amount">
-                                <span class="amount-label">TOTAL AMOUNT</span>
-                                <span class="amount-value">Rs.1,850</span>
-                            </div>
-                            <div class="order-actions">
-                                <button class="action-btn details-btn">
-                                    <i class="fas fa-eye"></i>
-                                    DETAILS
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Loading State -->
+                <div style="text-align: center; padding: 4rem 2rem;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: #6b8e23;"></i>
+                    <p style="margin-top: 1.5rem; color: #718096; font-size: 1.1rem;">Loading your orders...</p>
                 </div>
             </div>
 

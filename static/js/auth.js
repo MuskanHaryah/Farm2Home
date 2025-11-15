@@ -78,13 +78,14 @@ function showPasswordStrength(password) {
     }
 }
 
-function handleLoginSubmit(e) {
+async function handleLoginSubmit(e) {
+    e.preventDefault(); // Always prevent default - we'll handle with API
+    
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     
     // Validate email
     if (!validateEmail(email)) {
-        e.preventDefault();
         if (typeof notifications !== 'undefined') {
             notifications.error('Please enter a valid email address', 'error', 'Invalid Email');
         } else {
@@ -95,7 +96,6 @@ function handleLoginSubmit(e) {
     
     // Validate password
     if (password.length < 6) {
-        e.preventDefault();
         if (typeof notifications !== 'undefined') {
             notifications.error('Password must be at least 6 characters', 'error', 'Invalid Password');
         } else {
@@ -104,11 +104,59 @@ function handleLoginSubmit(e) {
         return false;
     }
     
-    // If validation passes, allow form submission
-    return true;
+    // Call login API
+    try {
+        const response = await fetch('/api/auth/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Store customer data in localStorage
+            localStorage.setItem('customer_id', result.customer_id);
+            localStorage.setItem('customer_name', result.name);
+            localStorage.setItem('customer_email', result.email);
+            
+            // Show success message
+            if (typeof notifications !== 'undefined') {
+                notifications.success('Login successful! Redirecting...', 'success', 'Welcome');
+            }
+            
+            // Redirect to account page
+            setTimeout(() => {
+                window.location.href = '/account/';
+            }, 1000);
+        } else {
+            // Show error message
+            if (typeof notifications !== 'undefined') {
+                notifications.error(result.error || 'Login failed', 'error', 'Login Error');
+            } else {
+                alert(result.error || 'Login failed');
+            }
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        if (typeof notifications !== 'undefined') {
+            notifications.error('Login failed. Please try again.', 'error', 'Connection Error');
+        } else {
+            alert('Login failed. Please try again.');
+        }
+    }
+    
+    return false;
 }
 
-function handleSignupSubmit(e) {
+async function handleSignupSubmit(e) {
+    e.preventDefault(); // Always prevent default - we'll handle with API
+    
     const fullName = document.getElementById('fullName').value;
     const email = document.getElementById('email').value;
     const phone = document.getElementById('phone').value;
@@ -118,7 +166,6 @@ function handleSignupSubmit(e) {
     
     // Validate full name
     if (fullName.trim().length < 3) {
-        e.preventDefault();
         if (typeof notifications !== 'undefined') {
             notifications.error('Please enter a valid name', 'error', 'Invalid Name');
         } else {
@@ -129,7 +176,6 @@ function handleSignupSubmit(e) {
     
     // Validate email
     if (!validateEmail(email)) {
-        e.preventDefault();
         if (typeof notifications !== 'undefined') {
             notifications.error('Please enter a valid email address', 'error', 'Invalid Email');
         } else {
@@ -140,7 +186,6 @@ function handleSignupSubmit(e) {
     
     // Validate phone
     if (phone.trim().length < 10) {
-        e.preventDefault();
         if (typeof notifications !== 'undefined') {
             notifications.error('Please enter a valid phone number', 'error', 'Invalid Phone');
         } else {
@@ -151,7 +196,6 @@ function handleSignupSubmit(e) {
     
     // Validate passwords match
     if (password !== confirmPassword) {
-        e.preventDefault();
         if (typeof notifications !== 'undefined') {
             notifications.error('Passwords do not match!', 'error', 'Validation Error');
         } else {
@@ -160,21 +204,18 @@ function handleSignupSubmit(e) {
         return false;
     }
     
-    // Validate password strength
-    const passwordStrength = validatePasswordStrength(password);
-    if (!passwordStrength.isValid) {
-        e.preventDefault();
+    // Validate password strength (relaxed for signup to match backend minimum of 6)
+    if (password.length < 6) {
         if (typeof notifications !== 'undefined') {
-            notifications.error('Password must contain uppercase, lowercase, numbers, and be at least 8 characters', 'error', 'Weak Password');
+            notifications.error('Password must be at least 6 characters long', 'error', 'Weak Password');
         } else {
-            alert('Password must contain uppercase, lowercase, numbers, and be at least 8 characters');
+            alert('Password must be at least 6 characters long');
         }
         return false;
     }
     
     // Check if terms are agreed
     if (!agreeTerms) {
-        e.preventDefault();
         if (typeof notifications !== 'undefined') {
             notifications.error('Please agree to the Terms and Conditions', 'error', 'Accept Terms');
         } else {
@@ -183,8 +224,56 @@ function handleSignupSubmit(e) {
         return false;
     }
     
-    // If all validation passes, allow form submission
-    return true;
+    // Call signup API
+    try {
+        const response = await fetch('/api/auth/signup/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: fullName,
+                email: email,
+                phone: phone,
+                password: password
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Store customer data in localStorage
+            localStorage.setItem('customer_id', result.customer_id);
+            localStorage.setItem('customer_name', result.name);
+            localStorage.setItem('customer_email', result.email);
+            
+            // Show success message
+            if (typeof notifications !== 'undefined') {
+                notifications.success('Account created successfully! Redirecting...', 'success', 'Welcome');
+            }
+            
+            // Redirect to account page
+            setTimeout(() => {
+                window.location.href = '/account/';
+            }, 1000);
+        } else {
+            // Show error message
+            if (typeof notifications !== 'undefined') {
+                notifications.error(result.error || 'Signup failed', 'error', 'Signup Error');
+            } else {
+                alert(result.error || 'Signup failed');
+            }
+        }
+    } catch (error) {
+        console.error('Signup error:', error);
+        if (typeof notifications !== 'undefined') {
+            notifications.error('Signup failed. Please try again.', 'error', 'Connection Error');
+        } else {
+            alert('Signup failed. Please try again.');
+        }
+    }
+    
+    return false;
 }
 
 // Initialize when DOM is ready

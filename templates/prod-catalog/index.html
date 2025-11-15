@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/global-typography.css' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal-auth.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -31,9 +32,12 @@
 
             <!-- Cart Icon -->
             <div class="header-icons">
-                <a href="{% url 'main:account_home' %}" class="account-icon" title="My Account">
+                <a href="{% url 'main:account_home' %}" class="account-icon" id="accountIcon" title="My Account" style="display: none;">
                     <i class="fas fa-user-circle"></i>
                 </a>
+                <button class="login-btn" id="catalogLoginBtn" style="display: none; padding: 0.5rem 1.2rem; background: white; color: #6b8e23; border: 2px solid #6b8e23; border-radius: 6px; font-weight: 500; cursor: pointer; transition: all 0.3s;">
+                    Login
+                </button>
                 <div class="cart-icon" id="cartIconBtn">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCount">0</span>
@@ -255,6 +259,139 @@
             <button class="checkout-btn" id="checkoutBtn">
                 Proceed to Checkout
             </button>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="auth-modal-new">
+        <div class="modal-container">
+            <!-- Left Side - Illustration -->
+            <div class="modal-left-side">
+                <img src="{% static 'images/left.png' %}" alt="Farm Illustration" class="modal-illustration">
+            </div>
+
+            <!-- Right Side - Form -->
+            <div class="modal-right-side">
+                <button type="button" class="modal-close-btn" onclick="closeAuthModal()">&times;</button>
+                
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form-section">
+                    <div class="form-header">
+                        <h1 class="form-title">Login</h1>
+                        <p class="form-subtitle">Welcome back to Farm2Home</p>
+                    </div>
+
+                    <form id="loginFormElement" class="form-container">
+                        <div class="form-group">
+                            <label for="login_email">Email Address</label>
+                            <div class="input-field">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="login_email" name="email" placeholder="your@email.com" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="login_password">Password</label>
+                            <div class="input-field password-field">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="login_password" name="password" placeholder="Enter your password" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('login_password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="checkbox-field">
+                                <input type="checkbox" name="rememberMe">
+                                <span>Remember me</span>
+                            </label>
+                            <a href="#" class="forgot-password-link">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Login</button>
+                    </form>
+
+                    <div class="form-footer">
+                        <p>Don't have an account? <button type="button" class="switch-form-btn" onclick="switchToSignup()">Sign up</button></p>
+                    </div>
+                </div>
+
+                <!-- Signup Form (Hidden by default) -->
+                <div id="signupForm" class="auth-form-section" style="display: none;">
+                    <div class="form-header">
+                        <h1 class="form-title">Sign Up</h1>
+                        <p class="form-subtitle">Create your Farm2Home account</p>
+                    </div>
+
+                    <form id="signupFormElement" class="form-container">
+                        <div class="form-group">
+                            <label for="signup_fullname">Full Name</label>
+                            <div class="input-field">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="signup_fullname" name="fullName" placeholder="John Doe" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup_email">Email Address</label>
+                            <div class="input-field">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="signup_email" name="email" placeholder="your@email.com" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup_phone">Phone Number</label>
+                            <div class="input-field">
+                                <i class="fas fa-phone"></i>
+                                <input type="tel" id="signup_phone" name="phone" placeholder="+92 300 1234567" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup_address">Address</label>
+                            <div class="input-field">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <input type="text" id="signup_address" name="address" placeholder="123 Street, City" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup_password">Password</label>
+                            <div class="input-field password-field">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="signup_password" name="password" placeholder="Create a strong password" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('signup_password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup_confirm_password">Confirm Password</label>
+                            <div class="input-field password-field">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="signup_confirm_password" name="confirmPassword" placeholder="Confirm your password" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('signup_confirm_password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <label class="checkbox-field">
+                            <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                            <span>I agree to the Terms & Conditions</span>
+                        </label>
+
+                        <button type="submit" class="submit-btn">Create Account</button>
+                    </form>
+
+                    <div class="form-footer">
+                        <p>Already have an account? <button type="button" class="switch-form-btn" onclick="switchToLogin()">Login</button></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

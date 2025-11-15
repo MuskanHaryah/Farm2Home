@@ -95,6 +95,7 @@ class Cart(models.Model):
 
     class Meta:
         unique_together = ('customer', 'product')  # Prevent duplicate cart items
+        ordering = ['-cart_id']  # Order by newest first to fix pagination warning
 
     def __str__(self):
         return f"{self.customer.name} - {self.product.name} (x{self.quantity})"

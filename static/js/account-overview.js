@@ -590,41 +590,38 @@ function renderOrderItem(order) {
 
 /**
  * Setup logout button handler
+ * Note: Logout handler is now managed by account.js centralized function
  */
 function setupLogoutHandler() {
-    const logoutBtn = document.querySelector('.logout-btn');
-    
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            handleLogout();
-        });
-        console.log('Logout handler set up successfully');
-    } else {
-        console.warn('Logout button not found');
-    }
+    // Logout button handler is managed by account.js
+    // No need to attach handler here as account.js loads after and handles it
+    console.log('Logout handler managed by account.js centralized function');
 }
 
 /**
  * Handle logout action
+ * Note: This function is deprecated - use window.accountFunctions.handleAccountLogout from account.js
  */
 function handleLogout() {
-    // Confirm logout
-    const confirmLogout = confirm('Are you sure you want to logout?');
-    
-    if (confirmLogout) {
-        // Clear all localStorage
-        localStorage.removeItem('customer_id');
-        localStorage.removeItem('customer_name');
-        localStorage.removeItem('customer_email');
+    // Use centralized logout function from account.js if available
+    if (window.accountFunctions && window.accountFunctions.handleAccountLogout) {
+        window.accountFunctions.handleAccountLogout();
+    } else {
+        // Fallback for legacy support
+        console.warn('Centralized logout function not available, using fallback');
+        const confirmLogout = confirm('Are you sure you want to logout?');
         
-        console.log('User logged out, localStorage cleared');
-        
-        // Show success message
-        alert('You have been logged out successfully');
-        
-        // Redirect to landing page
-        window.location.href = '/landing/';
+        if (confirmLogout) {
+            localStorage.removeItem('customer_id');
+            localStorage.removeItem('customer_name');
+            localStorage.removeItem('customer_email');
+            localStorage.removeItem('farm2home_cart');
+            localStorage.removeItem('checkoutCart');
+            
+            console.log('User logged out, localStorage cleared');
+            alert('You have been logged out successfully');
+            window.location.href = '/landing/';
+        }
     }
 }
 

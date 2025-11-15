@@ -108,6 +108,26 @@ document.addEventListener('DOMContentLoaded', function() {
             e.target.value = value;
         });
     }
+    
+    // Logout button handler
+    const logoutBtn = document.querySelector('.logout-btn');
+    if (logoutBtn) {
+        if (window.accountFunctions && window.accountFunctions.handleAccountLogout) {
+            logoutBtn.addEventListener('click', window.accountFunctions.handleAccountLogout);
+        } else {
+            // Fallback if account.js not loaded
+            logoutBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('customer_id');
+                    localStorage.removeItem('customer_name');
+                    localStorage.removeItem('customer_email');
+                    localStorage.removeItem('farm2home_cart');
+                    localStorage.removeItem('checkoutCart');
+                    window.location.replace('/login/');
+                }
+            });
+        }
+    }
 
     // CVV input - numbers only
     const cvvInput = document.getElementById('cvv');

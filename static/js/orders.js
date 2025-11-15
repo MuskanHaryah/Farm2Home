@@ -193,18 +193,12 @@ function renderOrderCard(order) {
                     <span class="amount-label">TOTAL AMOUNT</span>
                     <span class="amount-value">${formatCurrency(order.total_amount)}</span>
                 </div>
-                <div class="order-actions">
-                    <button class="action-btn details-btn">
-                        <i class="fas fa-eye"></i>
-                        DETAILS
-                    </button>
-                    ${order.status === 'DELIVERED' ? `
-                    <button class="action-btn reorder-btn">
-                        <i class="fas fa-redo"></i>
-                        REORDER
-                    </button>
-                    ` : ''}
-                </div>
+                ${order.status === 'DELIVERED' ? `
+                <button class="action-btn reorder-btn">
+                    <i class="fas fa-redo"></i>
+                    REORDER
+                </button>
+                ` : ''}
             </div>
         </div>
     `;
@@ -643,49 +637,34 @@ function initializeOrderActions() {
 }
 
 /**
- * Step 20: Handle logout
+ * Step 20: Handle logout - Use centralized function from account.js
  * Manages user logout with confirmation, session cleanup, and redirect
- * Ensures complete cleanup of all user session data
  */
 function handleLogout() {
-    // Show confirmation dialog
-    const confirmed = confirm('Are you sure you want to logout?');
-    
-    if (!confirmed) {
-        return; // User cancelled logout
-    }
-    
-    try {
-        // Clear all customer-related data from localStorage
-        localStorage.removeItem('customer_id');
-        localStorage.removeItem('customer_name');
-        localStorage.removeItem('customer_email');
+    if (window.accountFunctions && window.accountFunctions.handleAccountLogout) {
+        window.accountFunctions.handleAccountLogout();
+    } else {
+        // Fallback if account.js not loaded
+        const confirmed = confirm('Are you sure you want to logout?');
         
-        // Optional: Clear any other session-related data for complete cleanup
-        const keysToRemove = [];
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key && (key.startsWith('customer_') || key.startsWith('session_') || key.startsWith('cart_'))) {
-                keysToRemove.push(key);
-            }
+        if (!confirmed) {
+            return;
         }
-        keysToRemove.forEach(key => localStorage.removeItem(key));
         
-        console.log('User logged out successfully');
-        
-        // Show success message
-        alert('You have been logged out successfully.');
-        
-        // Redirect to landing page
-        // Use replace to prevent back button from returning to protected page
-        window.location.replace('/landing/');
-        
-    } catch (error) {
-        console.error('Error during logout:', error);
-        
-        // Even if there's an error, try to redirect
-        alert('Logout completed. Redirecting...');
-        window.location.replace('/landing/');
+        try {
+            localStorage.removeItem('customer_id');
+            localStorage.removeItem('customer_name');
+            localStorage.removeItem('customer_email');
+            localStorage.removeItem('farm2home_cart');
+            localStorage.removeItem('checkoutCart');
+            
+            console.log('User logged out successfully');
+            alert('You have been logged out successfully.');
+            window.location.replace('/landing/');
+        } catch (error) {
+            console.error('Error during logout:', error);
+            window.location.replace('/landing/');
+        }
     }
 }
 
@@ -748,87 +727,74 @@ async function handleReorder(orderId) {
         return;
     }
     
-    // Build confirmation message with item names
-    const itemNames = (order.order_items || [])
-        .map(item => item.product_name)
+    // Build items list for display
+    const itemsList = (order.order_items || [])
+        .map(item => `${item.product_name} (${item.quantity}kg)`)
         .join(', ');
     
-    const confirmed = confirm(
-        `Add all items from ${order.order_id_formatted} to your cart?\n\nItems: ${itemNames}\n\nTotal: ${formatCurrency(order.total_amount)}`
-    );
-    
-    if (!confirmed) {
-        return;
-    }
-    
-    // Get customer_id from localStorage
-    const customerId = localStorage.getItem('customer_id');
-    
-    if (!customerId) {
-        handleAuthError('No customer ID found');
-        return;
-    }
-    
-    // Show loading notification
-    if (typeof notifications !== 'undefined') {
-        notifications.info('Adding items to cart...');
-    }
-    
-    // Add each item to cart via API
-    let successCount = 0;
-    let failCount = 0;
-    
-    for (const item of order.order_items) {
-        try {
-            const response = await fetch('/api/cart/add_item/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken
-                },
-                body: JSON.stringify({
-                    customer_id: customerId,
-                    product_id: item.product,
-                    quantity: item.quantity
-                })
-            });
-            
-            if (response.ok) {
-                successCount++;
-            } else {
-                console.error(`Failed to add ${item.product_name}:`, await response.text());
-                failCount++;
-            }
-        } catch (error) {
-            console.error(`Error adding ${item.product_name}:`, error);
-            failCount++;
-        }
-    }
-    
-    // Show result notification
-    if (typeof notifications !== 'undefined') {
-        if (failCount === 0) {
-            notifications.success(`✓ All ${successCount} items added to cart!`);
-        } else if (successCount > 0) {
-            notifications.warning(`⚠ ${successCount} items added, ${failCount} failed`);
-        } else {
-            notifications.error('Failed to add items to cart');
+    // Show custom reorder confirmation modal
+    showReorderConfirmation(order, itemsList, async () => {
+        // Get customer_id from localStorage
+        const customerId = localStorage.getItem('customer_id');
+        
+        if (!customerId) {
+            handleAuthError('No customer ID found');
             return;
         }
-    } else {
-        // Fallback alert if notifications not available
-        if (failCount === 0) {
-            alert(`✓ All ${successCount} items added to cart!`);
-        } else {
-            alert(`Added ${successCount} items to cart. ${failCount} failed.`);
+        
+        // Show loading notification
+        if (typeof notifications !== 'undefined') {
+            notifications.info('Adding items to cart...');
         }
-    }
-    
-    // Ask if user wants to go to checkout
-    const goToCheckout = confirm('Items added to cart! Go to checkout now?');
-    if (goToCheckout) {
-        window.location.href = '/checkout/';
-    }
+        
+        // Add each item to cart via API
+        let successCount = 0;
+        let failCount = 0;
+        
+        for (const item of order.order_items) {
+            try {
+                const response = await fetch('/api/cart/add_item/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        customer_id: customerId,
+                        product_id: item.product,
+                        quantity: item.quantity
+                    })
+                });
+                
+                if (response.ok) {
+                    successCount++;
+                } else {
+                    console.error(`Failed to add ${item.product_name}:`, await response.text());
+                    failCount++;
+                }
+            } catch (error) {
+                console.error(`Error adding ${item.product_name}:`, error);
+                failCount++;
+            }
+        }
+        
+        // Show result notification
+        if (typeof notifications !== 'undefined') {
+            if (failCount === 0) {
+                notifications.success(`✓ All ${successCount} items added to cart!`);
+            } else if (successCount > 0) {
+                notifications.warning(`⚠ ${successCount} items added, ${failCount} failed`);
+            } else {
+                notifications.error('Failed to add items to cart');
+                return;
+            }
+        }
+        
+        // Redirect to catalog after successful reorder
+        setTimeout(() => {
+            window.location.href = '/catalog/';
+        }, 1500);
+    });
 }
 
 /**
@@ -881,6 +847,191 @@ function getStatusIcon(status) {
         'cancelled': '✕'
     };
     return iconMap[status] || '•';
+}
+
+/**
+ * Custom Reorder Confirmation Modal
+ */
+function showReorderConfirmation(order, itemsList, onConfirm) {
+    // Create modal backdrop
+    const backdrop = document.createElement('div');
+    backdrop.className = 'reorder-modal-backdrop';
+    backdrop.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        animation: fadeIn 0.2s ease;
+    `;
+    
+    // Create modal container
+    const modal = document.createElement('div');
+    modal.className = 'reorder-modal';
+    modal.style.cssText = `
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.3s ease;
+        text-align: center;
+        max-height: 80vh;
+        overflow-y: auto;
+    `;
+    
+    // Count total items
+    const itemCount = (order.order_items || []).length;
+    const totalQuantity = (order.order_items || []).reduce((sum, item) => sum + item.quantity, 0);
+    
+    // Modal content
+    modal.innerHTML = `
+        <div style="margin-bottom: 1.5rem;">
+            <div style="width: 64px; height: 64px; background: #e8f5e9; border-radius: 50%; 
+                        display: flex; align-items: center; justify-content: center; 
+                        margin: 0 auto 1rem;">
+                <i class="fas fa-redo-alt" style="font-size: 28px; color: #6b8e23;"></i>
+            </div>
+            <h3 style="color: #2d3748; margin: 0 0 0.5rem 0; font-size: 1.5rem; font-weight: 600;">
+                Reorder ${order.order_id_formatted}?
+            </h3>
+            <p style="color: #718096; margin: 0 0 1rem 0; font-size: 0.95rem; line-height: 1.5;">
+                Add <strong>${itemCount} item${itemCount !== 1 ? 's' : ''}</strong> (${totalQuantity}kg total) to your cart?
+            </p>
+            <div style="background: #f7fafc; border-radius: 8px; padding: 1rem; margin: 1rem 0; text-align: left;">
+                <p style="font-weight: 600; color: #2d3748; margin: 0 0 0.5rem 0; font-size: 0.9rem;">Items:</p>
+                <p style="color: #4a5568; margin: 0; font-size: 0.85rem; line-height: 1.6;">
+                    ${itemsList}
+                </p>
+            </div>
+            <p style="color: #2d3748; font-weight: 600; font-size: 1.1rem; margin: 0.5rem 0 0 0;">
+                Total: ${formatCurrency(order.total_amount)}
+            </p>
+            <p style="color: #718096; font-size: 0.85rem; margin: 0.5rem 0 0 0;">
+                <i class="fas fa-info-circle"></i> Items will be added to your existing cart
+            </p>
+        </div>
+        <div style="display: flex; gap: 0.75rem; justify-content: center;">
+            <button id="cancelReorder" style="
+                padding: 0.75rem 1.5rem;
+                border: 2px solid #e2e8f0;
+                background: white;
+                color: #4a5568;
+                border-radius: 8px;
+                font-size: 0.95rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+                min-width: 100px;
+            ">Cancel</button>
+            <button id="confirmReorder" style="
+                padding: 0.75rem 1.5rem;
+                border: none;
+                background: #6b8e23;
+                color: white;
+                border-radius: 8px;
+                font-size: 0.95rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+                min-width: 120px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+            ">
+                <i class="fas fa-shopping-cart"></i>
+                Add to Cart
+            </button>
+        </div>
+    `;
+    
+    backdrop.appendChild(modal);
+    document.body.appendChild(backdrop);
+    
+    // Add hover effects
+    const cancelBtn = modal.querySelector('#cancelReorder');
+    const confirmBtn = modal.querySelector('#confirmReorder');
+    
+    cancelBtn.addEventListener('mouseenter', () => {
+        cancelBtn.style.background = '#f7fafc';
+        cancelBtn.style.borderColor = '#cbd5e0';
+    });
+    cancelBtn.addEventListener('mouseleave', () => {
+        cancelBtn.style.background = 'white';
+        cancelBtn.style.borderColor = '#e2e8f0';
+    });
+    
+    confirmBtn.addEventListener('mouseenter', () => {
+        confirmBtn.style.background = '#5a7319';
+    });
+    confirmBtn.addEventListener('mouseleave', () => {
+        confirmBtn.style.background = '#6b8e23';
+    });
+    
+    // Handle button clicks
+    cancelBtn.addEventListener('click', () => {
+        backdrop.style.animation = 'fadeOut 0.2s ease';
+        setTimeout(() => backdrop.remove(), 200);
+    });
+    
+    confirmBtn.addEventListener('click', () => {
+        backdrop.style.animation = 'fadeOut 0.2s ease';
+        setTimeout(() => backdrop.remove(), 200);
+        onConfirm();
+    });
+    
+    // Close on backdrop click
+    backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) {
+            backdrop.style.animation = 'fadeOut 0.2s ease';
+            setTimeout(() => backdrop.remove(), 200);
+        }
+    });
+    
+    // Close on Escape key
+    const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+            backdrop.style.animation = 'fadeOut 0.2s ease';
+            setTimeout(() => backdrop.remove(), 200);
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    document.addEventListener('keydown', handleEscape);
+    
+    // Add animation keyframes if not already added
+    if (!document.querySelector('#reorderModalAnimations')) {
+        const style = document.createElement('style');
+        style.id = 'reorderModalAnimations';
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+            @keyframes slideUp {
+                from { 
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to { 
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
 }
 
 // Export functions for use in other modules if needed

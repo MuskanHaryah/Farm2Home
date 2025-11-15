@@ -24,6 +24,12 @@ let isLoadingProducts = false;
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('🌾 Farm2Home Catalog Initializing...');
     
+    // Clear old localStorage cart to prevent cross-account cart issues
+    localStorage.removeItem('farm2home_cart');
+    
+    // Update auth UI (login button vs profile icon)
+    updateCatalogAuthUI();
+    
     // Load products from backend
     await loadProductsFromBackend();
     
@@ -174,8 +180,8 @@ function initializeApp() {
     // Set up event listeners
     setupEventListeners();
     
-    // Load cart from localStorage if exists
-    loadCartFromStorage();
+    // Load cart from backend if user is logged in
+    loadCartFromBackend();
     
     // Make functions globally accessible for debugging
     window.testAddToCart = (productId) => {
@@ -323,7 +329,7 @@ function setupEventListeners() {
     // Clear cart button
     const clearCartBtn = document.getElementById('clearCartBtn');
     if (clearCartBtn) {
-        clearCartBtn.addEventListener('click', function() {
+        clearCartBtn.addEventListener('click', async function() {
             if (cart.length === 0) {
                 if (typeof notifications !== 'undefined') {
                     notifications.info('Your cart is already empty.');
@@ -332,15 +338,46 @@ function setupEventListeners() {
                 }
                 return;
             }
-            if (confirm('Are you sure you want to clear all items from your cart?')) {
-                cart = [];
-                saveCartToStorage();
-                renderCartItems();
-                updateCartCount();
-                if (typeof notifications !== 'undefined') {
-                    notifications.success('Cart cleared successfully!');
+            
+            // Show custom confirmation modal
+            showClearCartConfirmation(async () => {
+                const customerId = localStorage.getItem('customer_id');
+                
+                if (customerId) {
+                    try {
+                        // Call backend API to clear cart from database
+                        const response = await fetch(`/api/cart/clear/?customer_id=${customerId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRFToken': getCsrfToken()
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            // Reload cart from backend to sync UI
+                            await loadCartFromBackend();
+                            if (typeof notifications !== 'undefined') {
+                                notifications.success('Cart cleared successfully!');
+                            }
+                        } else {
+                            throw new Error('Failed to clear cart');
+                        }
+                    } catch (error) {
+                        console.error('Error clearing cart:', error);
+                        if (typeof notifications !== 'undefined') {
+                            notifications.error('Failed to clear cart. Please try again.');
+                        }
+                    }
+                } else {
+                    // No customer logged in, just clear local cart
+                    cart = [];
+                    renderCartItems();
+                    updateCartCount();
+                    if (typeof notifications !== 'undefined') {
+                        notifications.success('Cart cleared successfully!');
+                    }
                 }
-            }
+            });
         });
         console.log('Clear cart button listener attached');
     }
@@ -651,14 +688,12 @@ function addToCart(productId) {
     const customerId = localStorage.getItem('customer_id');
     
     if (!customerId) {
-        // User not logged in - show login prompt
+        // User not logged in - show login modal
         if (typeof notifications !== 'undefined') {
             notifications.error('Please log in to add items to cart');
         }
-        // Redirect to login or open login modal
-        setTimeout(() => {
-            window.location.href = '/login/';
-        }, 1500);
+        // Open login modal
+        openLoginModal();
         return;
     }
     
@@ -687,9 +722,6 @@ async function addToCartBackend(customerId, productId, quantity, productName) {
             // Success - item added to backend cart
             console.log('Item added to backend cart:', data);
             
-            // Also update localStorage cart for immediate UI feedback
-            updateLocalCart(productId, quantity);
-            
             // Show feedback notification
             showCartFeedback(productName, quantity);
             
@@ -697,12 +729,11 @@ async function addToCartBackend(customerId, productId, quantity, productName) {
             productQuantities[productId] = 0;
             updateQuantityDisplay(productId);
             
+            // Reload cart from backend to update UI
+            await loadCartFromBackend();
+            
             // Update cart count
             updateCartCountFromBackend(customerId);
-            
-            // Update cart display
-            renderCartItems();
-            updateCartProgress();
             
             // Show side cart after a small delay
             setTimeout(() => {
@@ -719,29 +750,7 @@ async function addToCartBackend(customerId, productId, quantity, productName) {
     }
 }
 
-function updateLocalCart(productId, quantity) {
-    // Find product by ID
-    const product = productsData.find(p => p.id === productId);
-    
-    if (!product) return;
-    
-    // Check if product already in local cart
-    const existingItem = cart.find(item => item.id === productId);
-    
-    if (existingItem) {
-        existingItem.quantity += quantity;
-        console.log(`Updated existing item in local cart. New quantity: ${existingItem.quantity}`);
-    } else {
-        cart.push({
-            ...product,
-            quantity: quantity
-        });
-        console.log('Added new item to local cart');
-    }
-    
-    // Save cart to localStorage
-    saveCartToStorage();
-}
+// Removed updateLocalCart - cart is now only stored in backend
 
 async function updateCartCountFromBackend(customerId) {
     try {
@@ -800,28 +809,38 @@ function showCartFeedback(productName, quantity) {
 }
 
 // ===============================================
-// CART PERSISTENCE (LocalStorage)
+// CART BACKEND INTEGRATION
 // ===============================================
-function saveCartToStorage() {
-    try {
-        localStorage.setItem('farm2home_cart', JSON.stringify(cart));
-        console.log('Cart saved to localStorage');
-    } catch (error) {
-        console.error('Error saving cart to localStorage:', error);
+async function loadCartFromBackend() {
+    const customerId = localStorage.getItem('customer_id');
+    if (!customerId) {
+        console.log('No customer logged in, skipping cart load');
+        cart = [];
+        return;
     }
-}
-
-function loadCartFromStorage() {
+    
     try {
-        const savedCart = localStorage.getItem('farm2home_cart');
-        if (savedCart) {
-            cart = JSON.parse(savedCart);
-            console.log(`Loaded ${cart.length} items from localStorage`);
+        const response = await fetch(`/api/cart/summary/?customer_id=${customerId}`);
+        const data = await response.json();
+        
+        if (response.ok && data.items) {
+            // Transform backend cart items to frontend format
+            cart = data.items.map(item => ({
+                id: item.product,
+                name: item.product_name,
+                variety: item.product_category,
+                price: parseFloat(item.product_price),
+                quantity: item.quantity,
+                category: item.product_category,
+                image: item.product_image || 'images/' + item.product_category + '/' + item.product_name.toLowerCase() + '.png'
+            }));
+            console.log(`Loaded ${cart.length} items from backend cart`);
             updateCartCount();
             renderCartItems();
+            updateCartProgress();
         }
     } catch (error) {
-        console.error('Error loading cart from localStorage:', error);
+        console.error('Error loading cart from backend:', error);
         cart = [];
     }
 }
@@ -901,40 +920,151 @@ function renderCartItems() {
     updateCartSubtotal();
 }
 
-function increaseCartQty(productId) {
+async function increaseCartQty(productId) {
+    const customerId = localStorage.getItem('customer_id');
+    if (!customerId) return;
+    
     const item = cart.find(item => item.id === productId);
     if (item) {
-        item.quantity++;
-        saveCartToStorage();
-        renderCartItems();
-        updateCartCount();
-        updateCartProgress();
+        try {
+            const response = await fetch('/api/cart/add_item/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                body: JSON.stringify({
+                    customer_id: customerId,
+                    product_id: productId,
+                    quantity: 1
+                })
+            });
+            
+            if (response.ok) {
+                // Reload cart from backend to sync UI
+                await loadCartFromBackend();
+            }
+        } catch (error) {
+            console.error('Error updating cart:', error);
+        }
     }
 }
 
-function decreaseCartQty(productId) {
+async function decreaseCartQty(productId) {
+    const customerId = localStorage.getItem('customer_id');
+    if (!customerId) {
+        console.log('No customer ID, cannot decrease cart quantity');
+        return;
+    }
+    
     const item = cart.find(item => item.id === productId);
-    if (item && item.quantity > 1) {
-        item.quantity--;
-        saveCartToStorage();
-        renderCartItems();
-        updateCartCount();
-        updateCartProgress();
+    console.log('Decrease cart qty for product:', productId, 'Current item:', item);
+    
+    if (!item) {
+        console.error('Item not found in cart');
+        return;
+    }
+    
+    if (item.quantity === 1) {
+        // If quantity is 1, remove the item instead
+        console.log('Quantity is 1, removing item instead');
+        removeCartItem(productId);
+        return;
+    }
+    
+    if (item.quantity > 1) {
+        try {
+            console.log('Fetching cart from backend to find cart_id...');
+            // Find the cart item in backend
+            const cartResponse = await fetch(`/api/cart/?customer_id=${customerId}`);
+            const cartData = await cartResponse.json();
+            console.log('Backend cart data:', cartData);
+            
+            // cartData is paginated, so get results array
+            const cartItems = cartData.results || cartData;
+            const backendItem = cartItems.find(ci => ci.product === productId);
+            console.log('Found backend item:', backendItem);
+            
+            if (backendItem) {
+                const newQuantity = item.quantity - 1;
+                console.log(`Updating backend: cart_id=${backendItem.cart_id}, new quantity=${newQuantity}`);
+                
+                // Update quantity in backend
+                const response = await fetch(`/api/cart/${backendItem.cart_id}/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCsrfToken()
+                    },
+                    body: JSON.stringify({
+                        customer: customerId,
+                        product: productId,
+                        quantity: newQuantity
+                    })
+                });
+                
+                console.log('PUT response status:', response.status);
+                const responseData = await response.json();
+                console.log('PUT response data:', responseData);
+                
+                if (response.ok) {
+                    console.log('Successfully decreased quantity in backend');
+                    // Reload cart from backend to sync UI
+                    await loadCartFromBackend();
+                } else {
+                    console.error('Failed to update backend:', responseData);
+                    if (typeof notifications !== 'undefined') {
+                        notifications.error('Failed to update cart. Please try again.');
+                    }
+                }
+            } else {
+                console.error('Backend item not found for product:', productId);
+            }
+        } catch (error) {
+            console.error('Error updating cart:', error);
+            if (typeof notifications !== 'undefined') {
+                notifications.error('Error updating cart. Please try again.');
+            }
+        }
     }
 }
 
-function removeCartItem(productId) {
+async function removeCartItem(productId) {
+    const customerId = localStorage.getItem('customer_id');
+    if (!customerId) return;
+    
     const index = cart.findIndex(item => item.id === productId);
     if (index !== -1) {
         const removedItem = cart[index];
-        cart.splice(index, 1);
-        saveCartToStorage();
-        renderCartItems();
-        updateCartCount();
-        updateCartProgress();
         
-        if (typeof notifications !== 'undefined') {
-            notifications.info(`Removed ${removedItem.name} from cart`);
+        try {
+            // Find the cart item in backend
+            const cartResponse = await fetch(`/api/cart/?customer_id=${customerId}`);
+            const cartData = await cartResponse.json();
+            // cartData is paginated, so get results array
+            const cartItems = cartData.results || cartData;
+            const backendItem = cartItems.find(ci => ci.product === productId);
+            
+            if (backendItem) {
+                // Delete from backend
+                const response = await fetch(`/api/cart/${backendItem.cart_id}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': getCsrfToken()
+                    }
+                });
+                
+                if (response.ok) {
+                    // Reload cart from backend to sync UI
+                    await loadCartFromBackend();
+                    
+                    if (typeof notifications !== 'undefined') {
+                        notifications.info(`Removed ${removedItem.name} from cart`);
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error removing item from cart:', error);
         }
     }
 }
@@ -1204,6 +1334,403 @@ function createProductListItem(product) {
     }
     
     return item;
+}
+
+// ===============================================
+// CLEAR CART CONFIRMATION MODAL
+// ===============================================
+function showClearCartConfirmation(callback) {
+    // Create modal backdrop
+    const backdrop = document.createElement('div');
+    backdrop.className = 'clear-cart-modal-backdrop';
+    backdrop.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        animation: fadeIn 0.2s ease;
+    `;
+    
+    // Create modal container
+    const modal = document.createElement('div');
+    modal.className = 'clear-cart-modal';
+    modal.style.cssText = `
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 420px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.3s ease;
+        text-align: center;
+    `;
+    
+    // Modal content
+    modal.innerHTML = `
+        <div style="margin-bottom: 1.5rem;">
+            <div style="width: 64px; height: 64px; background: #fee; border-radius: 50%; 
+                        display: flex; align-items: center; justify-content: center; 
+                        margin: 0 auto 1rem;">
+                <i class="fas fa-trash-alt" style="font-size: 28px; color: #dc3545;"></i>
+            </div>
+            <h3 style="color: #2d3748; margin: 0 0 0.5rem 0; font-size: 1.5rem; font-weight: 600;">
+                Clear Cart?
+            </h3>
+            <p style="color: #718096; margin: 0; font-size: 0.95rem; line-height: 1.5;">
+                Are you sure you want to remove all items from your cart? This action cannot be undone.
+            </p>
+        </div>
+        <div style="display: flex; gap: 0.75rem; justify-content: center;">
+            <button id="cancelClearCart" style="
+                padding: 0.75rem 1.5rem;
+                border: 2px solid #e2e8f0;
+                background: white;
+                color: #4a5568;
+                border-radius: 8px;
+                font-size: 0.95rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+                min-width: 100px;
+            ">Cancel</button>
+            <button id="confirmClearCart" style="
+                padding: 0.75rem 1.5rem;
+                border: none;
+                background: #dc3545;
+                color: white;
+                border-radius: 8px;
+                font-size: 0.95rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+                min-width: 100px;
+            ">Clear All</button>
+        </div>
+    `;
+    
+    backdrop.appendChild(modal);
+    document.body.appendChild(backdrop);
+    
+    // Add hover effects
+    const cancelBtn = modal.querySelector('#cancelClearCart');
+    const confirmBtn = modal.querySelector('#confirmClearCart');
+    
+    cancelBtn.addEventListener('mouseenter', () => {
+        cancelBtn.style.background = '#f7fafc';
+        cancelBtn.style.borderColor = '#cbd5e0';
+    });
+    cancelBtn.addEventListener('mouseleave', () => {
+        cancelBtn.style.background = 'white';
+        cancelBtn.style.borderColor = '#e2e8f0';
+    });
+    
+    confirmBtn.addEventListener('mouseenter', () => {
+        confirmBtn.style.background = '#c82333';
+    });
+    confirmBtn.addEventListener('mouseleave', () => {
+        confirmBtn.style.background = '#dc3545';
+    });
+    
+    // Handle button clicks
+    cancelBtn.addEventListener('click', () => {
+        backdrop.style.animation = 'fadeOut 0.2s ease';
+        setTimeout(() => backdrop.remove(), 200);
+    });
+    
+    confirmBtn.addEventListener('click', () => {
+        backdrop.style.animation = 'fadeOut 0.2s ease';
+        setTimeout(() => backdrop.remove(), 200);
+        callback();
+    });
+    
+    // Close on backdrop click
+    backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) {
+            backdrop.style.animation = 'fadeOut 0.2s ease';
+            setTimeout(() => backdrop.remove(), 200);
+        }
+    });
+    
+    // Add animation keyframes if not already added
+    if (!document.querySelector('#clearCartModalAnimations')) {
+        const style = document.createElement('style');
+        style.id = 'clearCartModalAnimations';
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+            @keyframes slideUp {
+                from { 
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to { 
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// ===============================================
+// AUTH UI UPDATE FOR CATALOG PAGE
+// ===============================================
+function updateCatalogAuthUI() {
+    const accountIcon = document.getElementById('accountIcon');
+    const loginBtn = document.getElementById('catalogLoginBtn');
+    const customerId = localStorage.getItem('customer_id');
+    
+    if (customerId) {
+        // User is logged in - show profile icon
+        if (accountIcon) accountIcon.style.display = 'block';
+        if (loginBtn) loginBtn.style.display = 'none';
+    } else {
+        // User is logged out - show login button
+        if (accountIcon) accountIcon.style.display = 'none';
+        if (loginBtn) loginBtn.style.display = 'block';
+    }
+    
+    // Add click handler to login button
+    if (loginBtn) {
+        loginBtn.onclick = function() {
+            openLoginModal();
+        };
+    }
+}
+
+// ===============================================
+// AUTH MODAL FUNCTIONS
+// ===============================================
+function openLoginModal() {
+    const modal = document.getElementById('authModal');
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    
+    if (modal && loginForm && signupForm) {
+        loginForm.style.display = 'block';
+        signupForm.style.display = 'none';
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function openSignupModal() {
+    const modal = document.getElementById('authModal');
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    
+    if (modal && loginForm && signupForm) {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeAuthModal() {
+    const modal = document.getElementById('authModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+function switchToSignup() {
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    
+    if (loginForm && signupForm) {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
+    }
+}
+
+function switchToLogin() {
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    
+    if (loginForm && signupForm) {
+        loginForm.style.display = 'block';
+        signupForm.style.display = 'none';
+    }
+}
+
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const button = input.parentElement.querySelector('.toggle-password');
+    const icon = button.querySelector('i');
+    
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
+// Close modal on outside click
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('authModal');
+    if (e.target === modal) {
+        closeAuthModal();
+    }
+});
+
+// ===============================================
+// AUTH FORM HANDLERS
+// ===============================================
+// Initialize auth form handlers when DOM is ready
+const loginFormElement = document.getElementById('loginFormElement');
+const signupFormElement = document.getElementById('signupFormElement');
+
+if (loginFormElement) {
+    loginFormElement.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('login_email').value.trim();
+        const password = document.getElementById('login_password').value.trim();
+        
+        if (!email || !password) {
+            if (typeof notifications !== 'undefined') {
+                notifications.error('Please fill in all fields');
+            }
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/auth/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success === true) {
+                localStorage.setItem('customer_id', data.customer_id);
+                localStorage.setItem('customer_name', data.name);
+                localStorage.setItem('customer_email', data.email);
+                
+                if (typeof notifications !== 'undefined') {
+                    notifications.success('Login successful! Welcome back, ' + data.name);
+                }
+                
+                closeAuthModal();
+                updateCatalogAuthUI();
+                
+                // Reload cart from backend
+                await loadCartFromBackend();
+            } else {
+                if (typeof notifications !== 'undefined') {
+                    notifications.error(data.error || data.message || 'Login failed. Please check your credentials.');
+                }
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            if (typeof notifications !== 'undefined') {
+                notifications.error('An error occurred during login. Please try again.');
+            }
+        }
+    });
+}
+
+if (signupFormElement) {
+    signupFormElement.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const fullName = document.getElementById('signup_fullname').value.trim();
+        const email = document.getElementById('signup_email').value.trim();
+        const phone = document.getElementById('signup_phone').value.trim();
+        const address = document.getElementById('signup_address').value.trim();
+        const password = document.getElementById('signup_password').value.trim();
+        const confirmPassword = document.getElementById('signup_confirm_password').value.trim();
+        const agreeTerms = document.getElementById('agreeTerms').checked;
+        
+        if (!fullName || !email || !phone || !address || !password || !confirmPassword) {
+            if (typeof notifications !== 'undefined') {
+                notifications.error('Please fill in all fields');
+            }
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            if (typeof notifications !== 'undefined') {
+                notifications.error('Passwords do not match');
+            }
+            return;
+        }
+        
+        if (!agreeTerms) {
+            if (typeof notifications !== 'undefined') {
+                notifications.error('Please agree to the Terms & Conditions');
+            }
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/auth/signup/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                body: JSON.stringify({
+                    name: fullName,
+                    email: email,
+                    phone: phone,
+                    address: address,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success === true) {
+                localStorage.setItem('customer_id', data.customer_id);
+                localStorage.setItem('customer_name', data.name);
+                localStorage.setItem('customer_email', data.email);
+                
+                if (typeof notifications !== 'undefined') {
+                    notifications.success('Account created successfully! Welcome, ' + data.name);
+                }
+                
+                closeAuthModal();
+                updateCatalogAuthUI();
+                
+                // Reload cart from backend
+                await loadCartFromBackend();
+            } else {
+                if (typeof notifications !== 'undefined') {
+                    notifications.error(data.error || data.message || 'Signup failed. Please try again.');
+                }
+            }
+        } catch (error) {
+            console.error('Signup error:', error);
+            if (typeof notifications !== 'undefined') {
+                notifications.error('An error occurred during signup. Please try again.');
+            }
+        }
+    });
 }
 
 // ===============================================

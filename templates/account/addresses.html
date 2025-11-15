@@ -34,17 +34,17 @@
         <aside class="sidebar">
             <div class="user-profile">
                 <div class="profile-avatar">
-                    <i class="fas fa-user"></i>
+                    <i class="fas fa-user-circle"></i>
                 </div>
                 <div class="profile-info">
-                    <h3 id="profileName">AHMED KHAN</h3>
-                    <p id="profileEmail">AHMED.KHAN@EMAIL.COM</p>
+                    <h3 class="profile-name" id="profileName"><i class="fas fa-spinner fa-spin"></i></h3>
+                    <p class="profile-email" id="profileEmail"><i class="fas fa-spinner fa-spin"></i></p>
                 </div>
             </div>
 
-            <div class="stats-card">
-                <div class="stat-label">TOTAL ORDERS</div>
-                <div class="stat-value" id="sidebarTotalOrders">47 Orders</div>
+            <div class="orders-card">
+                <div class="orders-label">TOTAL ORDERS</div>
+                <div class="orders-count" id="sidebarTotalOrders"><i class="fas fa-spinner fa-spin"></i></div>
             </div>
 
             <nav class="sidebar-nav">
@@ -95,122 +95,21 @@
                 </button>
             </div>
 
+            <!-- Loading State -->
+            <div id="loadingState" style="text-align: center; padding: 4rem 2rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: #6b8e23;"></i>
+                <p style="margin-top: 1.5rem; color: #718096; font-size: 1.1rem;">Loading your addresses...</p>
+            </div>
+            
+            <!-- Empty State (hidden by default) -->
+            <div id="emptyState" style="display: none; text-align: center; padding: 4rem 2rem; background: white; border-radius: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);">
+                <i class="fas fa-map-marker-alt" style="font-size: 3rem; color: #E8F5E9; margin-bottom: 1rem;"></i>
+                <h3 style="font-size: 1.25rem; color: #2D3748; margin-bottom: 0.5rem; font-weight: 700;">NO ADDRESSES SAVED</h3>
+                <p style="color: #718096; margin-bottom: 0;">Add your first delivery address to get started</p>
+            </div>
+
             <!-- Addresses Grid -->
-            <div class="addresses-grid" id="addressesContainer">
-                <!-- Address Card 1 - HOME (Default) -->
-                <div class="address-card" data-address-id="home-address">
-                    <div class="address-card-header">
-                        <div class="address-icon-label">
-                            <div class="address-icon home-icon">
-                                <i class="fas fa-home"></i>
-                            </div>
-                            <div class="address-type">
-                                <h3>HOME</h3>
-                                <span class="default-badge">
-                                    <i class="fas fa-star"></i>
-                                    DEFAULT
-                                </span>
-                            </div>
-                        </div>
-                        <div class="address-actions">
-                            <button class="icon-btn edit-btn" title="Edit address">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="icon-btn delete-btn" title="Delete address">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="address-card-body">
-                        <p class="address-line">House 123, Street 5, F-7 Markaz</p>
-                        <p class="address-city">Karachi 74000</p>
-                        <p class="address-phone">+92 (300) 1234567</p>
-                    </div>
-                </div>
-
-                <!-- Address Card 2 - WORK -->
-                <div class="address-card" data-address-id="work-address">
-                    <div class="address-card-header">
-                        <div class="address-icon-label">
-                            <div class="address-icon work-icon">
-                                <i class="fas fa-briefcase"></i>
-                            </div>
-                            <div class="address-type">
-                                <h3>WORK</h3>
-                            </div>
-                        </div>
-                        <div class="address-actions">
-                            <button class="icon-btn edit-btn" title="Edit address">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="icon-btn delete-btn" title="Delete address">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="address-card-body">
-                        <p class="address-line">Office 204, Blue Area, Jinnah Avenue</p>
-                        <p class="address-city">Karachi 74000</p>
-                        <p class="address-phone">+92 (321) 9876543</p>
-                    </div>
-                    <div class="address-card-footer">
-                        <button class="set-default-btn">
-                            <i class="far fa-star"></i>
-                            SET AS DEFAULT
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Address Card 3 - OTHER -->
-                <div class="address-card" data-address-id="other-address">
-                    <div class="address-card-header">
-                        <div class="address-icon-label">
-                            <div class="address-icon other-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="address-type">
-                                <h3>OTHER</h3>
-                            </div>
-                        </div>
-                        <div class="address-actions">
-                            <button class="icon-btn edit-btn" title="Edit address">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="icon-btn delete-btn" title="Delete address">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="address-card-body">
-                        <p class="address-line">Plot 45, DHA Phase 6, Main Boulevard</p>
-                        <p class="address-city">Karachi 74500</p>
-                        <p class="address-phone">+92 (333) 4567890</p>
-                    </div>
-                    <div class="address-card-footer">
-                        <button class="set-default-btn">
-                            <i class="far fa-star"></i>
-                            SET AS DEFAULT
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Empty State (hidden by default) -->
-                <div class="empty-state" id="emptyState" style="display: none;">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <h3>NO ADDRESSES SAVED</h3>
-                    <p>Add your first delivery address to get started</p>
-                </div>
-
-                <!-- Add New Address Card -->
-                <div class="address-card add-new-card">
-                    <div class="add-new-content">
-                        <div class="add-icon">
-                            <i class="fas fa-plus"></i>
-                        </div>
-                        <h3>ADD NEW ADDRESS</h3>
-                        <p>SAVE A NEW DELIVERY LOCATION</p>
-                    </div>
-                </div>
+            <div class="addresses-grid" id="addressesContainer" style="display: none;">
             </div>
         </main>
     </div>

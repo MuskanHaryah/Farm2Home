@@ -431,12 +431,13 @@ class CartSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='product.name', read_only=True)
     product_category = serializers.CharField(source='product.category', read_only=True)
     product_price = serializers.DecimalField(source='product.price', max_digits=10, decimal_places=2, read_only=True)
+    product_image = serializers.CharField(source='product.image', read_only=True)
     stock_available = serializers.SerializerMethodField()
     
     class Meta:
         model = Cart
         fields = ['cart_id', 'customer', 'product', 'product_name', 
-                  'product_category', 'product_price', 'quantity', 'stock_available']
+                  'product_category', 'product_price', 'product_image', 'quantity', 'stock_available']
         read_only_fields = ['cart_id']
     
     def get_stock_available(self, obj):

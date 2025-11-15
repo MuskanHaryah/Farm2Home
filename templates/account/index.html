@@ -34,15 +34,15 @@
                 <i class="fas fa-user-circle"></i>
             </div>
             <div class="profile-info">
-                <h3 class="profile-name" id="profileName">AHMED KHAN</h3>
-                <p class="profile-email" id="profileEmail">AHMED.KHAN@EMAIL.COM</p>
+                <h3 class="profile-name" id="profileName"><i class="fas fa-spinner fa-spin"></i></h3>
+                <p class="profile-email" id="profileEmail"><i class="fas fa-spinner fa-spin"></i></p>
             </div>
         </div>
 
         <!-- Total Orders Card -->
         <div class="orders-card">
             <div class="orders-label">TOTAL ORDERS</div>
-            <div class="orders-count" id="sidebarTotalOrders">47 Orders</div>
+            <div class="orders-count" id="sidebarTotalOrders"><i class="fas fa-spinner fa-spin"></i></div>
         </div>
 
         <!-- Navigation Menu -->
@@ -81,7 +81,7 @@
         <main class="content">
             <!-- Welcome Banner -->
             <div class="welcome-banner">
-                <h1 class="welcome-title">WELCOME BACK, AHMED! 👋</h1>
+                <h1 class="welcome-title" id="welcomeTitle">WELCOME BACK! 👋</h1>
                 <p class="welcome-subtitle">HERE'S WHAT'S HAPPENING WITH YOUR ACCOUNT</p>
             </div>
 
@@ -94,9 +94,9 @@
                     </div>
                     <div class="stat-info">
                         <div class="stat-label">TOTAL SPENT</div>
-                        <div class="stat-value" id="totalSpent">Rs.98,500</div>
+                        <div class="stat-value" id="totalSpent"><i class="fas fa-spinner fa-spin"></i></div>
                     </div>
-                    <div class="stat-change" id="growthPercentage">+12%</div>
+                    <div class="stat-change" id="growthPercentage"></div>
                 </div>
 
                 <!-- Total Orders Card -->
@@ -106,7 +106,7 @@
                     </div>
                     <div class="stat-info">
                         <div class="stat-label">TOTAL ORDERS</div>
-                        <div class="stat-value" id="totalOrders">47</div>
+                        <div class="stat-value" id="totalOrders"><i class="fas fa-spinner fa-spin"></i></div>
                     </div>
                     <div class="trend-icon">
                         <i class="fas fa-arrow-trend-up"></i>
@@ -125,58 +125,9 @@
                 </div>
 
                 <div class="orders-list" id="ordersList">
-                    <!-- Order 1 -->
-                    <div class="order-item">
-                        <div class="order-icon-wrapper delivered">
-                            <i class="fas fa-box"></i>
-                        </div>
-                        <div class="order-details">
-                            <div class="order-id-row">
-                                <span class="order-id">ORD-1128</span>
-                                <span class="order-status delivered">Delivered</span>
-                            </div>
-                            <div class="order-items-text">Tomato, Mustard Greens, Potato +1 more</div>
-                        </div>
-                        <div class="order-meta">
-                            <div class="order-price">Rs.3,850</div>
-                            <div class="order-date">Nov 28, 2024</div>
-                        </div>
-                    </div>
-
-                    <!-- Order 2 -->
-                    <div class="order-item">
-                        <div class="order-icon-wrapper delivered">
-                            <i class="fas fa-box"></i>
-                        </div>
-                        <div class="order-details">
-                            <div class="order-id-row">
-                                <span class="order-id">ORD-1115</span>
-                                <span class="order-status delivered">Delivered</span>
-                            </div>
-                            <div class="order-items-text">Okra (Bhindi), Papaya, Carrot</div>
-                        </div>
-                        <div class="order-meta">
-                            <div class="order-price">Rs.5,200</div>
-                            <div class="order-date">Nov 15, 2024</div>
-                        </div>
-                    </div>
-
-                    <!-- Order 3 -->
-                    <div class="order-item">
-                        <div class="order-icon-wrapper transit">
-                            <i class="fas fa-truck"></i>
-                        </div>
-                        <div class="order-details">
-                            <div class="order-id-row">
-                                <span class="order-id">ORD-1102</span>
-                                <span class="order-status transit">In Transit</span>
-                            </div>
-                            <div class="order-items-text">Mosambi, Guava (Amrood)</div>
-                        </div>
-                        <div class="order-meta">
-                            <div class="order-price">Rs.2,890</div>
-                            <div class="order-date">Nov 2, 2024</div>
-                        </div>
+                    <div style="text-align: center; padding: 3rem 0;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 2.5rem; color: #6b8e23;"></i>
+                        <p style="margin-top: 1rem; color: #718096; font-size: 1rem;">Loading your orders...</p>
                     </div>
                 </div>
             </div>
@@ -197,7 +148,7 @@
                 </a>
 
                 <!-- Support Card -->
-                <a href="{% url 'main:home' %}" class="action-card support">
+                <a href="{% url 'main:home' %}#footerSection" class="action-card support">
                     <div class="action-card-icon">
                         <i class="fas fa-headset"></i>
                     </div>

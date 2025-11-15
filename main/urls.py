@@ -36,6 +36,9 @@ urlpatterns = [
     # Customer Profile API endpoints
     # These endpoints provide customer profile data and order summaries for account pages
     path('api/customer/profile/', views.customer_profile_api, name='customer_profile_api'),
+    path('api/customer/profile/update/', views.update_customer_profile_api, name='update_customer_profile_api'),
+    path('api/customer/change-password/', views.change_password_api, name='change_password_api'),
+    path('api/customer/delete-account/', views.delete_customer_account_api, name='delete_customer_account_api'),
     path('api/customer/orders-summary/', views.customer_orders_summary_api, name='customer_orders_summary_api'),
     path('api/customer/orders/', views.customer_orders_api, name='customer_orders_api'),
     

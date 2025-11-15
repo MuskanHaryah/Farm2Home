@@ -36,14 +36,14 @@
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="profile-info">
-                    <h3>AHMED KHAN</h3>
-                    <p>AHMED.KHAN@EMAIL.COM</p>
+                    <h3 id="profileName">Loading...</h3>
+                    <p id="profileEmail">Loading...</p>
                 </div>
             </div>
 
             <div class="stats-card">
                 <div class="stat-label">TOTAL ORDERS</div>
-                <div class="stat-value">47 Orders</div>
+                <div class="stat-value" id="totalOrders">Loading...</div>
             </div>
 
             <nav class="sidebar-nav">
@@ -102,23 +102,17 @@
                     </div>
                     <div class="section-body">
                         <form id="personalInfoForm">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="firstName">FIRST NAME</label>
-                                    <input type="text" id="firstName" name="firstName" value="Ahmed" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lastName">LAST NAME</label>
-                                    <input type="text" id="lastName" name="lastName" value="Khan" required>
-                                </div>
+                            <div class="form-group">
+                                <label for="firstName">FULL NAME</label>
+                                <input type="text" id="firstName" name="firstName" value="" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">E-MAIL ADDRESS</label>
-                                <input type="email" id="email" name="email" value="ahmed.khan@email.com" required>
+                                <input type="email" id="email" name="email" value="" required>
                             </div>
                             <div class="form-group">
                                 <label for="phone">PHONE NUMBER</label>
-                                <input type="tel" id="phone" name="phone" value="+92 (300) 1234567" required>
+                                <input type="tel" id="phone" name="phone" value="" required>
                             </div>
                             <button type="submit" class="btn-save-changes">
                                 <i class="fas fa-save"></i>

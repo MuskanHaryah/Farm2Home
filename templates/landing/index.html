@@ -483,7 +483,7 @@
                         </div>
 
                         <label class="checkbox-field">
-                            <input type="checkbox" name="agreeTerms" required>
+                            <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
                             <span>I agree to the Terms & Conditions</span>
                         </label>
 
@@ -662,6 +662,9 @@
 
         // Form validation and submission
         document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in and update UI accordingly
+            updateAuthButtonsVisibility();
+            
             const loginFormElement = document.getElementById('loginFormElement');
             const signupFormElement = document.getElementById('signupFormElement');
 
@@ -699,8 +702,11 @@
                             // Show success message
                             alert('Login successful! Welcome back, ' + data.name);
                             
-                            // Redirect to account page
-                            window.location.href = '/account/';
+                            // Close the modal
+                            closeAuthModal();
+                            
+                            // Hide login and signup buttons
+                            updateAuthButtonsVisibility();
                         } else {
                             // Show error message
                             alert(data.error || data.message || 'Login failed. Please check your credentials.');
@@ -724,33 +730,117 @@
                 }
                 return '';
             }
+            
+            // Function to update auth buttons visibility based on login status
+            function updateAuthButtonsVisibility() {
+                const customerId = localStorage.getItem('customer_id');
+                const loginBtn = document.querySelector('.login-btn');
+                const signupBtn = document.querySelector('.signup-btn');
+                
+                if (customerId) {
+                    // User is logged in - hide login and signup buttons
+                    if (loginBtn) loginBtn.style.display = 'none';
+                    if (signupBtn) signupBtn.style.display = 'none';
+                } else {
+                    // User is not logged in - show login and signup buttons
+                    if (loginBtn) loginBtn.style.display = '';
+                    if (signupBtn) signupBtn.style.display = '';
+                }
+            }
 
-            // Signup form validation
+            // Signup form validation and submission
             if (signupFormElement) {
-                signupFormElement.addEventListener('submit', function(e) {
+                signupFormElement.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
                     const fullname = document.getElementById('signup_fullname').value.trim();
                     const email = document.getElementById('signup_email').value.trim();
                     const phone = document.getElementById('signup_phone').value.trim();
+                    const address = document.getElementById('signup_address').value.trim();
                     const password = document.getElementById('signup_password').value.trim();
                     const confirmPassword = document.getElementById('signup_confirm_password').value.trim();
                     const agreeTerms = document.getElementById('agreeTerms').checked;
                     
-                    if (!fullname || !email || !phone || !password || !confirmPassword) {
-                        e.preventDefault();
-                        alert('Please fill in all fields');
+                    // Validate all fields are filled
+                    if (!fullname || !email || !phone || !address || !password || !confirmPassword) {
+                        alert('❌ Please fill in all fields');
                         return;
                     }
                     
+                    // Validate email format
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        alert('❌ Please enter a valid email address');
+                        return;
+                    }
+                    
+                    // Validate password length
+                    if (password.length < 6) {
+                        alert('❌ Password must be at least 6 characters long');
+                        return;
+                    }
+                    
+                    // Validate passwords match
                     if (password !== confirmPassword) {
-                        e.preventDefault();
-                        alert('Passwords do not match');
+                        alert('❌ Passwords do not match');
                         return;
                     }
                     
+                    // Validate terms checkbox
                     if (!agreeTerms) {
-                        e.preventDefault();
-                        alert('Please agree to Terms & Conditions');
+                        alert('❌ Please agree to Terms & Conditions');
                         return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/api/auth/signup/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCsrfToken()
+                            },
+                            body: JSON.stringify({
+                                name: fullname,
+                                email: email,
+                                phone: phone,
+                                address: address,
+                                password: password
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (response.ok && data.success === true) {
+                            // Store customer data in localStorage
+                            localStorage.setItem('customer_id', data.customer_id);
+                            localStorage.setItem('customer_name', data.name);
+                            localStorage.setItem('customer_email', data.email);
+                            
+                            // Show success message
+                            alert('✅ Signup successful! Welcome, ' + data.name + '!');
+                            
+                            // Close the modal
+                            closeAuthModal();
+                            
+                            // Hide login and signup buttons
+                            updateAuthButtonsVisibility();
+                            
+                            // Reset form
+                            signupFormElement.reset();
+                        } else {
+                            // Show specific error message
+                            const errorMsg = data.error || data.message || 'Signup failed. Please try again.';
+                            
+                            // Add emoji based on error type
+                            if (errorMsg.includes('Email already exists') || errorMsg.includes('Phone number already registered')) {
+                                alert('⚠️ ' + errorMsg);
+                            } else {
+                                alert('❌ ' + errorMsg);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Signup error:', error);
+                        alert('An error occurred during signup. Please try again.');
                     }
                 });
             }
@@ -763,6 +853,18 @@
                     document.getElementById('loginForm').style.display === '') {
                     setTimeout(() => openLoginModal(), 100);
                 }
+            }
+
+            // Handle scrolling to hash on page load (e.g., #footerSection)
+            if (window.location.hash) {
+                // Wait for page to fully load
+                setTimeout(() => {
+                    const hash = window.location.hash;
+                    const targetElement = document.querySelector(hash);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
             }
         });
     </script>

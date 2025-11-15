@@ -41,6 +41,12 @@ async function fetchCustomerAddresses() {
         return;
     }
     
+    // Show loading state
+    const loadingState = document.getElementById('loadingState');
+    const emptyState = document.getElementById('emptyState');
+    if (loadingState) loadingState.style.display = 'block';
+    if (emptyState) emptyState.style.display = 'none';
+    
     try {
         const response = await fetch(`/api/customer/addresses/?customer_id=${customerId}`);
         if (!response.ok) {
@@ -70,31 +76,50 @@ async function fetchCustomerAddresses() {
 function renderAddressesUI(addresses) {
     const container = document.getElementById('addressesContainer');
     const emptyState = document.getElementById('emptyState');
+    const loadingState = document.getElementById('loadingState');
+    
     if (!container) return;
     
-    const existingCards = container.querySelectorAll('.address-card:not(.add-new-card)');
-    existingCards.forEach(card => card.remove());
+    // Hide loading state
+    if (loadingState) {
+        loadingState.style.display = 'none';
+    }
+    
+    // Clear container
+    container.innerHTML = '';
     
     if (!addresses || addresses.length === 0) {
+        // No addresses - hide container and show empty state
+        container.style.display = 'none';
         if (emptyState) emptyState.style.display = 'block';
         return;
     }
     
+    // Has addresses - show container and hide empty state
+    container.style.display = 'grid';
     if (emptyState) emptyState.style.display = 'none';
-    const addNewCard = container.querySelector('.add-new-card');
     
     addresses.forEach((address, index) => {
         const card = renderAddressCard(address);
         card.style.animation = `fadeIn 0.4s ease forwards`;
         card.style.animationDelay = `${index * 0.1}s`;
         card.style.opacity = '0';
-        
-        if (addNewCard) {
-            container.insertBefore(card, addNewCard);
-        } else {
-            container.appendChild(card);
-        }
+        container.appendChild(card);
     });
+    
+    // Add the "Add New Address" card at the end
+    const addNewCard = document.createElement('div');
+    addNewCard.className = 'address-card add-new-card';
+    addNewCard.innerHTML = `
+        <div class="add-new-content">
+            <div class="add-icon">
+                <i class="fas fa-plus"></i>
+            </div>
+            <h3>ADD NEW ADDRESS</h3>
+            <p>SAVE A NEW DELIVERY LOCATION</p>
+        </div>
+    `;
+    container.appendChild(addNewCard);
 }
 
 // Step 13: Render individual address card
@@ -491,37 +516,41 @@ async function handleDeleteAddress(addressId) {
     const address = allAddressesData.find(a => a.address_id === addressId);
     const label = address ? address.label : 'this address';
     
-    if (!confirm(`Are you sure you want to delete your ${label} address?`)) return;
-    
-    showLoadingState();
-    
-    try {
-        const response = await fetch(`/api/customer/addresses/${addressId}/delete/?customer_id=${customerId}`, {
-            method: 'DELETE'
-        });
+    // Show custom delete confirmation modal
+    showDeleteConfirmation(label, async () => {
+        showLoadingState();
         
-        const data = await response.json();
-        if (response.ok && data.status === 'success') {
-            if (typeof notifications !== 'undefined') {
-                notifications.success('✅ Address deleted successfully!');
-            }
-            await fetchCustomerAddresses();
-        } else {
-            if (typeof notifications !== 'undefined') {
-                notifications.error(data.message || 'Failed to delete address');
+        try {
+            const response = await fetch(`/api/customer/addresses/${addressId}/delete/?customer_id=${customerId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                }
+            });
+            
+            const data = await response.json();
+            if (response.ok && data.status === 'success') {
+                if (typeof notifications !== 'undefined') {
+                    notifications.success('✅ Address deleted successfully!');
+                }
+                await fetchCustomerAddresses();
             } else {
-                alert(data.message || 'Failed to delete address');
+                if (typeof notifications !== 'undefined') {
+                    notifications.error(data.message || 'Failed to delete address');
+                } else {
+                    alert(data.message || 'Failed to delete address');
+                }
             }
+        } catch (error) {
+            if (typeof notifications !== 'undefined') {
+                notifications.error('Network error. Please try again.');
+            } else {
+                alert('Network error. Please try again.');
+            }
+        } finally {
+            hideLoadingState();
         }
-    } catch (error) {
-        if (typeof notifications !== 'undefined') {
-            notifications.error('Network error. Please try again.');
-        } else {
-            alert('Network error. Please try again.');
-        }
-    } finally {
-        hideLoadingState();
-    }
+    });
 }
 
 // Step 20: Set default address
@@ -652,13 +681,20 @@ function closeModal() {
     }
 }
 
-// Step 25: Logout
+// Step 25: Logout - Use centralized function from account.js
 function handleLogout() {
-    if (!confirm('Are you sure you want to logout?')) return;
-    localStorage.removeItem('customer_id');
-    localStorage.removeItem('customer_name');
-    localStorage.removeItem('customer_email');
-    window.location.replace('/landing/');
+    if (window.accountFunctions && window.accountFunctions.handleAccountLogout) {
+        window.accountFunctions.handleAccountLogout();
+    } else {
+        // Fallback if account.js not loaded
+        if (!confirm('Are you sure you want to logout?')) return;
+        localStorage.removeItem('customer_id');
+        localStorage.removeItem('customer_name');
+        localStorage.removeItem('customer_email');
+        localStorage.removeItem('farm2home_cart');
+        localStorage.removeItem('checkoutCart');
+        window.location.replace('/landing/');
+    }
 }
 
 // Step 26: Helper functions
@@ -681,6 +717,137 @@ function editAddress(id) { showEditAddressModal(id); }
 function deleteAddress(id) { handleDeleteAddress(id); }
 function setDefaultAddress(id) { handleSetDefaultAddress(id); }
 
+// Custom Delete Confirmation Modal
+function showDeleteConfirmation(addressLabel, onConfirm) {
+    // Create modal backdrop
+    const backdrop = document.createElement('div');
+    backdrop.className = 'delete-modal-backdrop';
+    backdrop.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        animation: fadeIn 0.2s ease;
+    `;
+    
+    // Create modal container
+    const modal = document.createElement('div');
+    modal.className = 'delete-modal';
+    modal.style.cssText = `
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 420px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.3s ease;
+        text-align: center;
+    `;
+    
+    // Modal content
+    modal.innerHTML = `
+        <div style="margin-bottom: 1.5rem;">
+            <div style="width: 64px; height: 64px; background: #fee; border-radius: 50%; 
+                        display: flex; align-items: center; justify-content: center; 
+                        margin: 0 auto 1rem;">
+                <i class="fas fa-trash-alt" style="font-size: 28px; color: #dc3545;"></i>
+            </div>
+            <h3 style="color: #2d3748; margin: 0 0 0.5rem 0; font-size: 1.5rem; font-weight: 600;">
+                Delete Address?
+            </h3>
+            <p style="color: #718096; margin: 0; font-size: 0.95rem; line-height: 1.5;">
+                Are you sure you want to delete your <strong>${addressLabel}</strong> address? This action cannot be undone.
+            </p>
+        </div>
+        <div style="display: flex; gap: 0.75rem; justify-content: center;">
+            <button id="cancelDelete" style="
+                padding: 0.75rem 1.5rem;
+                border: 2px solid #e2e8f0;
+                background: white;
+                color: #4a5568;
+                border-radius: 8px;
+                font-size: 0.95rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+                min-width: 100px;
+            ">Cancel</button>
+            <button id="confirmDelete" style="
+                padding: 0.75rem 1.5rem;
+                border: none;
+                background: #dc3545;
+                color: white;
+                border-radius: 8px;
+                font-size: 0.95rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+                min-width: 100px;
+            ">Delete</button>
+        </div>
+    `;
+    
+    backdrop.appendChild(modal);
+    document.body.appendChild(backdrop);
+    
+    // Add hover effects
+    const cancelBtn = modal.querySelector('#cancelDelete');
+    const confirmBtn = modal.querySelector('#confirmDelete');
+    
+    cancelBtn.addEventListener('mouseenter', () => {
+        cancelBtn.style.background = '#f7fafc';
+        cancelBtn.style.borderColor = '#cbd5e0';
+    });
+    cancelBtn.addEventListener('mouseleave', () => {
+        cancelBtn.style.background = 'white';
+        cancelBtn.style.borderColor = '#e2e8f0';
+    });
+    
+    confirmBtn.addEventListener('mouseenter', () => {
+        confirmBtn.style.background = '#c82333';
+    });
+    confirmBtn.addEventListener('mouseleave', () => {
+        confirmBtn.style.background = '#dc3545';
+    });
+    
+    // Handle button clicks
+    cancelBtn.addEventListener('click', () => {
+        backdrop.style.animation = 'fadeOut 0.2s ease';
+        setTimeout(() => backdrop.remove(), 200);
+    });
+    
+    confirmBtn.addEventListener('click', () => {
+        backdrop.style.animation = 'fadeOut 0.2s ease';
+        setTimeout(() => backdrop.remove(), 200);
+        onConfirm();
+    });
+    
+    // Close on backdrop click
+    backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) {
+            backdrop.style.animation = 'fadeOut 0.2s ease';
+            setTimeout(() => backdrop.remove(), 200);
+        }
+    });
+    
+    // Close on Escape key
+    const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+            backdrop.style.animation = 'fadeOut 0.2s ease';
+            setTimeout(() => backdrop.remove(), 200);
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    document.addEventListener('keydown', handleEscape);
+}
+
 // Animations
 const style = document.createElement('style');
 style.textContent = `
@@ -691,6 +858,16 @@ style.textContent = `
     @keyframes fadeOut {
         from { opacity: 1; transform: scale(1); }
         to { opacity: 0; transform: scale(0.9); }
+    }
+    @keyframes slideUp {
+        from { 
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to { 
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 `;
 document.head.appendChild(style);

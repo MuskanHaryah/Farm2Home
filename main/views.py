@@ -3,6 +3,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 from .models import Product, Inventory, Customer, Order, OrderItem, Cart, Address
 from .serializers import (
     ProductSerializer, ProductListSerializer, 
@@ -174,12 +175,13 @@ class CartViewSet(viewsets.ModelViewSet):
     DELETE /api/cart/{id}/ - Remove cart item
     """
     serializer_class = CartSerializer
+    lookup_field = 'cart_id'
     
     def get_queryset(self):
         customer_id = self.request.query_params.get('customer_id')
         if customer_id:
             return Cart.objects.filter(customer_id=customer_id).select_related('product', 'product__inventory')
-        return Cart.objects.none()
+        return Cart.objects.all().select_related('product', 'product__inventory')
     
     @action(detail=False, methods=['post'])
     def add_item(self, request):
@@ -574,15 +576,15 @@ def api_login(request):
             # Password is incorrect
             return Response({
                 'success': False,
-                'error': 'Invalid email or password'
+                'error': 'Incorrect password. Please try again.'
             }, status=status.HTTP_401_UNAUTHORIZED)
     
     except Customer.DoesNotExist:
         # Customer with this email doesn't exist
         return Response({
             'success': False,
-            'error': 'Invalid email or password'
-        }, status=status.HTTP_401_UNAUTHORIZED)
+            'error': 'No account exists with this email. Please sign up first.'
+        }, status=status.HTTP_404_NOT_FOUND)
     
     except Exception as e:
         # Handle unexpected errors
@@ -665,6 +667,13 @@ def api_signup(request):
             return Response({
                 'success': False,
                 'error': 'Email already exists. Please login instead.'
+            }, status=status.HTTP_409_CONFLICT)
+        
+        # Check if phone number already exists
+        if Customer.objects.filter(phone=phone).exists():
+            return Response({
+                'success': False,
+                'error': 'Phone number already registered. Please use a different number or login.'
             }, status=status.HTTP_409_CONFLICT)
         
         # Hash password using Django's make_password
@@ -926,6 +935,200 @@ def customer_orders_api(request):
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@api_view(['PUT', 'PATCH'])
+@csrf_exempt
+def update_customer_profile_api(request):
+    """
+    API endpoint to update customer profile information
+    
+    Expected PUT/PATCH data:
+    {
+        "customer_id": 1,
+        "name": "John Doe",
+        "email": "john@example.com",
+        "phone": "1234567890"
+    }
+    
+    Returns on success:
+    {
+        "success": true,
+        "message": "Profile updated successfully",
+        "data": {
+            "customer_id": 1,
+            "name": "John Doe",
+            "email": "john@example.com",
+            "phone": "1234567890"
+        }
+    }
+    
+    Returns on failure:
+    {
+        "success": false,
+        "error": "Error message"
+    }
+    
+    Use Case: Called from settings page when user updates personal information
+    """
+    customer_id = request.data.get('customer_id')
+    
+    # Validate customer_id
+    if not customer_id:
+        return Response({
+            'success': False,
+            'error': 'Customer ID is required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # Get the customer
+        customer = Customer.objects.get(customer_id=customer_id)
+        
+        # Extract update data
+        name = request.data.get('name', '').strip()
+        email = request.data.get('email', '').strip()
+        phone = request.data.get('phone', '').strip()
+        
+        # Validate required fields
+        if not name or not email or not phone:
+            return Response({
+                'success': False,
+                'error': 'Name, email, and phone are required',
+                'missing_fields': []
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Validate email format
+        if '@' not in email or '.' not in email:
+            return Response({
+                'success': False,
+                'error': 'Invalid email format'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if email is already taken by another customer
+        if Customer.objects.filter(email__iexact=email).exclude(customer_id=customer_id).exists():
+            return Response({
+                'success': False,
+                'error': 'Email already exists'
+            }, status=status.HTTP_409_CONFLICT)
+        
+        # Update customer fields
+        customer.name = name
+        customer.email = email
+        customer.phone = phone
+        customer.save()
+        
+        # Return success response
+        return Response({
+            'success': True,
+            'message': 'Profile updated successfully',
+            'data': {
+                'customer_id': customer.customer_id,
+                'name': customer.name,
+                'email': customer.email,
+                'phone': customer.phone
+            }
+        }, status=status.HTTP_200_OK)
+    
+    except Customer.DoesNotExist:
+        return Response({
+            'success': False,
+            'error': f'Customer with ID {customer_id} not found'
+        }, status=status.HTTP_404_NOT_FOUND)
+    
+    except Exception as e:
+        return Response({
+            'success': False,
+            'error': 'Failed to update profile',
+            'detail': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@csrf_exempt
+def change_password_api(request):
+    """
+    API endpoint to change customer password
+    
+    Expected POST data:
+    {
+        "customer_id": 1,
+        "current_password": "oldpass123",
+        "new_password": "newpass123"
+    }
+    
+    Returns on success:
+    {
+        "success": true,
+        "message": "Password changed successfully"
+    }
+    
+    Returns on failure:
+    {
+        "success": false,
+        "error": "Error message"
+    }
+    
+    Use Case: Called from settings page when user changes password
+    """
+    from django.contrib.auth.hashers import check_password, make_password
+    
+    customer_id = request.data.get('customer_id')
+    current_password = request.data.get('current_password', '')
+    new_password = request.data.get('new_password', '')
+    
+    # Validate required fields
+    if not customer_id:
+        return Response({
+            'success': False,
+            'error': 'Customer ID is required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    if not current_password or not new_password:
+        return Response({
+            'success': False,
+            'error': 'Current password and new password are required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Validate new password length
+    if len(new_password) < 6:
+        return Response({
+            'success': False,
+            'error': 'New password must be at least 6 characters long'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # Get the customer
+        customer = Customer.objects.get(customer_id=customer_id)
+        
+        # Verify current password
+        if not check_password(current_password, customer.password):
+            return Response({
+                'success': False,
+                'error': 'Current password is incorrect'
+            }, status=status.HTTP_401_UNAUTHORIZED)
+        
+        # Hash and save new password
+        customer.password = make_password(new_password)
+        customer.save()
+        
+        # Return success response
+        return Response({
+            'success': True,
+            'message': 'Password changed successfully'
+        }, status=status.HTTP_200_OK)
+    
+    except Customer.DoesNotExist:
+        return Response({
+            'success': False,
+            'error': f'Customer with ID {customer_id} not found'
+        }, status=status.HTTP_404_NOT_FOUND)
+    
+    except Exception as e:
+        return Response({
+            'success': False,
+            'error': 'Failed to change password',
+            'detail': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 # ==================== HTML VIEWS ====================
 
 def home(request):
@@ -975,7 +1178,15 @@ def account_payment(request):
 
 
 def account_settings(request):
-    """Render account settings page"""
+    """
+    Render account settings page with customer data
+    Requires customer_id in localStorage (set during login)
+    """
+    # Note: Since we're using localStorage for auth (not Django sessions),
+    # we don't check authentication here. The JavaScript will handle
+    # redirecting if customer_id is not in localStorage.
+    # The page will load, and JS will fetch customer data via API.
+    
     return render(request, 'account/settings.html')
 
 
@@ -1255,16 +1466,7 @@ def delete_address_api(request, address_id):
                 'message': 'You are not authorized to delete this address'
             }, status=status.HTTP_403_FORBIDDEN)
         
-        # Check if this is the only address
-        customer_addresses_count = Address.objects.filter(customer=address.customer).count()
-        
-        if customer_addresses_count == 1:
-            return Response({
-                'status': 'error',
-                'message': 'Cannot delete the only address. Please add another address first.'
-            }, status=status.HTTP_400_BAD_REQUEST)
-        
-        # If deleting default address, set another as default
+        # If deleting default address, set another as default (if there are other addresses)
         if address.is_default:
             # Get another address to set as default
             another_address = Address.objects.filter(
@@ -1350,5 +1552,62 @@ def set_default_address_api(request, address_id):
         return Response({
             'status': 'error',
             'message': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['DELETE'])
+def delete_customer_account_api(request):
+    """
+    Delete a customer account permanently
+    DELETE /api/customer/delete-account/
+    
+    Body:
+        - customer_id: int (required)
+    
+    Returns:
+        - 200: Account deleted successfully
+        - 400: Invalid request
+        - 404: Customer not found
+        - 500: Server error
+    
+    This will delete:
+    - Customer record
+    - All associated orders
+    - All associated addresses
+    - Cart items (cascading delete)
+    """
+    try:
+        customer_id = request.data.get('customer_id')
+        
+        if not customer_id:
+            return Response({
+                'status': 'error',
+                'message': 'customer_id is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get the customer
+        try:
+            customer = Customer.objects.get(customer_id=customer_id)
+        except Customer.DoesNotExist:
+            return Response({
+                'status': 'error',
+                'message': 'Customer not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Store customer name for response message
+        customer_name = customer.name
+        
+        # Delete the customer (this will cascade delete related records)
+        customer.delete()
+        
+        return Response({
+            'status': 'success',
+            'message': f'Account for {customer_name} has been permanently deleted'
+        }, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': f'Failed to delete account: {str(e)}'
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

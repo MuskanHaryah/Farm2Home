@@ -174,6 +174,7 @@
     align-items: center;
     gap: 1rem;
     padding: 1.5rem;
+    padding-right: 1.5rem;
     border-bottom: 1px solid var(--border-light);
     background: var(--white);
 }
@@ -257,6 +258,7 @@
 /* Order Content */
 .order-content {
     padding: 1.5rem;
+    padding-right: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
@@ -315,11 +317,13 @@
 /* Order Footer */
 .order-footer {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     padding-top: 1rem;
+    padding-right: 2rem;
     border-top: 1px solid var(--border-light);
     background: var(--white);
+    position: relative;
 }
 
 .total-amount {
@@ -378,6 +382,11 @@
 .reorder-btn {
     background: var(--primary-green);
     color: var(--white);
+    padding: 0.85rem 2.5rem;
+    font-size: 0.85rem;
+    position: absolute;
+    right: 2rem;
+    flex-shrink: 0;
 }
 
 .reorder-btn:hover {
