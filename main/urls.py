@@ -53,13 +53,6 @@ urlpatterns = [
     path('api/customer/addresses/<int:address_id>/delete/', views.delete_address_api, name='delete_address_api'),
     path('api/customer/addresses/<int:address_id>/set-default/', views.set_default_address_api, name='set_default_address_api'),
     
-    # Payment Method API endpoints
-    # These endpoints handle CRUD operations for customer payment methods
-    path('api/payment-methods/', views.get_payment_methods_api, name='get_payment_methods_api'),
-    path('api/payment-methods/add/', views.add_payment_method_api, name='add_payment_method_api'),
-    path('api/payment-methods/<int:payment_id>/delete/', views.delete_payment_method_api, name='delete_payment_method_api'),
-    path('api/payment-methods/<int:payment_id>/set-default/', views.set_default_payment_api, name='set_default_payment_api'),
-    
     # Stripe Payment API endpoints (TEST MODE)
     # These endpoints handle Stripe payment processing in test mode
     path('api/stripe/create-payment-intent/', views.create_payment_intent, name='create_payment_intent'),
@@ -81,7 +74,6 @@ urlpatterns = [
     path('account/new/', views.account_new, name='account_new'),
     path('account/addresses/', views.account_addresses, name='account_addresses'),
     path('account/orders/', views.account_orders, name='account_orders'),
-    path('account/payment/', views.account_payment, name='account_payment'),
     path('account/settings/', views.account_settings, name='account_settings'),
     
     # Auth

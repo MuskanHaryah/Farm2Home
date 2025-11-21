@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Customer, Product, Inventory, Order, OrderItem, Cart, Address, PaymentMethod
+from .models import Customer, Product, Inventory, Order, OrderItem, Cart, Address
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -876,70 +876,3 @@ class AddressSerializer(serializers.ModelSerializer):
                 })
         
         return data
-
-
-class PaymentMethodSerializer(serializers.ModelSerializer):
-    """
-    Serializer for PaymentMethod model
-    Handles payment method data with validation for card details
-    SECURITY: Only processes last 4 digits of card, never full card number or CVV
-    """
-    payment_type_display = serializers.CharField(source='get_payment_type_display', read_only=True)
-    expiry_date = serializers.SerializerMethodField()
-    
-    class Meta:
-        model = PaymentMethod
-        fields = [
-            'payment_id', 'customer', 'payment_type', 'payment_type_display',
-            'card_holder_name', 'card_last_4', 'expiry_month', 'expiry_year',
-            'expiry_date', 'bank_name', 'is_default', 'created_at', 'updated_at'
-        ]
-        read_only_fields = ['payment_id', 'created_at', 'updated_at']
-    
-    def get_expiry_date(self, obj):
-        """Return expiry date in MM/YY format"""
-        return f"{obj.expiry_month}/{obj.expiry_year}"
-    
-    def validate_card_last_4(self, value):
-        """Validate last 4 digits of card"""
-        if not value.isdigit() or len(value) != 4:
-            raise serializers.ValidationError("Card last 4 must be exactly 4 digits")
-        return value
-    
-    def validate_expiry_month(self, value):
-        """Validate expiry month (01-12)"""
-        if not value.isdigit() or len(value) != 2:
-            raise serializers.ValidationError("Month must be 2 digits (01-12)")
-        
-        month = int(value)
-        if month < 1 or month > 12:
-            raise serializers.ValidationError("Month must be between 01 and 12")
-        
-        return value
-    
-    def validate_expiry_year(self, value):
-        """Validate expiry year (YY format)"""
-        if not value.isdigit() or len(value) != 2:
-            raise serializers.ValidationError("Year must be 2 digits (e.g., 25)")
-        return value
-    
-    def validate(self, data):
-        """Cross-field validation including expiry date check"""
-        # Check if card is expired
-        if 'expiry_month' in data and 'expiry_year' in data:
-            from datetime import datetime
-            
-            month = int(data['expiry_month'])
-            year = int(data['expiry_year']) + 2000  # Convert YY to YYYY
-            
-            current_date = datetime.now()
-            current_year = current_date.year
-            current_month = current_date.month
-            
-            if year < current_year or (year == current_year and month < current_month):
-                raise serializers.ValidationError({
-                    'expiry_date': 'Card has expired. Please use a valid card.'
-                })
-        
-        return data
-
