@@ -306,8 +306,9 @@ function setupEventListeners() {
         console.log('Cart overlay listener attached');
     }
     
-    // Checkout button
+    // Checkout button with animation
     const checkoutBtn = document.querySelector('.checkout-btn');
+    
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', function() {
             if (cart.length === 0) {
@@ -319,20 +320,14 @@ function setupEventListeners() {
                 return;
             }
             
-            // Add cart animation
-            checkoutBtn.classList.add('animate');
+            // Show animation on button only (not on HTML element)
+            checkoutBtn.classList.add('button-animate');
             
-            // Remove animation class after animation completes
-            setTimeout(() => {
-                checkoutBtn.classList.remove('animate');
-            }, 800);
-            
-            // Save cart to localStorage before redirecting
+            // Save cart and redirect after animation
             setTimeout(() => {
                 localStorage.setItem('checkoutCart', JSON.stringify(cart));
-                // Redirect to checkout page
                 window.location.href = '/checkout/';
-            }, 600);
+            }, 800);
         });
         console.log('Checkout button listener attached');
     }

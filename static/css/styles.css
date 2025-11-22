@@ -874,6 +874,15 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.add-to-cart-btn::before {
+    content: "🛒";
+    font-size: 16px;
 }
 
 .add-to-cart-btn:hover {
@@ -1519,73 +1528,180 @@ body {
 }
 
 .checkout-btn {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     width: 100%;
-    padding: 12px 25px;
-    background-color: #5dbf4d;
+    padding: 16px 20px;
+    height: auto;
+    background-color: var(--primary-green);
     color: white;
     border: none;
-    border-radius: 25px;
-    font-size: 15px;
+    border-radius: 32px;
+    font-size: 1em;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 8px;
     position: relative;
-    overflow: visible;
+    overflow: hidden;
     box-shadow: 0 4px 12px rgba(93, 191, 77, 0.3);
+    -webkit-tap-highlight-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.checkout-btn:hover {
-    background-color: #4da83d;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(93, 191, 77, 0.4);
+.checkout-btn span {
+    margin-left: 8px;
 }
 
+.checkout-btn:focus {
+    box-shadow: 0 8px 24px rgba(93, 191, 77, 0.5);
+    outline: none;
+}
+
+.checkout-btn:hover,
 .checkout-btn:active {
-    transform: translateY(0);
+    background-color: var(--dark-green);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(93, 191, 77, 0.4);
 }
 
-.checkout-btn i:first-child {
-    font-size: 18px;
-    transition: all 0.3s ease;
-    position: relative;
+#cartIcon {
+    transform-origin: 20% 100%;
+    opacity: 1;
 }
 
-.cart-icon-animation {
+#checkIcon {
     position: absolute;
-    font-size: 18px;
-    color: white;
-    left: 25px;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0;
-    pointer-events: none;
 }
 
-.checkout-btn.animate i:first-child {
-    opacity: 0;
+#checkIcon path {
+    stroke-dasharray: 26px;
+    stroke-dashoffset: 26px;
 }
 
-.checkout-btn.animate .cart-icon-animation {
-    animation: cartFly 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-}
-
-@keyframes cartFly {
-    0% {
-        left: 25px;
-        top: 50%;
+/* Animations for checkout button */
+@keyframes slide-up-fade {
+    from {
+        transform: translateY(0);
         opacity: 1;
-        transform: translateY(-50%) scale(1) rotate(0deg);
+    }
+    to {
+        transform: translateY(-16px);
+        opacity: 0;
+    }
+}
+
+@keyframes slide-down-fade {
+    from {
+        transform: translateY(-16px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes roll-out {
+    0% {
+        transform: translate(0) rotate(0);
+        opacity: 1;
+    }
+    20% {
+        transform: translate(0) rotate(-70deg);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(0) rotate(-45deg);
+        opacity: 1;
     }
     100% {
-        left: 100vw;
-        top: -100vh;
+        transform: translate(60px) rotate(-47deg);
         opacity: 0;
-        transform: translateY(-50%) scale(0.5) rotate(180deg);
     }
+}
+
+@keyframes roll-in {
+    0% {
+        transform: translate(-60px) rotate(-47deg);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(0) rotate(-45deg);
+        opacity: 1;
+    }
+    80% {
+        transform: translate(0) rotate(-70deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(0) rotate(0);
+        opacity: 1;
+    }
+}
+
+@keyframes checkmark {
+    from { stroke-dashoffset: 26px; }
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes checkmark-out {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: 26px; }
+}
+
+/* Checked out state */
+.checked-out .checkout-btn span {
+    animation: slide-up-fade 150ms ease forwards;
+}
+
+.checked-out #cartIcon {
+    animation: roll-out 0.8s ease-in forwards;
+}
+
+.checked-out #checkIcon path {
+    animation: checkmark 150ms ease-in 800ms forwards;
+}
+
+.checked-out .checkout-btn {
+    background-color: #20bf6b;
+    transition-delay: 800ms;
+}
+
+/* Button-level animation (for just the button, not the whole page) */
+.checkout-btn.button-animate span {
+    animation: slide-up-fade 150ms ease forwards;
+}
+
+.checkout-btn.button-animate #cartIcon {
+    animation: roll-out 0.8s ease-in forwards;
+}
+
+.checkout-btn.button-animate #checkIcon path {
+    animation: checkmark 150ms ease-in 800ms forwards;
+}
+
+/* Reset animation */
+.resetting .checkout-btn span {
+    animation: slide-down-fade 150ms ease 800ms forwards;
+}
+
+.resetting #cartIcon {
+    animation: roll-in 0.8s ease-out forwards;
+}
+
+.resetting #checkIcon path {
+    animation: checkmark-out 150ms ease-out forwards;
+}
+
+.resetting .checkout-btn {
+    background-color: #1e3799;
+    transition-delay: 0ms;
 }
 
 /* Empty Cart */

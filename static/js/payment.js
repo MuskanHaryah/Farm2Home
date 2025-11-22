@@ -1,4 +1,4 @@
-// Payment page modal functionality
+    // Payment page modal functionality
 
 // Global variables
 let cart = [];
@@ -915,5 +915,85 @@ async function processPayment(method) {
 
 // Go back
 function goBack() {
+    // Remove any button animation classes before redirecting back to cart
+    const checkoutBtn = document.querySelector('.checkout-btn');
+    if (checkoutBtn) {
+        checkoutBtn.classList.remove('button-animate');
+    }
     window.location.href = '/checkout/';
 }
+
+// Animated order button event handlers
+$(document).ready(function() {
+    const cardNameInput = document.getElementById('cardName');
+    const cardOrderBtn = document.getElementById('cardOrderBtn');
+    
+    // Enable/disable button based on card name input AND card validation
+    function updateCardButtonState() {
+        const hasCardName = cardNameInput && cardNameInput.value.trim().length > 0;
+        const hasCardDetails = stripe && stripeInitialized && cardElement;
+        
+        if (hasCardName && hasCardDetails) {
+            cardOrderBtn.disabled = false;
+        } else {
+            cardOrderBtn.disabled = true;
+        }
+    }
+    
+    if (cardNameInput && cardOrderBtn) {
+        // Check state when user types in card name
+        cardNameInput.addEventListener('input', function() {
+            updateCardButtonState();
+        });
+        
+        // Also check initial state after Stripe initializes
+        const checkStripeInterval = setInterval(() => {
+            if (stripeInitialized) {
+                updateCardButtonState();
+                clearInterval(checkStripeInterval);
+            }
+        }, 100);
+    }
+    
+    // Handle card payment button click
+    $('#cardOrderBtn').click(function(e) {
+        e.preventDefault();
+        
+        // Validate card details first
+        if (!validateCardPayment()) {
+            return; // Validation failed, don't animate
+        }
+        
+        let button = $(this);
+        if(!button.hasClass('animate')) {
+            // Trigger the animation only after validation passes
+            button.addClass('animate');
+            
+            // Process the payment
+            processPayment('card');
+            
+            // Reset animation after 10 seconds
+            setTimeout(() => {
+                button.removeClass('animate');
+            }, 10000);
+        }
+    });
+    
+    // Handle COD payment button click
+    $('#codOrderBtn').click(function(e) {
+        e.preventDefault();
+        let button = $(this);
+        if(!button.hasClass('animate')) {
+            // Trigger the animation
+            button.addClass('animate');
+            
+            // Process the payment
+            processPayment('cod');
+            
+            // Reset animation after 10 seconds
+            setTimeout(() => {
+                button.removeClass('animate');
+            }, 10000);
+        }
+    });
+});

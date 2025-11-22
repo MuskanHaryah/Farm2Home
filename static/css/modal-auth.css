@@ -632,3 +632,175 @@
 .auth-modal-new.active {
     animation: slideIn 0.3s ease forwards;
 }
+
+/* ================================
+   CALLBACK REQUEST MODAL
+   ================================ */
+
+.callback-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    display: none;
+    opacity: 0;
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 500px;
+    width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.callback-modal.active {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.callback-modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    position: relative;
+}
+
+.callback-modal .modal-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.3s;
+    z-index: 10;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.callback-modal .modal-close-btn:hover {
+    color: #333;
+}
+
+.callback-header {
+    margin-bottom: 2rem;
+}
+
+.callback-header h2 {
+    font-size: 1.75rem;
+    color: #2c5f2d;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.callback-header p {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.callback-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.callback-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.callback-form label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.callback-form .required {
+    color: #ff6b35;
+}
+
+.callback-form input,
+.callback-form select,
+.callback-form textarea {
+    padding: 0.9rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: all 0.3s;
+    background: #f8f9fa;
+}
+
+.callback-form input:focus,
+.callback-form select:focus,
+.callback-form textarea:focus {
+    outline: none;
+    border-color: #5dbf4d;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(93, 191, 77, 0.1);
+}
+
+.callback-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.callback-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.callback-actions button {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+    color: white;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.btn-cancel {
+    background: white;
+    color: #666;
+    border: 2px solid #ddd !important;
+}
+
+.btn-cancel:hover {
+    background: #f8f9fa;
+    border-color: #999 !important;
+}
+
+@media (max-width: 600px) {
+    .callback-modal-content {
+        padding: 1.5rem;
+    }
+
+    .callback-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .callback-actions {
+        flex-direction: column;
+    }
+}

@@ -47,6 +47,14 @@
 
         <!-- Navigation Menu -->
         <nav class="sidebar-nav">
+            <a href="{% url 'main:home' %}" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>HOME</span>
+            </a>
+            <a href="{% url 'main:catalog' %}" class="nav-item">
+                <i class="fas fa-shopping-bag"></i>
+                <span>PRODUCTS</span>
+            </a>
             <a href="{% url 'main:account_home' %}" class="nav-item active">
                 <i class="fas fa-th-large"></i>
                 <span>OVERVIEW</span>

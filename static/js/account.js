@@ -322,3 +322,26 @@ function showLogoutConfirmation(callback) {
 window.accountFunctions = window.accountFunctions || {};
 window.accountFunctions.handleAccountLogout = handleAccountLogout;
 
+// Search Functionality - Redirect to catalog with search query
+const searchInput = document.getElementById('accountSearch');
+const searchButton = document.querySelector('.search-button');
+
+if (searchInput && searchButton) {
+    // Search on button click
+    searchButton.addEventListener('click', performSearch);
+    
+    // Search on Enter key
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+}
+
+function performSearch() {
+    const query = searchInput.value.trim();
+    if (query) {
+        // Redirect to catalog page with search query as parameter
+        window.location.href = `/catalog/?search=${encodeURIComponent(query)}`;
+    }
+}

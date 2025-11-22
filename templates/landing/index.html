@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/landing.css' %}">
     <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
     <link rel="stylesheet" href="{% static 'css/modal-auth.css' %}">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -64,19 +65,135 @@
         </div>
     </section>
 
-    <!-- Featured Categories Section -->
-    <section class="featured-categories-section" id="about">
-        <!-- Full Width Featured Image -->
+    <!-- About Farm2Home Section -->
+    <section class="about-farm-section" id="about">
+        <div class="container">
+            <div class="about-header">
+                <h2>About Farm2Home</h2>
+                <p>Connecting local farms directly to your table.</p>
+            </div>
+
+            <div class="about-cards-grid">
+                <!-- Card 1 -->
+                <div class="about-card">
+                    <div class="about-card-image">
+                        <img src="{% static 'images/card1.jpg' %}" alt="Our Mission">
+                    </div>
+                    <div class="about-card-content">
+                        <h3>Our Mission</h3>
+                        <p>To provide fresh locally-sourced produce while supporting sustainable farming practices</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="about-card">
+                    <div class="about-card-image">
+                        <img src="{% static 'images/card2.jpg' %}" alt="Our Farms">
+                    </div>
+                    <div class="about-card-content">
+                        <h3>Our Farms</h3>
+                        <p>Partnering in trusted local farms commited of quality and freshness.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="about-card">
+                    <div class="about-card-image">
+                        <img src="{% static 'images/card3.png' %}" alt="Our Impact">
+                    </div>
+                    <div class="about-card-content">
+                        <h3>Our Impact</h3>
+                        <p>Reducing food miles and connecting of communities through healthy exiting</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="featured-categories-section">
         <div class="featured-content-wrapper">
+            <h2 class="featured-heading">Our Products</h2>
             <div class="featured-image-container">
-                <img src="{% static 'images/featureprod.jpg' %}" alt="Featured Products" class="featured-bg-image">
+                <lottie-player
+                    src="{% static 'Re fork farmer.json' %}"
+                    background="transparent"
+                    speed="1"
+                    class="featured-products-image"
+                    loop
+                    autoplay>
+                </lottie-player>
                 
-                <!-- Shop Now Button Overlay -->
-                <div class="featured-cart-button-overlay">
-                    <a href="{% url 'main:catalog' %}" class="featured-cart-btn">
-                        <i class="fas fa-shopping-cart"></i>
-                        Shop Now
+                <!-- Content overlays inside the white cards -->
+                <div class="product-content-overlay vegetables-content">
+                    <h3>Purely Fresh Vegetables</h3>
+                    <p>Premium quality vegetables at special price</p>
+                    <div class="product-image-overlay">
+                        <img src="{% static 'images/vegetables/carrot.png' %}" alt="Vegetables">
+                    </div>
+                    <a href="{% url 'main:catalog' %}?category=vegetables" class="shop-now-btn">
+                        Shop Now →
                     </a>
+                </div>
+                
+                <div class="product-content-overlay fruits-content">
+                    <h3>Fresh Fruits, Pure Quality</h3>
+                    <p>Handpicked fresh fruits directly from farms</p>
+                    <div class="product-image-overlay">
+                        <img src="{% static 'images/fruits/pineapple.png' %}" alt="Fruits">
+                    </div>
+                    <a href="{% url 'main:catalog' %}?category=fruits" class="shop-now-btn">
+                        Shop Now →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- B2B Section -->
+    <section class="b2b-section" id="b2bSection">
+        <div class="b2b-content">
+            <h2>B2B Service</h2>
+            <h3>Wholesale Pricing Info</h3>
+            
+            <div class="b2b-features">
+                <div class="b2b-feature">
+                    <span class="feature-check">✅</span>
+                    <span>Wholesale Pricing</span>
+                </div>
+                <div class="b2b-feature">
+                    <span class="feature-check">✅</span>
+                    <span>Daily Fresh Delivery</span>
+                </div>
+                <div class="b2b-feature">
+                    <span class="feature-check">✅</span>
+                    <span>Flexible Payment Terms</span>
+                </div>
+                <div class="b2b-feature">
+                    <span class="feature-check">✅</span>
+                    <span>Dedicated Account Manager</span>
+                </div>
+            </div>
+
+            <div class="b2b-actions">
+                <a href="#" class="b2b-btn primary-btn">
+                    <span>📋</span>
+                    Request Quote
+                </a>
+                <a href="tel:+1234567890" class="b2b-btn secondary-btn">
+                    <span>📞</span>
+                    Call Us
+                </a>
+            </div>
+
+            <div class="b2b-stats">
+                <div class="stat-item">
+                    <strong>500+</strong>
+                    <span>B2B Clients</span>
+                </div>
+                <div class="stat-item">
+                    <strong>50kg+</strong>
+                    <span>Minimum Order</span>
                 </div>
             </div>
         </div>
@@ -333,55 +450,18 @@
         </div>
     </div>
 
-    <!-- About Farm2Home Section -->
-    <section class="about-farm-section">
-        <div class="container">
-            <div class="about-header">
-                <h2>About Farm2Home</h2>
-                <p>Connecting local farms directly to your table.</p>
-            </div>
-
-            <div class="about-cards-grid">
-                <!-- Card 1 -->
-                <div class="about-card">
-                    <div class="about-card-image">
-                        <img src="{% static 'images/card1.jpg' %}" alt="Our Mission">
-                    </div>
-                    <div class="about-card-content">
-                        <h3>Our Mission</h3>
-                        <p>To provide fresh locally-sourced produce while supporting sustainable farming practices</p>
-                    </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="about-card">
-                    <div class="about-card-image">
-                        <img src="{% static 'images/card2.jpg' %}" alt="Our Farms">
-                    </div>
-                    <div class="about-card-content">
-                        <h3>Our Farms</h3>
-                        <p>Partnering in trusted local farms commited of quality and freshness.</p>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="about-card">
-                    <div class="about-card-image">
-                        <img src="{% static 'images/card3.png' %}" alt="Our Impact">
-                    </div>
-                    <div class="about-card-content">
-                        <h3>Our Impact</h3>
-                        <p>Reducing food miles and connecting of communities through healthy exiting</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Why Farm2Home -->
     <section class="why-farm2home-section" id="whyFarm2HomeSection">
         <!-- Coin Falling Animation -->
-        <div id="coinAnimation" class="coin-animation-container"></div>
+        <lottie-player
+            id="coinAnimation"
+            src="{% static 'Coin Falling Animation.json' %}"
+            background="transparent"
+            speed="1"
+            class="coin-animation-container"
+            loop
+            autoplay>
+        </lottie-player>
         
         <!-- Why Farm2Home Content Overlay -->
         <div class="why-farm2home-content-overlay">
@@ -478,16 +558,11 @@
         // Apply about section background image
         const aboutSection = document.querySelector('.about-farm-section');
         aboutSection.style.backgroundImage = "url('{% static 'images/about.png' %}')";
-        aboutSection.style.backgroundSize = "100% auto";
-        aboutSection.style.backgroundPosition = "top center";
-        aboutSection.style.backgroundRepeat = "no-repeat";
+        // backgroundSize handled by CSS to avoid extra white space
 
         // Apply why farm2home section background image
         const whySection = document.getElementById('whyFarm2HomeSection');
         whySection.style.backgroundImage = "url('{% static 'images/whyfarm2home.png' %}')";
-        whySection.style.backgroundSize = "100% auto";
-        whySection.style.backgroundPosition = "top center";
-        whySection.style.backgroundRepeat = "no-repeat";
 
         // ================================
         // FRESH AUTH MODAL FUNCTIONS
@@ -1047,46 +1122,8 @@
         // ================================
         // COIN FALLING ANIMATION ON SCROLL
         // ================================
-        
-        let coinAnimationPlayed = false;
-
-        function playFarmInvestmentAnimation() {
-            const section = document.getElementById('whyFarm2HomeSection');
-            const sectionTop = section.getBoundingClientRect().top;
-            const windowHeight = window.innerHeight;
-
-            // Check if section is in viewport
-            if (sectionTop < windowHeight && !coinAnimationPlayed) {
-                coinAnimationPlayed = true;
-                
-                // Load and play Lottie animation
-                const animationContainer = document.getElementById('coinAnimation');
-                
-                // Create coins falling animation
-                createCoinFallingAnimation();
-            }
-        }
-
-        function createCoinFallingAnimation() {
-            const container = document.getElementById('coinAnimation');
-            
-            // Clear previous coins
-            container.innerHTML = '';
-
-            // Create multiple falling coins
-            const coinCount = 8;
-            for (let i = 0; i < coinCount; i++) {
-                const coin = document.createElement('div');
-                coin.className = 'falling-coin';
-                coin.style.left = Math.random() * 100 + '%';
-                coin.style.animationDelay = (i * 0.2) + 's';
-                coin.innerHTML = '💰';
-                container.appendChild(coin);
-            }
-        }
-
-        // Listen for scroll events
-        window.addEventListener('scroll', playFarmInvestmentAnimation);
+        // Animation is now handled by Lottie player with autoplay
+        // No additional JavaScript needed
     </script>
 
 </body>
