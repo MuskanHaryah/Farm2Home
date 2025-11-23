@@ -41,12 +41,20 @@
                 </div>
             </div>
 
-            <div class="stats-card">
-                <div class="stat-label">TOTAL ORDERS</div>
-                <div class="stat-value" id="totalOrders">Loading...</div>
+            <div class="orders-card">
+                <div class="orders-label">TOTAL ORDERS</div>
+                <div class="orders-count" id="totalOrders">Loading...</div>
             </div>
 
             <nav class="sidebar-nav">
+                <a href="{% url 'main:home' %}" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>HOME</span>
+                </a>
+                <a href="{% url 'main:catalog' %}" class="nav-item">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>PRODUCTS</span>
+                </a>
                 <a href="{% url 'main:account_home' %}" class="nav-item">
                     <i class="fas fa-th-large"></i>
                     <span>OVERVIEW</span>

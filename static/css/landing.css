@@ -23,11 +23,11 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: transparent;
+    backdrop-filter: none;
     padding: 1rem 0;
     z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
 }
 
 .nav-container {
@@ -62,7 +62,7 @@ body {
 
 .nav-links a {
     text-decoration: none;
-    color: #333;
+    color: white;
     font-weight: 500;
     transition: color 0.3s;
 }
@@ -82,8 +82,8 @@ body {
 
 .login-btn {
     background: transparent;
-    color: #333;
-    border: 2px solid #ddd;
+    color: white;
+    border: 2px solid white;
 }
 
 .login-btn:hover {
@@ -103,7 +103,7 @@ body {
 }
 
 .shop-btn {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+    background: linear-gradient(135deg, #ff6b35, #ff8c42);
     color: white;
     padding: 0.6rem 1.5rem;
     border-radius: 8px;
@@ -114,7 +114,22 @@ body {
 
 .shop-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+}
+
+.profile-icon {
+    font-size: 1.8rem;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-icon:hover {
+    color: #5dbf4d;
+    transform: scale(1.1);
 }
 
 .hamburger {
@@ -1387,7 +1402,7 @@ body {
     position: relative;
     width: 100%;
     height: auto;
-    min-height: 900px;
+    min-height: 1100px;
     padding: 2rem 0;
     margin: 0;
     display: flex;
@@ -1411,7 +1426,7 @@ body {
     position: relative;
     z-index: 2;
     max-width: 1400px;
-    margin: 0 auto;
+    margin: 8rem auto 0 auto;
     padding: 1rem 2rem;
     color: white;
     display: flex;
@@ -1911,231 +1926,6 @@ body {
 }
 
 /* ================================
-   RESPONSIVE DESIGN
-   ================================ */
-
-@media (max-width: 1024px) {
-    .hero-title {
-        font-size: 4.5rem;
-    }
-    
-    .contact-content {
-        grid-template-columns: 1fr;
-    }
-
-    .summer-discount-card {
-        grid-template-columns: 1fr;
-    }
-
-    /* Featured image responsive */
-    .featured-image-container {
-        max-width: 700px;
-        margin-right: 3%;
-    }
-
-    .featured-cart-button-overlay {
-        bottom: 12%;
-    }
-
-    .featured-cart-btn {
-        padding: 1rem 2.5rem;
-        font-size: 1.1rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .nav-links {
-        display: none;
-    }
-    
-    .hamburger {
-        display: flex;
-    }
-    
-    .hero-title {
-        font-size: 3rem;
-    }
-    
-    .hero-subtitle {
-        font-size: 1.2rem;
-    }
-    
-    .hero-buttons {
-        flex-direction: column;
-    }
-    
-    .btn {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .section-header h2 {
-        font-size: 2rem;
-    }
-    
-    .view-all-link {
-        margin-top: 1rem;
-    }
-    
-    .features-grid,
-    .products-grid,
-    .categories-grid,
-    .deals-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .promo-cards-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .promo-image {
-        position: relative;
-        width: 100%;
-        height: auto;
-        margin-top: 1rem;
-    }
-    
-    .discount-card {
-        min-height: auto;
-    }
-    
-    .summer-discount-card {
-        padding: 2rem;
-        grid-template-columns: 1fr;
-    }
-    
-    .countdown-timer {
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
-    
-    .timer-item {
-        min-width: 70px;
-        padding: 1rem;
-    }
-    
-    .timer-number {
-        font-size: 1.5rem;
-    }
-
-    .modal-content {
-        padding: 2rem 1.5rem;
-    }
-
-    /* Featured image responsive for tablets */
-    .featured-content-wrapper {
-        justify-content: center;
-    }
-
-    .featured-image-container {
-        max-width: 600px;
-        margin-right: 0;
-        margin-left: 0;
-    }
-
-    .featured-bg-image {
-        max-height: 400px;
-    }
-
-    .featured-cart-button-overlay {
-        bottom: 10%;
-    }
-
-    .featured-cart-btn {
-        padding: 0.9rem 2rem;
-        font-size: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-title {
-        font-size: 2.5rem;
-    }
-    
-    .hero-subtitle {
-        font-size: 1rem;
-    }
-    
-    .section-header h2 {
-        font-size: 1.5rem;
-    }
-    
-    .category-circle {
-        width: 120px;
-        height: 120px;
-    }
-    
-    .category-circle img {
-        width: 100px;
-        height: 100px;
-    }
-    
-    .promo-cards-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .discount-badge {
-        font-size: 0.75rem;
-    }
-    
-    .discount-card h3 {
-        font-size: 1.5rem;
-    }
-    
-    .summer-discount-card {
-        padding: 1.5rem;
-    }
-    
-    .countdown-timer {
-        gap: 0.5rem;
-    }
-    
-    .timer-item {
-        min-width: 60px;
-        padding: 0.8rem;
-        font-size: 0.8rem;
-    }
-    
-    .timer-number {
-        font-size: 1.2rem;
-    }
-    
-    .modal-content {
-        padding: 2rem 1.5rem;
-        width: 95%;
-    }
-
-    /* Featured image responsive for mobile */
-    .featured-image-container {
-        max-width: 100%;
-        padding: 0 1rem;
-    }
-
-    .featured-bg-image {
-        max-height: 300px;
-    }
-
-    .featured-cart-button-overlay {
-        bottom: 8%;
-    }
-
-    .featured-cart-btn {
-        padding: 0.8rem 1.5rem;
-        font-size: 0.9rem;
-        gap: 0.5rem;
-    }
-
-    .featured-cart-btn i {
-        font-size: 1rem;
-    }
-}
-
-/* ================================
    MODAL STYLES
    ================================ */
 
@@ -2408,29 +2198,8 @@ body {
     text-decoration: underline;
 }
 
-/* Responsive Modal */
-@media (max-width: 768px) {
-    .modal-content {
-        padding: 2rem 1.5rem;
-        max-width: 90%;
-    }
-
-    .modal-header h2 {
-        font-size: 1.5rem;
-    }
-
-    .auth-modal {
-        max-height: 95vh;
-    }
-
-    .form-actions {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-    }
-}
-
-/* Alert Messages Styling */
+/* ================================
+   SPLIT MODAL LAYOUT (Login & Signup)
 .modal-messages {
     margin-bottom: 1.5rem;
 }
@@ -2735,70 +2504,3 @@ body {
     text-decoration: underline;
 }
 
-/* ================================
-   RESPONSIVE - SPLIT MODAL
-   ================================ */
-
-@media (max-width: 768px) {
-    .auth-modal-split {
-        width: 95vw;
-        max-height: 95vh;
-        flex-direction: column;
-    }
-
-    .modal-left {
-        min-height: 300px;
-        display: none;
-    }
-
-    .modal-right {
-        padding: 2rem 1.5rem;
-        max-height: 90vh;
-    }
-
-    .auth-title {
-        font-size: 1.5rem;
-    }
-
-    .auth-subtitle {
-        font-size: 0.9rem;
-    }
-
-    .form-group label {
-        font-size: 0.85rem;
-    }
-
-    .input-wrapper input {
-        padding: 0.8rem 0.4rem;
-        font-size: 0.9rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .auth-modal-split {
-        width: 98vw;
-        max-height: 98vh;
-    }
-
-    .modal-right {
-        padding: 1.5rem;
-    }
-
-    .auth-logo {
-        font-size: 1.2rem;
-    }
-
-    .auth-title {
-        font-size: 1.3rem;
-    }
-
-    .form-actions {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-
-    .forgot-password {
-        align-self: flex-start;
-    }
-}

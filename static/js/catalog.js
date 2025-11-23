@@ -795,7 +795,7 @@ function getCsrfToken() {
 }
 
 function updateCartCount() {
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const totalItems = cart.length; // Count number of items, not quantity
     console.log('updateCartCount: Total items =', totalItems);
     const cartCountElem = document.getElementById('cartCount');
     if (cartCountElem) {

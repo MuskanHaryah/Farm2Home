@@ -210,6 +210,15 @@ body {
     position: relative;
 }
 
+/* Keep first two nav items (Home and Products) fixed at top */
+.nav-item:nth-child(1),
+.nav-item:nth-child(2) {
+    position: relative;
+    background: transparent;
+    margin: 0;
+    padding: 0.875rem 1rem;
+}
+
 .nav-item i {
     font-size: 20px;
     color: var(--text-light);
@@ -624,48 +633,4 @@ body {
 .action-card.support .action-btn:hover {
     background: var(--pastel-green-3);
     transform: translateX(4px);
-}
-
-/* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
-@media (max-width: 1024px) {
-    .sidebar {
-        width: 240px;
-    }
-    
-    .main-container {
-        margin-left: 240px;
-    }
-    
-    .header-container {
-        padding-left: calc(240px + 2rem);
-    }
-}
-
-@media (max-width: 768px) {
-    .sidebar {
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-    }
-    
-    .sidebar.open {
-        transform: translateX(0);
-    }
-    
-    .main-container {
-        margin-left: 0;
-    }
-    
-    .header-container {
-        padding-left: 2rem;
-    }
-    
-    .stats-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .action-cards {
-        grid-template-columns: 1fr;
-    }
 }

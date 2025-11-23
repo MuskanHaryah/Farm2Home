@@ -22,16 +22,11 @@
                 <span class="logo-text">Farm2Home</span>
             </div>
 
-            <!-- Search Bar -->
-            <div class="search-bar">
-                <input type="text" class="search-input" id="headerSearch" placeholder="What are you looking for?">
-                <button class="search-button">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-
             <!-- Cart Icon -->
             <div class="header-icons">
+                <button class="search-icon-btn" id="mobileSearchBtn" title="Search" onclick="document.getElementById('productSearch').focus(); document.querySelector('.product-search-container-inline').scrollIntoView({behavior: 'smooth', block: 'center'});">
+                    <i class="fas fa-search"></i>
+                </button>
                 <a href="{% url 'main:account_home' %}" class="account-icon" id="accountIcon" title="My Account" style="display: none;">
                     <i class="fas fa-user-circle"></i>
                 </a>
@@ -48,15 +43,10 @@
         <!-- Navigation Menu -->
         <nav class="navigation">
             <ul class="nav-menu">
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link">
-                        Categories <i class="fas fa-chevron-down"></i>
-                    </a>
-                </li>
                 <li class="nav-item"><a href="{% url 'main:landing' %}" class="nav-link">Home</a></li>
                 <li class="nav-item"><a href="#" class="nav-link active">Products</a></li>
-                <li class="nav-item"><a href="{% url 'main:landing' %}#about" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="{% url 'main:landing' %}#contact" class="nav-link">Contact</a></li>
+                <li class="nav-item"><a href="{% url 'main:landing' %}#about" class="nav-link">About Us</a></li>
+                <li class="nav-item"><a href="{% url 'main:landing' %}#footer" class="nav-link">Contact</a></li>
             </ul>
         </nav>
     </header>

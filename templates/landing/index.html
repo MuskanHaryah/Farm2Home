@@ -22,12 +22,12 @@
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
-                <li><a href="#benefits">Benefits</a></li>
-                <li><a href="#products">Products</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="{% url 'main:catalog' %}">Products</a></li>
+                <li><a href="#footer">Contact</a></li>
                 <li><button type="button" class="auth-btn login-btn" onclick="event.preventDefault(); openLoginModal();">Login</button></li>
                 <li><button type="button" class="auth-btn signup-btn" onclick="event.preventDefault(); openSignupModal();">Sign Up</button></li>
                 <li><a href="{% url 'main:catalog' %}" class="shop-btn">Shop Now</a></li>
+                <li><a href="{% url 'main:account_home' %}" class="profile-icon"><i class="fas fa-user-circle"></i></a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -499,7 +499,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" id="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
