@@ -1446,6 +1446,28 @@ function showClearCartConfirmation(callback) {
 }
 
 // ===============================================
+// NAVIGATION WITH AUTH CHECK
+// ===============================================
+/**
+ * Navigate to account page with login check
+ * Shows login modal if user is not authenticated
+ */
+function navigateToAccount() {
+    const customerId = localStorage.getItem('customer_id');
+    
+    if (!customerId) {
+        // User not logged in - show login modal
+        if (typeof notifications !== 'undefined') {
+            notifications.warning('⚠️ Please login first to access your account');
+        }
+        openLoginModal();
+    } else {
+        // User is logged in - redirect to account page
+        window.location.href = "/account/";
+    }
+}
+
+// ===============================================
 // AUTH UI UPDATE FOR CATALOG PAGE
 // ===============================================
 function updateCatalogAuthUI() {

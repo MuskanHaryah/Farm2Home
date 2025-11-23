@@ -18,7 +18,7 @@
         <div class="header-container">
             <!-- Logo -->
             <div class="logo">
-                <img src="{% static 'images/Logo_Pogo[1].png' %}" alt="Farm2Home Logo" class="logo-image">
+                <img src="{% static 'images/logo.png' %}" alt="Farm2Home Logo" class="logo-image">
                 <span class="logo-text">Farm2Home</span>
             </div>
 
@@ -27,7 +27,7 @@
                 <button class="search-icon-btn" id="mobileSearchBtn" title="Search" onclick="document.getElementById('productSearch').focus(); document.querySelector('.product-search-container-inline').scrollIntoView({behavior: 'smooth', block: 'center'});">
                     <i class="fas fa-search"></i>
                 </button>
-                <a href="{% url 'main:account_home' %}" class="account-icon" id="accountIcon" title="My Account" style="display: none;">
+                <a href="javascript:void(0)" onclick="navigateToAccount()" class="account-icon" id="accountIcon" title="My Account" style="display: none;">
                     <i class="fas fa-user-circle"></i>
                 </a>
                 <button class="login-btn" id="catalogLoginBtn" style="display: none; padding: 0.5rem 1.2rem; background: white; color: #6b8e23; border: 2px solid #6b8e23; border-radius: 6px; font-weight: 500; cursor: pointer; transition: all 0.3s;">

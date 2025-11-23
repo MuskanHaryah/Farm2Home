@@ -16,7 +16,7 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
-                <img src="{% static 'images/Logo_Pogo[1].png' %}" alt="Farm2Home Logo" class="logo-image">
+                <img src="{% static 'images/logo.png' %}" alt="Farm2Home Logo" class="logo-image">
                 <span>Farm2Home</span>
             </div>
             <ul class="nav-links">
@@ -545,7 +545,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="footer-logo">
-                        <i class="fas fa-leaf"></i>
+                        <img src="{% static 'images/logo.png' %}" alt="Farm2Home Logo" style="max-width: 120px; height: auto; margin-bottom: 10px;">
                         <span>FARM2HOME</span>
                     </div>
                     <p>Bringing fresh, organic produce directly from farm to your table.</p>
@@ -560,10 +560,10 @@
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="#">About Us</a></li>
+                        <li><a href="#about">About Us</a></li>
                         <li><a href="{% url 'main:catalog' %}">Products</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="{% url 'main:account_home' %}">My Account</a></li>
+                        <li><a href="#footer">Contact</a></li>
+                        <li><a href="javascript:void(0)" onclick="navigateToAccount()">My Account</a></li>
                     </ul>
                 </div>
                 
@@ -655,6 +655,25 @@
             
             // Close modal
             closeCallbackModal();
+        }
+
+        /**
+         * Navigate to account page with login check
+         * Shows login modal if user is not authenticated
+         */
+        function navigateToAccount() {
+            const customerId = localStorage.getItem('customer_id');
+            
+            if (!customerId) {
+                // User not logged in - show login modal
+                if (typeof notifications !== 'undefined') {
+                    notifications.warning('⚠️ Please login first to access your account');
+                }
+                openLoginModal();
+            } else {
+                // User is logged in - redirect to account page
+                window.location.href = "{% url 'main:account_home' %}";
+            }
         }
 
         // Apply about section background image
