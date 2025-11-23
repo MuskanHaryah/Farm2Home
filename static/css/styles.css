@@ -60,12 +60,23 @@ body {
 .logo {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     font-size: 24px;
     font-weight: 700;
     color: var(--primary-green);
     cursor: pointer;
     white-space: nowrap;
+    transition: opacity 0.3s ease;
+}
+
+.logo:hover {
+    opacity: 0.8;
+}
+
+.logo-image {
+    height: 45px;
+    width: auto;
+    object-fit: contain;
 }
 
 .logo-icon {
@@ -289,11 +300,32 @@ body {
    SIDEBAR FILTERS
    =============================================== */
 .sidebar {
-    /* make filter panel wide */
     position: sticky;
     top: 100px;
-    width: 320px; 
+    width: 320px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
+
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 .filter-panel {
     background-color: var(--bg-white);
     border-radius: 12px;
@@ -1135,40 +1167,49 @@ body {
 .cart-item-quantity {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     margin-top: 10px;
 }
 
 .cart-item-quantity .qty-btn {
-    width: 30px;
-    height: 30px;
-    border: 1px solid #d0d0d0;
-    background-color: white;
-    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid #e0e0e0;
+    background-color: #fafafa;
+    border-radius: 6px;
     font-size: 14px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s;
-    color: var(--text-gray);
+    color: #666;
+    font-weight: 600;
 }
 
 .cart-item-quantity .qty-btn:hover {
     border-color: var(--primary-green);
-    color: var(--primary-green);
-    background-color: #f0f8f0;
+    color: white;
+    background-color: var(--primary-green);
 }
 
 .cart-item-quantity .qty-input {
-    width: 40px;
-    height: 30px;
+    width: 50px;
+    height: 32px;
     text-align: center;
-    border: none;
-    background: transparent;
-    font-size: 15px;
-    font-weight: 600;
+    border: 1.5px solid #e0e0e0;
+    background: white;
+    font-size: 16px;
+    font-weight: 700;
     color: var(--text-dark);
+    border-radius: 6px;
+    padding: 0;
+}
+
+.cart-item-quantity .qty-input:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 2px rgba(93, 191, 77, 0.1);
 }
 
 .cart-item-right {

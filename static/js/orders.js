@@ -364,7 +364,11 @@ function handleAuthError(message) {
         ? 'Your account session has expired or is invalid. Please log in again.'
         : 'Your session has expired. Please log in again.';
     
-    alert(errorMessage);
+    if (typeof notifications !== 'undefined') {
+        notifications.error(errorMessage);
+    } else {
+        alert(errorMessage);
+    }
     
     // Redirect to landing page (which has login modal)
     // Use replace to prevent back button from returning to this page
@@ -659,7 +663,11 @@ function handleLogout() {
             localStorage.removeItem('checkoutCart');
             
             console.log('User logged out successfully');
-            alert('You have been logged out successfully.');
+            if (typeof notifications !== 'undefined') {
+                notifications.success('✅ You have been logged out successfully.');
+            } else {
+                alert('You have been logged out successfully.');
+            }
             window.location.replace('/landing/');
         } catch (error) {
             console.error('Error during logout:', error);
@@ -704,9 +712,12 @@ ${'-'.repeat(50)}
 TOTAL: ${formatCurrency(order.total_amount)}
     `.trim();
     
-    // Show details in alert (simple implementation)
-    // For a more sophisticated UI, you could create a modal overlay
-    alert(detailsMessage);
+    // Show details in notification
+    if (typeof notifications !== 'undefined') {
+        notifications.info(detailsMessage);
+    } else {
+        alert(detailsMessage);
+    }
     
     // Optional: log for debugging
     console.log('Order details:', order);

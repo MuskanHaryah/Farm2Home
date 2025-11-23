@@ -203,65 +203,6 @@ function backToHome() {
     continueShopping();
 }
 
-// Download receipt (optional - can be removed if not needed)
-function downloadReceipt() {
-    if (!cart || cart.length === 0) {
-        notifications.info('Receipt will be sent to your email address.');
-        return;
-    }
-    
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    
-    let receiptContent = `FARM2HOME - ORDER RECEIPT\n`;
-    receiptContent += `========================================\n`;
-    receiptContent += `Order Date: ${new Date().toLocaleDateString()}\n`;
-    receiptContent += `Order Time: ${new Date().toLocaleTimeString()}\n`;
-    receiptContent += `========================================\n\n`;
-
-    receiptContent += `ORDER ITEMS:\n`;
-    cart.forEach((item, index) => {
-        receiptContent += `${index + 1}. ${item.name}\n`;
-        receiptContent += `   Quantity: ${item.quantity} x $${item.price.toFixed(2)} = $${(item.price * item.quantity).toFixed(2)}\n`;
-    });
-
-    receiptContent += `\n========================================\n`;
-    receiptContent += `SUBTOTAL: $${total.toFixed(2)}\n`;
-    receiptContent += `TOTAL: $${total.toFixed(2)}\n`;
-    receiptContent += `========================================\n\n`;
-
-    receiptContent += `SHIPPING INFORMATION:\n`;
-    receiptContent += `Name: ${shippingData.fullName || 'N/A'}\n`;
-    receiptContent += `Address: ${shippingData.address || 'N/A'}\n`;
-    receiptContent += `City: ${shippingData.city || 'N/A'}\n`;
-    receiptContent += `ZIP Code: ${shippingData.zipCode || 'N/A'}\n`;
-    receiptContent += `Phone: ${shippingData.phone || 'N/A'}\n`;
-    receiptContent += `Email: ${shippingData.email || 'N/A'}\n`;
-
-    receiptContent += `\nPAYMENT METHOD:\n`;
-    if (paymentData.method === 'card') {
-        receiptContent += `Card Payment\n`;
-        receiptContent += `Cardholder: ${paymentData.cardName || 'N/A'}\n`;
-        receiptContent += `Card: ${paymentData.cardNumber || '****'}\n`;
-    } else {
-        receiptContent += `Cash on Delivery (COD)\n`;
-        receiptContent += `Pay $${paymentData.total ? paymentData.total.toFixed(2) : '0.00'} to delivery person\n`;
-    }
-
-    receiptContent += `\n========================================\n`;
-    receiptContent += `Thank you for your order!\n`;
-    receiptContent += `For support, contact us at support@farm2home.com\n`;
-    receiptContent += `========================================\n`;
-
-    // Create blob and download
-    const blob = new Blob([receiptContent], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `receipt-${Date.now()}.txt`;
-    a.click();
-    window.URL.revokeObjectURL(url);
-}
-
 // Go back
 function goBack() {
     window.location.href = '/checkout/';
@@ -270,5 +211,4 @@ function goBack() {
 // Make functions globally accessible
 window.continueShopping = continueShopping;
 window.backToHome = backToHome;
-window.downloadReceipt = downloadReceipt;
 window.goBack = goBack;

@@ -182,53 +182,6 @@ function initializeApp() {
     
     // Load cart from backend if user is logged in
     loadCartFromBackend();
-    
-    // Make functions globally accessible for debugging
-    window.testAddToCart = (productId) => {
-        console.log('TEST: Attempting to add product', productId);
-        productQuantities[productId] = 2;
-        updateQuantityDisplay(productId);
-        addToCart(productId);
-    };
-    
-    window.viewCart = () => {
-        console.log('Current cart:', cart);
-        console.log('Product quantities:', productQuantities);
-    };
-    
-    window.reloadProducts = async () => {
-        await loadProductsFromBackend();
-        if (productsData.length > 0) {
-            // Re-initialize product quantities
-            productsData.forEach(product => {
-                if (!productQuantities[product.id]) {
-                    productQuantities[product.id] = 0;
-                }
-            });
-            // Update filter counts
-            updateFilterCounts();
-            // Re-render products
-            renderProducts(productsData);
-            updateProductCount();
-            console.log('✅ Products reloaded and filter counts updated');
-        }
-    };
-    
-    // Test function to simulate different months/seasons
-    window.testSeason = (month) => {
-        if (month < 0 || month > 11) {
-            console.error('Invalid month. Use 0-11 (0=January, 11=December)');
-            return;
-        }
-        const originalGetMonth = Date.prototype.getMonth;
-        Date.prototype.getMonth = function() { return month; };
-        updateCurrentSeasonIndicator();
-        Date.prototype.getMonth = originalGetMonth;
-        console.log(`Testing season for month ${month + 1}`);
-    };
-    
-    console.log('✅ App initialization complete');
-    console.log('💡 Debug commands: window.reloadProducts(), window.testSeason(month), window.viewCart()');
 }
 
 // ===============================================
@@ -313,7 +266,7 @@ function setupEventListeners() {
         checkoutBtn.addEventListener('click', function() {
             if (cart.length === 0) {
                 if (typeof notifications !== 'undefined') {
-                    notifications.warning('Your cart is empty. Add some items before checking out.');
+                    notifications.warning('🛒 Your cart is empty. Add some items before checking out.');
                 } else {
                     alert('Your cart is empty. Add some items before checking out.');
                 }

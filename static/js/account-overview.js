@@ -410,7 +410,11 @@ function handleAuthError(message) {
     localStorage.removeItem('customer_email');
     
     // Show alert
-    alert(message);
+    if (typeof notifications !== 'undefined') {
+        notifications.error(message);
+    } else {
+        alert(message);
+    }
     
     // Redirect to login
     window.location.href = '/landing/';
@@ -598,32 +602,7 @@ function setupLogoutHandler() {
     console.log('Logout handler managed by account.js centralized function');
 }
 
-/**
- * Handle logout action
- * Note: This function is deprecated - use window.accountFunctions.handleAccountLogout from account.js
- */
-function handleLogout() {
-    // Use centralized logout function from account.js if available
-    if (window.accountFunctions && window.accountFunctions.handleAccountLogout) {
-        window.accountFunctions.handleAccountLogout();
-    } else {
-        // Fallback for legacy support
-        console.warn('Centralized logout function not available, using fallback');
-        const confirmLogout = confirm('Are you sure you want to logout?');
-        
-        if (confirmLogout) {
-            localStorage.removeItem('customer_id');
-            localStorage.removeItem('customer_name');
-            localStorage.removeItem('customer_email');
-            localStorage.removeItem('farm2home_cart');
-            localStorage.removeItem('checkoutCart');
-            
-            console.log('User logged out, localStorage cleared');
-            alert('You have been logged out successfully');
-            window.location.href = '/landing/';
-        }
-    }
-}
+
 
 // ==================== UTILITY FUNCTIONS ====================
 

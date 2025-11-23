@@ -16,7 +16,7 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
-                <i class="fas fa-leaf"></i>
+                <img src="{% static 'images/Logo_Pogo[1].png' %}" alt="Farm2Home Logo" class="logo-image">
                 <span>Farm2Home</span>
             </div>
             <ul class="nav-links">
@@ -176,14 +176,14 @@
             </div>
 
             <div class="b2b-actions">
-                <a href="#" class="b2b-btn primary-btn">
+                <button type="button" class="b2b-btn primary-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
                     <span>📋</span>
                     Request Quote
-                </a>
-                <a href="tel:+1234567890" class="b2b-btn secondary-btn">
+                </button>
+                <button type="button" onclick="openCallbackModal()" class="b2b-btn secondary-btn">
                     <span>📞</span>
                     Call Us
-                </a>
+                </button>
             </div>
 
             <div class="b2b-stats">
@@ -450,6 +450,47 @@
         </div>
     </div>
 
+    <!-- Callback Request Modal -->
+    <div id="callbackModal" class="callback-modal">
+        <div class="callback-modal-content">
+            <button type="button" class="callback-close-btn" onclick="closeCallbackModal()">&times;</button>
+            <h2>Request a Callback</h2>
+            <p style="color: #666; margin-bottom: 20px;">Share your details and our team will call you shortly.</p>
+            
+            <form id="callbackForm" onsubmit="submitCallbackForm(event)">
+                <div class="form-group">
+                    <label>Name <span style="color: red;">*</span></label>
+                    <input type="text" id="callback_name" placeholder="Your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Phone Number <span style="color: red;">*</span></label>
+                    <input type="tel" id="callback_phone" placeholder="+91 1234567890" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Preferred Time</label>
+                    <select id="callback_time">
+                        <option value="">Select preferred time</option>
+                        <option value="morning">Morning (9 AM - 12 PM)</option>
+                        <option value="afternoon">Afternoon (12 PM - 4 PM)</option>
+                        <option value="evening">Evening (4 PM - 8 PM)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Message (Optional)</label>
+                    <textarea id="callback_message" rows="3" placeholder="Any specific questions or requirements..."></textarea>
+                </div>
+                
+                <div class="callback-actions">
+                    <button type="submit" class="callback-submit-btn">Request Callback</button>
+                    <button type="button" class="callback-cancel-btn" onclick="closeCallbackModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Why Farm2Home -->
     <section class="why-farm2home-section" id="whyFarm2HomeSection">
         <!-- Coin Falling Animation -->
@@ -553,8 +594,69 @@
     </footer>
 
     <script src="{% static 'js/notifications.js' %}"></script>
-    <script src="{% static 'js/countdown.js' %}"></script>
     <script>
+        // ================================
+        // CALLBACK MODAL FUNCTIONS (DEFINED FIRST)
+        // ================================
+        function openCallbackModal() {
+            console.log('Opening callback modal...');
+            console.log('Button clicked - function called!');
+            const modal = document.getElementById('callbackModal');
+            console.log('Modal element:', modal);
+            if (!modal) {
+                console.error('Callback modal not found!');
+                if (typeof notifications !== 'undefined') {
+                    notifications.error('Error: Modal element not found! Check if callbackModal exists in HTML.');
+                } else {
+                    alert('Error: Modal element not found! Check if callbackModal exists in HTML.');
+                }
+                return;
+            }
+            console.log('Adding active class to modal...');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            console.log('Callback modal opened successfully. Classes:', modal.className);
+        }
+
+        function closeCallbackModal() {
+            console.log('Closing callback modal...');
+            const modal = document.getElementById('callbackModal');
+            if (!modal) {
+                console.error('Callback modal not found!');
+                return;
+            }
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            const form = document.getElementById('callbackForm');
+            if (form) {
+                form.reset();
+            }
+            console.log('Callback modal closed successfully');
+        }
+
+        function submitCallbackForm(event) {
+            event.preventDefault();
+            console.log('Submitting callback form...');
+            
+            const name = document.getElementById('callback_name').value;
+            const phone = document.getElementById('callback_phone').value;
+            const time = document.getElementById('callback_time').value;
+            const message = document.getElementById('callback_message').value;
+            
+            // Show success notification
+            if (typeof notifications !== 'undefined') {
+                notifications.success('✅ Callback request submitted! Our team will contact you soon.');
+            } else {
+                alert('Callback request submitted! Our team will contact you soon.');
+            }
+            
+            // Log data (you can replace this with actual API call)
+            console.log('Callback Request:', { name, phone, time, message });
+            
+            // Close modal
+            closeCallbackModal();
+        }
+
         // Apply about section background image
         const aboutSection = document.querySelector('.about-farm-section');
         aboutSection.style.backgroundImage = "url('{% static 'images/about.png' %}')";
@@ -563,6 +665,33 @@
         // Apply why farm2home section background image
         const whySection = document.getElementById('whyFarm2HomeSection');
         whySection.style.backgroundImage = "url('{% static 'images/whyfarm2home.png' %}')";
+
+        // ================================
+        // NAVBAR HIDE ON SCROLL (HERO ONLY)
+        // ================================
+        const navbar = document.querySelector('.navbar');
+        const heroSection = document.querySelector('.hero');
+        
+        window.addEventListener('scroll', () => {
+            if (!navbar || !heroSection) return;
+            
+            const heroBottom = heroSection.offsetHeight;
+            const scrolled = window.scrollY;
+            
+            if (scrolled > heroBottom - 100) {
+                // Scrolled past hero - hide navbar
+                navbar.style.opacity = '0';
+                navbar.style.visibility = 'hidden';
+                navbar.style.pointerEvents = 'none';
+                navbar.style.transition = 'all 0.3s ease';
+            } else {
+                // Still in hero - show navbar
+                navbar.style.opacity = '1';
+                navbar.style.visibility = 'visible';
+                navbar.style.pointerEvents = 'auto';
+                navbar.style.transition = 'all 0.3s ease';
+            }
+        });
 
         // ================================
         // FRESH AUTH MODAL FUNCTIONS
@@ -712,7 +841,11 @@
                     const password = document.getElementById('login_password').value.trim();
                     
                     if (!email || !password) {
-                        alert('Please fill in all fields');
+                        if (typeof notifications !== 'undefined') {
+                            notifications.error('❌ Please fill in all fields');
+                        } else {
+                            alert('Please fill in all fields');
+                        }
                         return;
                     }
 
@@ -1124,6 +1257,18 @@
         // ================================
         // Animation is now handled by Lottie player with autoplay
         // No additional JavaScript needed
+
+        // Close modal when clicking on backdrop
+        document.addEventListener('DOMContentLoaded', function() {
+            const callbackModal = document.getElementById('callbackModal');
+            if (callbackModal) {
+                callbackModal.addEventListener('click', function(event) {
+                    if (event.target === callbackModal) {
+                        closeCallbackModal();
+                    }
+                });
+            }
+        });
     </script>
 
 </body>
