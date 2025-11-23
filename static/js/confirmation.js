@@ -107,7 +107,7 @@ function displayConfirmationDetails() {
                         <div class="confirmation-item-name">${item.name}</div>
                         <div class="confirmation-item-desc">${itemDesc}</div>
                     </div>
-                    <div class="confirmation-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+                    <div class="confirmation-item-price">PKR ${(item.price * item.quantity).toFixed(2)}</div>
                 </div>
             `;
         });
@@ -115,7 +115,7 @@ function displayConfirmationDetails() {
         detailsHTML += `
             <div class="confirmation-total">
                 <span>TOTAL</span>
-                <span>$${total.toFixed(2)}</span>
+                <span>PKR ${total.toFixed(2)}</span>
             </div>
         `;
     } else {

@@ -38,7 +38,11 @@
 
 body {
     font-family: 'Poppins', 'Inter', -apple-system, sans-serif;
-    background: linear-gradient(180deg, #F9FBF8 0%, #F2F6F0 100%);
+    background: linear-gradient(to bottom, #FAFEF6, #E9F7DF);
+
+
+
+
     color: var(--text-dark);
     line-height: 1.6;
     font-weight: 400;

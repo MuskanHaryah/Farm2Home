@@ -401,9 +401,9 @@ body {
 
 /* Products Section with Grass Background */
 .products-section.with-grass-bg {
-    background: linear-gradient(to right top, #f6bd7a, #ebc37b, #dfc87f, #d4cc84, #c9d08c, #bfd08c, #b4d18e, #a9d190, #99cf8c, #86cd8a, #70ca89, #56c88a);
+    background: linear-gradient(to bottom, #F3FDE9, #D5EFC3);
     background-image: 
-        linear-gradient(to right top, #f6bd7a, #ebc37b, #dfc87f, #d4cc84, #c9d08c, #bfd08c, #b4d18e, #a9d190, #99cf8c, #86cd8a, #70ca89, #56c88a),
+        linear-gradient(to bottom, #F3FDE9, #D5EFC3),
         url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><defs><pattern id="grass" x="0" y="350" width="40" height="50" patternUnits="userSpaceOnUse"><path d="M5,350 Q10,330 8,320 M12,350 Q15,340 18,320 M20,350 Q22,335 25,315 M30,350 Q32,340 35,325 M35,350 Q38,330 40,310" stroke="%238fbc3e" stroke-width="2" fill="none" opacity="0.8"/></pattern></defs><rect width="1200" height="400" fill="url(%23grass)"/></svg>');
     background-size: 100% 100%, auto;
     background-position: center, bottom left;
@@ -891,6 +891,7 @@ body {
     font-weight: 600;
     min-width: 40px;
     text-align: center;
+    color: #333;
 }
 
 /* Add to Cart Button */
@@ -929,15 +930,19 @@ body {
    FOOTER
    =============================================== */
 .footer {
-    background-color: var(--text-dark);
+    background: linear-gradient(to bottom, 
+        rgba(139, 69, 19, 0.95) 0%,
+        rgba(101, 67, 33, 0.98) 100%);
     color: white;
     padding: 30px 0;
     margin-top: 60px;
     text-align: center;
+    border-top: 3px solid #5dbf4d;
 }
 
 .footer p {
     font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 /* ===============================================

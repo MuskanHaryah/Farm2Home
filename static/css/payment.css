@@ -913,7 +913,7 @@
     gap: 15px;
     padding: 0;
     border-top: none;
-    margin-top: 0;
+    margin-top: 60px;
 }
 
 .total-section {
@@ -1338,7 +1338,7 @@
 /* Carousel Items Styling */
 .item-image {
     width: 100%;
-    max-width: 300px;
+    max-width: 150px;
     height: auto;
     object-fit: contain;
     margin: 0 auto;

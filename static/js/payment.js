@@ -90,6 +90,11 @@ function initializeStripe() {
             if (event.brand) {
                 updateCardBrand(event.brand);
             }
+            
+            // Update button state when card details change
+            if (typeof updateCardButtonState === 'function') {
+                setTimeout(updateCardButtonState, 0);
+            }
         });
         
         // Handle focus/blur for better UX
@@ -703,19 +708,29 @@ function updateCardBrand(brand) {
 // Validate card payment
 function validateCardPayment() {
     const cardName = document.getElementById('cardName')?.value.trim();
+    const cardErrorsDiv = document.getElementById('card-errors');
 
     if (!cardName) {
-        notifications.error('Please enter the cardholder name.');
+        notifications.error('⚠️ Please enter the cardholder name.');
         document.getElementById('cardName')?.focus();
         return false;
     }
 
     if (!stripe || !stripeInitialized || !cardElement) {
-        notifications.error('Payment system not initialized. Please refresh the page.');
+        notifications.error('❌ Payment system not initialized. Please refresh the page.');
         return false;
     }
 
-    // Stripe Element handles card validation automatically
+    // Check if there are any Stripe card errors
+    if (cardErrorsDiv && cardErrorsDiv.textContent.trim()) {
+        notifications.error('❌ ' + cardErrorsDiv.textContent);
+        return false;
+    }
+
+    // Additional check: ensure card element has been touched/filled
+    // This is a basic check - Stripe will do full validation during payment
+    notifications.warning('⏳ Validating card details...', 'info', 'Validating');
+
     return true;
 }
 
@@ -932,11 +947,21 @@ $(document).ready(function() {
     function updateCardButtonState() {
         const hasCardName = cardNameInput && cardNameInput.value.trim().length > 0;
         const hasCardDetails = stripe && stripeInitialized && cardElement;
+        const cardErrorsDiv = document.getElementById('card-errors');
+        const hasCardErrors = cardErrorsDiv && cardErrorsDiv.textContent.trim().length > 0;
         
-        if (hasCardName && hasCardDetails) {
+        if (hasCardName && hasCardDetails && !hasCardErrors) {
             cardOrderBtn.disabled = false;
+            cardOrderBtn.title = 'Complete your order';
         } else {
             cardOrderBtn.disabled = true;
+            if (!hasCardName) {
+                cardOrderBtn.title = 'Please enter cardholder name';
+            } else if (hasCardErrors) {
+                cardOrderBtn.title = 'Please enter correct card details: ' + (cardErrorsDiv?.textContent || 'Invalid card');
+            } else {
+                cardOrderBtn.title = 'Please enter complete card details';
+            }
         }
     }
     

@@ -339,7 +339,7 @@ function renderCarouselItems() {
             <div class="item-info">
                 <div class="item-number">Item ${index + 1} of ${cart.length}</div>
                 <div class="item-name">${item.name.toUpperCase()}</div>
-                <div class="item-price">RS. ${itemTotal}</div>
+                <div class="item-price">PKR ${itemTotal}</div>
             </div>
             <img src="${imagePath}" 
                  alt="${item.name}" 
@@ -779,7 +779,7 @@ function showConfirmation() {
         detailsHTML += `
             <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px;">
                 <span>${index + 1}. ${item.name} x${item.quantity}</span>
-                <span>Rs. ${(item.price * item.quantity).toFixed(2)}</span>
+                <span>PKR ${(item.price * item.quantity).toFixed(2)}</span>
             </div>
         `;
     });
@@ -788,7 +788,7 @@ function showConfirmation() {
     detailsHTML += `
         <div style="border-top: 1px solid rgba(255, 255, 255, 0.3); padding-top: 10px; margin-top: 10px; display: flex; justify-content: space-between; font-weight: 600; font-size: 14px;">
             <span>TOTAL</span>
-            <span>Rs. ${total.toFixed(2)}</span>
+            <span>PKR ${total.toFixed(2)}</span>
         </div>
     </div>`;
 
@@ -877,10 +877,10 @@ function downloadReceipt() {
     receiptContent += `ORDER ITEMS:\n`;
     
     cart.forEach((item, index) => {
-        receiptContent += `${index + 1}. ${item.name} x${item.quantity} - Rs. ${(item.price * item.quantity).toFixed(2)}\n`;
+        receiptContent += `${index + 1}. ${item.name} x${item.quantity} - PKR ${(item.price * item.quantity).toFixed(2)}\n`;
     });
     
-    receiptContent += `\nTOTAL: Rs. ${total.toFixed(2)}\n\n`;
+    receiptContent += `\nTOTAL: PKR ${total.toFixed(2)}\n\n`;
     receiptContent += `SHIPPING TO:\n`;
     receiptContent += `${shippingData.fullName}\n`;
     receiptContent += `${shippingData.address}\n`;
