@@ -138,7 +138,7 @@ class Address(models.Model):
 
 
 class PasswordResetToken(models.Model):
-    """
+    """`
     Model to store password reset tokens for customers
     Each token is valid for 1 hour and can only be used once
     """
