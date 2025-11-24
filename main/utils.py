@@ -1,8 +1,3 @@
-"""
-Email Utility Functions for Farm2Home
-Handles sending various email notifications to customers
-"""
-
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
