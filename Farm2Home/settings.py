@@ -144,6 +144,62 @@ DEFAULT_FROM_EMAIL = 'Farm2Home <noreply@farm2home.com>'
 
 STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLIC_KEY', default='pk_test_your_key_here')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', default='sk_test_your_key_here')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default='', cast=str)  # Optional for testing
 
 
