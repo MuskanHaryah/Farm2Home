@@ -727,10 +727,7 @@ function validateCardPayment() {
         return false;
     }
 
-    // Additional check: ensure card element has been touched/filled
-    // This is a basic check - Stripe will do full validation during payment
-    notifications.warning('⏳ Validating card details...', 'info', 'Validating');
-
+    // Don't show validation notification here - processPayment will show "Processing"
     return true;
 }
 
@@ -904,9 +901,6 @@ async function processPayment(method) {
             
             // Clear only the main cart (keep checkoutCart for confirmation page)
             localStorage.removeItem('farm2home_cart');
-            
-            // Show success message
-            notifications.success('Order placed successfully!', 'Order Confirmed');
             
             // Redirect to confirmation page after short delay
             setTimeout(() => {

@@ -164,6 +164,9 @@ function initializeApp() {
     // Update filter counts based on active products
     updateFilterCounts();
     
+    // Check for URL parameters and apply filters
+    applyUrlFilters();
+    
     // Render products
     renderProducts(productsData);
     updateProductCount();
@@ -382,6 +385,42 @@ function updateFilterCounts() {
         fruits: fruitsCount,
         herbs: herbsCount
     });
+}
+
+// ===============================================
+// APPLY URL FILTERS
+// ===============================================
+function applyUrlFilters() {
+    console.log('🔗 Checking for URL parameters...');
+    
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get('category');
+    
+    if (category) {
+        console.log(`✅ Found category filter in URL: ${category}`);
+        
+        // Find and check the corresponding category checkbox
+        const categoryCheckbox = document.querySelector(`input[name="category"][value="${category}"]`);
+        
+        if (categoryCheckbox) {
+            categoryCheckbox.checked = true;
+            console.log(`✓ Applied category filter: ${category}`);
+            
+            // Apply the filters to show only selected category
+            applyFilters();
+            
+            // Optional: Show a notification
+            if (typeof notifications !== 'undefined') {
+                const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+                notifications.info(`Showing ${categoryName}`);
+            }
+        } else {
+            console.warn(`⚠️ Category checkbox not found for: ${category}`);
+        }
+    } else {
+        console.log('ℹ️ No category filter in URL');
+    }
 }
 
 // ===============================================

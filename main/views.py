@@ -14,7 +14,7 @@ from .serializers import (
     CheckoutOrderCreateSerializer, OrderConfirmationSerializer,
     AddressSerializer
 )
-from .utils import send_welcome_email, send_order_confirmation_email, send_password_reset_email
+from .utils import send_welcome_email, send_order_confirmation_email, send_password_reset_email, send_contact_form_email, send_callback_request_email
 
 # ==================== API VIEWS ====================
 
@@ -835,6 +835,74 @@ def api_request_password_reset(request):
         return Response({
             'success': False,
             'error': 'Failed to process request. Please try again.',
+            'detail': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+def api_validate_reset_token(request):
+    """
+    API endpoint to validate if a reset token is valid (not expired and not used)
+    
+    Query Parameters:
+    - token: The reset token UUID string
+    
+    Returns on success:
+    {
+        "success": true,
+        "valid": true,
+        "message": "Token is valid"
+    }
+    
+    Returns on failure:
+    {
+        "success": false,
+        "valid": false,
+        "error": "Token is expired or has been used"
+    }
+    
+    Use Case: Called when landing page loads with a token to check if it's valid before showing reset form
+    """
+    token = request.GET.get('token', '').strip()
+    
+    # Validate required fields
+    if not token:
+        return Response({
+            'success': False,
+            'valid': False,
+            'error': 'Token is required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # Find token
+        reset_token = PasswordResetToken.objects.get(token=token)
+        
+        # Check if token is valid (not expired and not used)
+        if reset_token.is_valid():
+            return Response({
+                'success': True,
+                'valid': True,
+                'message': 'Token is valid'
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'success': False,
+                'valid': False,
+                'error': 'This password reset link has expired or has already been used. Please request a new password reset link.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+    
+    except PasswordResetToken.DoesNotExist:
+        return Response({
+            'success': False,
+            'valid': False,
+            'error': 'Invalid reset link. Please request a new password reset link.'
+        }, status=status.HTTP_404_NOT_FOUND)
+    
+    except Exception as e:
+        return Response({
+            'success': False,
+            'valid': False,
+            'error': 'Failed to validate token. Please try again.',
             'detail': str(e)
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -2064,5 +2132,132 @@ def get_stripe_payment_method(request, payment_method_id):
             'status': 'error',
             'message': f'Failed to retrieve payment method: {str(e)}'
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# ==================== CONTACT & CALLBACK API ENDPOINTS ====================
+
+@csrf_exempt
+@api_view(['POST'])
+def api_contact_form(request):
+    """
+    API endpoint to handle contact form submissions
+    Sends email notification to admin with form details
+    
+    Expected POST data:
+    {
+        "name": "John Doe",
+        "email": "john@example.com",
+        "message": "I have a question about your products..."
+    }
+    
+    Returns:
+        - 200: Contact form submitted successfully
+        - 400: Invalid request data
+        - 500: Server error
+    """
+    try:
+        # Extract form data
+        sender_name = request.data.get('name', '').strip()
+        sender_email = request.data.get('email', '').strip()
+        message = request.data.get('message', '').strip()
+        
+        # Validate required fields
+        if not sender_name or not sender_email or not message:
+            return Response({
+                'success': False,
+                'error': 'All fields are required (name, email, message)'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Validate email format
+        if '@' not in sender_email or '.' not in sender_email:
+            return Response({
+                'success': False,
+                'error': 'Invalid email format'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Send email to admin
+        email_sent = send_contact_form_email(sender_name, sender_email, message)
+        
+        if email_sent:
+            return Response({
+                'success': True,
+                'message': 'Thank you for contacting us! We will get back to you soon.'
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'success': False,
+                'error': 'Failed to send email. Please try again later.'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    except Exception as e:
+        print(f"❌ Error in contact form submission: {str(e)}")
+        return Response({
+            'success': False,
+            'error': 'Failed to process contact form. Please try again.',
+            'detail': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@csrf_exempt
+@api_view(['POST'])
+def api_callback_request(request):
+    """
+    API endpoint to handle callback request submissions
+    Sends email notification to admin with callback details
+    
+    Expected POST data:
+    {
+        "name": "John Doe",
+        "phone": "+92 300 1234567",
+        "time": "Morning (9AM - 12PM)",
+        "message": "Interested in wholesale pricing"  // Optional
+    }
+    
+    Returns:
+        - 200: Callback request submitted successfully
+        - 400: Invalid request data
+        - 500: Server error
+    """
+    try:
+        # Extract form data
+        client_name = request.data.get('name', '').strip()
+        phone_number = request.data.get('phone', '').strip()
+        preferred_time = request.data.get('time', '').strip()
+        message = request.data.get('message', '').strip()
+        
+        # Validate required fields
+        if not client_name or not phone_number or not preferred_time:
+            return Response({
+                'success': False,
+                'error': 'Name, phone number, and preferred time are required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Send email to admin
+        email_sent = send_callback_request_email(
+            client_name, 
+            phone_number, 
+            preferred_time, 
+            message if message else None
+        )
+        
+        if email_sent:
+            return Response({
+                'success': True,
+                'message': 'Callback request submitted! Our team will contact you soon.'
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'success': False,
+                'error': 'Failed to send callback request. Please try again later.'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    except Exception as e:
+        print(f"❌ Error in callback request submission: {str(e)}")
+        return Response({
+            'success': False,
+            'error': 'Failed to process callback request. Please try again.',
+            'detail': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 

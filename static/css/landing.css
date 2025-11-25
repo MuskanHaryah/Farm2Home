@@ -93,14 +93,16 @@ body {
 }
 
 .login-btn {
-    background: transparent;
+    background: #5dbf4d;
     color: white;
-    border: 2px solid white;
+    border: 2px solid #5dbf4d;
 }
 
 .login-btn:hover {
-    border-color: #5dbf4d;
-    color: #5dbf4d;
+    background: #4da83d;
+    border-color: #4da83d;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(93, 191, 77, 0.3);
 }
 
 .signup-btn {

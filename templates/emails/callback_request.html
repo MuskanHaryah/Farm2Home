@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Callback Request</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .email-header {
+            background: linear-gradient(135deg, #ff6b35, #ff8c42);
+            color: #ffffff;
+            padding: 30px;
+            text-align: center;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .email-header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .email-body {
+            padding: 30px;
+        }
+        .urgent-badge {
+            display: inline-block;
+            background-color: #dc3545;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+        .info-section {
+            background-color: #f9f9f9;
+            border-left: 4px solid #ff6b35;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .info-row {
+            margin-bottom: 15px;
+        }
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #ff6b35;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+        .info-value {
+            color: #333333;
+            font-size: 16px;
+            word-wrap: break-word;
+        }
+        .phone-highlight {
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .phone-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff6b35;
+            margin: 5px 0;
+        }
+        .time-slot {
+            background-color: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .time-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1976d2;
+            margin: 5px 0;
+        }
+        .message-box {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .email-footer {
+            background-color: #f9f9f9;
+            padding: 20px 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #666666;
+            border-top: 1px solid #e0e0e0;
+        }
+        .email-footer p {
+            margin: 5px 0;
+        }
+        .timestamp {
+            color: #999999;
+            font-size: 11px;
+            margin-top: 10px;
+        }
+        .action-note {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #856404;
+        }
+        .call-button {
+            display: inline-block;
+            background-color: #ff6b35;
+            color: #ffffff;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+        .call-button:hover {
+            background-color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>📞 New Callback Request</h1>
+            <p>B2B Service - Farm2Home</p>
+        </div>
+        
+        <div class="email-body">
+            <div class="urgent-badge">🔔 URGENT - CALLBACK REQUIRED</div>
+            
+            <div class="action-note">
+                <strong>⚠️ Priority Action:</strong> A potential B2B client has requested a callback. Please contact them as soon as possible during their preferred time.
+            </div>
+            
+            <div class="info-section">
+                <div class="info-row">
+                    <div class="info-label">👤 Client Name</div>
+                    <div class="info-value">{{ client_name }}</div>
+                </div>
+            </div>
+            
+            <div class="phone-highlight">
+                <div class="info-label">📱 PHONE NUMBER</div>
+                <div class="phone-number">{{ phone_number }}</div>
+                <a href="tel:{{ phone_number }}" class="call-button">📞 Call Now</a>
+            </div>
+            
+            <div class="time-slot">
+                <div class="info-label">⏰ PREFERRED CALLBACK TIME</div>
+                <div class="time-value">{{ preferred_time }}</div>
+            </div>
+            
+            {% if message %}
+            <div class="info-section">
+                <div class="info-row">
+                    <div class="info-label">💬 Additional Message</div>
+                    <div class="message-box">{{ message }}</div>
+                </div>
+            </div>
+            {% else %}
+            <div class="info-section">
+                <div class="info-row">
+                    <div class="info-label">💬 Additional Message</div>
+                    <div class="info-value" style="font-style: italic; color: #999;">No additional message provided</div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <p style="color: #666666; font-size: 14px; margin-top: 20px;">
+                <strong>Quick Actions:</strong><br>
+                • Call: <a href="tel:{{ phone_number }}" style="color: #ff6b35; text-decoration: none;">{{ phone_number }}</a><br>
+                • Preferred Time: {{ preferred_time }}
+            </p>
+            
+            <div class="timestamp">
+                Request Received: {{ timestamp }}
+            </div>
+        </div>
+        
+        <div class="email-footer">
+            <p><strong>Farm2Home B2B Service</strong> - Wholesale Fresh Produce</p>
+            <p>This is an automated notification from your B2B callback request form.</p>
+        </div>
+    </div>
+</body>
+</html>
