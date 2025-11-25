@@ -24,10 +24,10 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="{% url 'main:catalog' %}">Products</a></li>
                 <li><a href="#footer">Contact</a></li>
-                <li><button type="button" class="auth-btn login-btn" onclick="event.preventDefault(); openLoginModal();">Login</button></li>
-                <li><button type="button" class="auth-btn signup-btn" onclick="event.preventDefault(); openSignupModal();">Sign Up</button></li>
+                <li id="navLoginBtn"><button type="button" class="auth-btn login-btn" onclick="event.preventDefault(); openLoginModal();">Login</button></li>
+                <li id="navSignupBtn" style="display: none;"><button type="button" class="auth-btn signup-btn" onclick="event.preventDefault(); openSignupModal();">Sign Up</button></li>
                 <li><a href="{% url 'main:catalog' %}" class="shop-btn">Shop Now</a></li>
-                <li><a href="{% url 'main:account_home' %}" class="profile-icon"><i class="fas fa-user-circle"></i></a></li>
+                <li id="navProfileIcon" style="display: none;"><a href="{% url 'main:account_home' %}" class="profile-icon"><i class="fas fa-user-circle"></i></a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -176,10 +176,6 @@
             </div>
 
             <div class="b2b-actions">
-                <button type="button" class="b2b-btn primary-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
-                    <span>📋</span>
-                    Request Quote
-                </button>
                 <button type="button" onclick="openCallbackModal()" class="b2b-btn secondary-btn">
                     <span>📞</span>
                     Call Us
@@ -569,10 +565,10 @@
                 
                 <div class="footer-section">
                     <h4>Get In Touch</h4>
-                    <form class="footer-contact-form">
-                        <input type="text" placeholder="Your Name" required>
-                        <input type="email" placeholder="Your Email" required>
-                        <textarea placeholder="Your Message" rows="3" required></textarea>
+                    <form class="footer-contact-form" id="contactForm" onsubmit="submitContactForm(event)">
+                        <input type="text" id="contact_name" name="name" placeholder="Your Name" required>
+                        <input type="email" id="contact_email" name="email" placeholder="Your Email" required>
+                        <textarea id="contact_message" name="message" placeholder="Your Message" rows="3" required></textarea>
                         <button type="submit" class="btn-primary">Send Message</button>
                     </form>
                 </div>
@@ -634,6 +630,24 @@
             console.log('Callback modal closed successfully');
         }
 
+        /**
+         * Get CSRF token from cookies
+         */
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
         function submitCallbackForm(event) {
             event.preventDefault();
             console.log('Submitting callback form...');
@@ -643,18 +657,127 @@
             const time = document.getElementById('callback_time').value;
             const message = document.getElementById('callback_message').value;
             
-            // Show success notification
-            if (typeof notifications !== 'undefined') {
-                notifications.success('✅ Callback request submitted! Our team will contact you soon.');
-            } else {
-                alert('Callback request submitted! Our team will contact you soon.');
+            // Validate required fields
+            if (!name || !phone || !time) {
+                if (typeof notifications !== 'undefined') {
+                    notifications.error('Please fill in all required fields');
+                } else {
+                    alert('Please fill in all required fields');
+                }
+                return;
             }
             
-            // Log data (you can replace this with actual API call)
-            console.log('Callback Request:', { name, phone, time, message });
+            // Send data to backend API
+            fetch('/api/callback/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    name: name,
+                    phone: phone,
+                    time: time,
+                    message: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success notification
+                    if (typeof notifications !== 'undefined') {
+                        notifications.success('✅ ' + data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                    
+                    // Reset form
+                    document.getElementById('callbackForm').reset();
+                    
+                    // Close modal
+                    closeCallbackModal();
+                } else {
+                    // Show error notification
+                    if (typeof notifications !== 'undefined') {
+                        notifications.error('❌ ' + (data.error || 'Failed to submit callback request'));
+                    } else {
+                        alert(data.error || 'Failed to submit callback request');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting callback request:', error);
+                if (typeof notifications !== 'undefined') {
+                    notifications.error('❌ Failed to submit callback request. Please try again.');
+                } else {
+                    alert('Failed to submit callback request. Please try again.');
+                }
+            });
+        }
+
+        /**
+         * Submit contact form from footer
+         */
+        function submitContactForm(event) {
+            event.preventDefault();
+            console.log('Submitting contact form...');
             
-            // Close modal
-            closeCallbackModal();
+            const name = document.getElementById('contact_name').value;
+            const email = document.getElementById('contact_email').value;
+            const message = document.getElementById('contact_message').value;
+            
+            // Validate required fields
+            if (!name || !email || !message) {
+                if (typeof notifications !== 'undefined') {
+                    notifications.error('Please fill in all fields');
+                } else {
+                    alert('Please fill in all fields');
+                }
+                return;
+            }
+            
+            // Send data to backend API
+            fetch('/api/contact/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    message: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success notification
+                    if (typeof notifications !== 'undefined') {
+                        notifications.success('✅ ' + data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                    
+                    // Reset form
+                    document.getElementById('contactForm').reset();
+                } else {
+                    // Show error notification
+                    if (typeof notifications !== 'undefined') {
+                        notifications.error('❌ ' + (data.error || 'Failed to send message'));
+                    } else {
+                        alert(data.error || 'Failed to send message');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting contact form:', error);
+                if (typeof notifications !== 'undefined') {
+                    notifications.error('❌ Failed to send message. Please try again.');
+                } else {
+                    alert('Failed to send message. Please try again.');
+                }
+            });
         }
 
         /**
@@ -721,10 +844,14 @@
             const backdrop = document.getElementById('modalBackdrop');
             const loginForm = document.getElementById('loginForm');
             const signupForm = document.getElementById('signupForm');
+            const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+            const resetPasswordForm = document.getElementById('resetPasswordForm');
             
-            // Show login form, hide signup form
+            // Show login form, hide all other forms
             loginForm.style.display = 'block';
             signupForm.style.display = 'none';
+            if (forgotPasswordForm) forgotPasswordForm.style.display = 'none';
+            if (resetPasswordForm) resetPasswordForm.style.display = 'none';
             
             // Show modal
             modal.classList.add('active');
@@ -737,10 +864,14 @@
             const backdrop = document.getElementById('modalBackdrop');
             const loginForm = document.getElementById('loginForm');
             const signupForm = document.getElementById('signupForm');
+            const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+            const resetPasswordForm = document.getElementById('resetPasswordForm');
             
-            // Show signup form, hide login form
+            // Show signup form, hide all other forms
             loginForm.style.display = 'none';
             signupForm.style.display = 'block';
+            if (forgotPasswordForm) forgotPasswordForm.style.display = 'none';
+            if (resetPasswordForm) resetPasswordForm.style.display = 'none';
             
             // Show modal
             modal.classList.add('active');
@@ -937,17 +1068,20 @@
             // Function to update auth buttons visibility based on login status
             function updateAuthButtonsVisibility() {
                 const customerId = localStorage.getItem('customer_id');
-                const loginBtn = document.querySelector('.login-btn');
-                const signupBtn = document.querySelector('.signup-btn');
+                const navLoginBtn = document.getElementById('navLoginBtn');
+                const navSignupBtn = document.getElementById('navSignupBtn');
+                const navProfileIcon = document.getElementById('navProfileIcon');
                 
                 if (customerId) {
-                    // User is logged in - hide login and signup buttons
-                    if (loginBtn) loginBtn.style.display = 'none';
-                    if (signupBtn) signupBtn.style.display = 'none';
+                    // User is logged in - hide login/signup buttons, show profile icon
+                    if (navLoginBtn) navLoginBtn.style.display = 'none';
+                    if (navSignupBtn) navSignupBtn.style.display = 'none';
+                    if (navProfileIcon) navProfileIcon.style.display = 'block';
                 } else {
-                    // User is not logged in - show login and signup buttons
-                    if (loginBtn) loginBtn.style.display = '';
-                    if (signupBtn) signupBtn.style.display = '';
+                    // User is not logged in - show only login button, hide signup and profile
+                    if (navLoginBtn) navLoginBtn.style.display = 'block';
+                    if (navSignupBtn) navSignupBtn.style.display = 'none';
+                    if (navProfileIcon) navProfileIcon.style.display = 'none';
                 }
             }
 
@@ -1234,18 +1368,41 @@
             const urlParams = new URLSearchParams(window.location.search);
             const resetToken = urlParams.get('token');
             if (resetToken) {
-                // Set token in hidden field
-                document.getElementById('resetToken').value = resetToken;
-                // Open modal with reset password form
-                const modal = document.getElementById('authModal');
-                const backdrop = document.getElementById('modalBackdrop');
-                modal.classList.add('active');
-                backdrop.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                // Switch to reset password form
-                switchToResetPassword();
-                // Remove token from URL to keep it clean
-                window.history.replaceState({}, document.title, window.location.pathname);
+                // Validate token before showing reset form
+                fetch(`/api/auth/validate-reset-token/?token=${resetToken}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.valid) {
+                            // Token is valid - show reset password form
+                            document.getElementById('resetToken').value = resetToken;
+                            // Open modal with reset password form
+                            const modal = document.getElementById('authModal');
+                            const backdrop = document.getElementById('modalBackdrop');
+                            modal.classList.add('active');
+                            backdrop.classList.add('active');
+                            document.body.style.overflow = 'hidden';
+                            // Switch to reset password form
+                            switchToResetPassword();
+                        } else {
+                            // Token is invalid or expired - show error message
+                            alert(data.error || 'This password reset link has expired or is invalid. Please request a new password reset link.');
+                            // Open forgot password modal to request new link
+                            const modal = document.getElementById('authModal');
+                            const backdrop = document.getElementById('modalBackdrop');
+                            modal.classList.add('active');
+                            backdrop.classList.add('active');
+                            document.body.style.overflow = 'hidden';
+                            switchToForgotPassword();
+                        }
+                        // Remove token from URL to keep it clean
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    })
+                    .catch(error => {
+                        console.error('Error validating token:', error);
+                        alert('Failed to validate reset link. Please try again or request a new password reset link.');
+                        // Remove token from URL
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    });
             }
 
             // Auto-open modal if there are messages from server

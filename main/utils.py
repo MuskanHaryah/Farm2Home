@@ -270,3 +270,129 @@ def send_order_delivered_email(order):
     except Exception as e:
         print(f"❌ Failed to send delivery confirmation email: {str(e)}")
         return False
+
+
+def send_contact_form_email(sender_name, sender_email, message):
+    """
+    Send contact form submission to admin email
+    
+    Args:
+        sender_name: Name of the person who submitted the form
+        sender_email: Email address of the sender
+        message: Message content from the form
+    
+    Returns:
+        bool: True if email sent successfully, False otherwise
+    """
+    try:
+        from datetime import datetime
+        
+        subject = f'🌾 New Contact Form Submission - {sender_name}'
+        
+        # Prepare template context
+        context = {
+            'sender_name': sender_name,
+            'sender_email': sender_email,
+            'message': message,
+            'timestamp': datetime.now().strftime('%B %d, %Y at %I:%M %p'),
+        }
+        
+        # Render HTML email template
+        html_message = render_to_string('emails/contact_form.html', context)
+        
+        # Create plain text version (fallback)
+        plain_message = f"""
+New Contact Form Submission
+
+From: {sender_name}
+Email: {sender_email}
+
+Message:
+{message}
+
+---
+Received: {context['timestamp']}
+Farm2Home Website - Automated Notification
+        """
+        
+        # Send email to admin
+        send_mail(
+            subject=subject,
+            message=plain_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[settings.EMAIL_HOST_USER],  # Send to admin email
+            html_message=html_message,
+            fail_silently=False,
+        )
+        
+        print(f"✅ Contact form email sent successfully from {sender_email}")
+        return True
+        
+    except Exception as e:
+        print(f"❌ Failed to send contact form email: {str(e)}")
+        return False
+
+
+def send_callback_request_email(client_name, phone_number, preferred_time, message=None):
+    """
+    Send callback request to admin email
+    
+    Args:
+        client_name: Name of the client requesting callback
+        phone_number: Client's phone number
+        preferred_time: Preferred time for callback
+        message: Optional additional message
+    
+    Returns:
+        bool: True if email sent successfully, False otherwise
+    """
+    try:
+        from datetime import datetime
+        
+        subject = f'📞 URGENT: Callback Request from {client_name}'
+        
+        # Prepare template context
+        context = {
+            'client_name': client_name,
+            'phone_number': phone_number,
+            'preferred_time': preferred_time,
+            'message': message if message else None,
+            'timestamp': datetime.now().strftime('%B %d, %Y at %I:%M %p'),
+        }
+        
+        # Render HTML email template
+        html_message = render_to_string('emails/callback_request.html', context)
+        
+        # Create plain text version (fallback)
+        plain_message = f"""
+🔔 URGENT: New Callback Request - B2B Service
+
+Client Name: {client_name}
+Phone Number: {phone_number}
+Preferred Time: {preferred_time}
+
+Additional Message:
+{message if message else 'No additional message provided'}
+
+---
+Request Received: {context['timestamp']}
+Farm2Home B2B Service - Automated Notification
+        """
+        
+        # Send email to admin
+        send_mail(
+            subject=subject,
+            message=plain_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[settings.EMAIL_HOST_USER],  # Send to admin email
+            html_message=html_message,
+            fail_silently=False,
+        )
+        
+        print(f"✅ Callback request email sent successfully for {client_name} ({phone_number})")
+        return True
+        
+    except Exception as e:
+        print(f"❌ Failed to send callback request email: {str(e)}")
+        return False
+

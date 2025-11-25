@@ -34,6 +34,7 @@ urlpatterns = [
     path('api/auth/login/', views.api_login, name='api_login'),
     path('api/auth/signup/', views.api_signup, name='api_signup'),
     path('api/auth/request-password-reset/', views.api_request_password_reset, name='api_request_password_reset'),
+    path('api/auth/validate-reset-token/', views.api_validate_reset_token, name='api_validate_reset_token'),
     path('api/auth/reset-password/', views.api_reset_password, name='api_reset_password'),
     
     # Customer Profile API endpoints
@@ -58,6 +59,12 @@ urlpatterns = [
     path('api/stripe/create-payment-intent/', views.create_payment_intent, name='create_payment_intent'),
     path('api/stripe/confirm-payment/', views.confirm_stripe_payment, name='confirm_stripe_payment'),
     path('api/stripe/payment-method/<str:payment_method_id>/', views.get_stripe_payment_method, name='get_stripe_payment_method'),
+    
+    # Contact & Callback API endpoints
+    # These endpoints handle contact form and callback request submissions
+    path('api/contact/', views.api_contact_form, name='api_contact_form'),
+    path('api/callback/', views.api_callback_request, name='api_callback_request'),
+    
     
     # ==================== HTML PAGE ROUTES ====================
     
@@ -91,3 +98,39 @@ urlpatterns = [
     # Test page (development only)
     path('test-order/', lambda request: render(request, 'test_order.html'), name='test_order'),
 ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+path('api/stripe/payment-method/<str:payment_method_id>/', views.get_stripe_payment_method, name='get_stripe_payment_method'),

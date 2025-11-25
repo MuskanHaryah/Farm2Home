@@ -1,5 +1,12 @@
 // Settings Page Functionality
 
+// Store original profile data for comparison
+let originalProfileData = {
+    name: '',
+    email: '',
+    phone: ''
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize settings page
     initializeSettingsPage();
@@ -56,6 +63,14 @@ function initializePersonalInfoForm() {
                 return;
             }
             
+            // Check if any data has actually changed
+            if (fullName === originalProfileData.name && 
+                email === originalProfileData.email && 
+                phone === originalProfileData.phone) {
+                notifications.info('ℹ️ No changes detected. Your information is already up to date.');
+                return;
+            }
+            
             try {
                 // Get CSRF token from cookie
                 function getCookie(name) {
@@ -92,6 +107,11 @@ function initializePersonalInfoForm() {
                 const result = await response.json();
                 
                 if (result.success) {
+                    // Update original data to new values
+                    originalProfileData.name = result.data.name;
+                    originalProfileData.email = result.data.email;
+                    originalProfileData.phone = result.data.phone;
+                    
                     // Update localStorage with new data
                     localStorage.setItem('customer_name', result.data.name);
                     localStorage.setItem('customer_email', result.data.email);
@@ -132,6 +152,12 @@ function initializePasswordForm() {
             const currentPassword = document.getElementById('currentPassword').value;
             const newPassword = document.getElementById('newPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Check if current password and new password are the same
+            if (currentPassword === newPassword) {
+                notifications.error('⚠️ New password must be different from your current password!');
+                return;
+            }
             
             // Validate passwords match
             if (newPassword !== confirmPassword) {
@@ -249,7 +275,15 @@ async function loadUserProfile() {
             if (emailEl) emailEl.value = customer.email;
             if (phoneEl) phoneEl.value = customer.phone || '';
             
+            // Store original values for change detection
+            originalProfileData = {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone || ''
+            };
+            
             console.log('[Settings] Populated form fields');
+            console.log('[Settings] Stored original profile data:', originalProfileData);
             
             // Update localStorage
             localStorage.setItem('customer_name', customer.name);
