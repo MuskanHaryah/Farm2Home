@@ -7,7 +7,10 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 # Collect static files
+echo "Collecting static files..."
 python manage.py collectstatic --no-input --clear
+echo "Static files collected to: $(python -c 'from Farm2Home import settings; print(settings.STATIC_ROOT)')"
+ls -la staticfiles/ || echo "staticfiles directory not found"
 
 # Run migrations
 python manage.py migrate --no-input
