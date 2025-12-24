@@ -20,7 +20,6 @@ class Command(BaseCommand):
                 name='Test Customer',
                 email='customer@farm2home.com',
                 phone='1234567890',
-                address='123 Test Street',
                 password='test_customer_123'  # You can change this
             )
             
