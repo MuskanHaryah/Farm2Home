@@ -1,5 +1,7 @@
 from pathlib import Path
 from decouple import config
+import dj_database_url
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,7 +15,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
 
 
@@ -31,6 +33,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add whitenoise for static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',  
     'django.middleware.common.CommonMiddleware',
@@ -60,16 +63,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Farm2Home.wsgi.application'
 
 
-
+# Database Configuration
+# Use Railway's DATABASE_URL if available, otherwise use local PostgreSQL
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'farm2home',
-        'USER': 'farmuser',           
-        'PASSWORD': 'farm123',
-        'HOST': 'localhost',
-        'PORT': '5433',               
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL', default='postgresql://farmuser:farm123@localhost:5433/farm2home'),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 
@@ -108,6 +109,16 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# Whitenoise configuration for static files
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -247,12 +258,14 @@ STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default='', cast=str)  #
 
 
 # CORS Configuration (for frontend integration)
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React default
-    "http://localhost:8000",  # Django dev server
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:8000",
-]
+CORS_ALLOWED_ORIGINS = config(
+    'CORS_ALLOWED_ORIGINS',
+    default='http://localhost:3000,http://localhost:8000,http://127.0.0.1:3000,http://127.0.0.1:8000'
+).split(',')
+
+# Allow all origins in development only
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 

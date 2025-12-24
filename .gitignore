@@ -1,37 +1,48 @@
 # Python
-_pycache_/
+__pycache__/
 *.py[cod]
 *$py.class
-
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
 
 # Environment variables file
 .env
+.env.local
+.env.production
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+/staticfiles/
+/media/
 
 # VS Code
-# .vscode/
+.vscode/
 
-# # IDEs
-# .idea/
-# *.sublime-project
-# *.sublime-workspace
+# IDEs
+.idea/
+*.sublime-project
+*.sublime-workspace
 
-# # pyenv
-# .python-version
+# pyenv
+.python-version
 
 # pytest
-# .pytest_cache/
-
-# pip / packaging
-# pip-wheel-metadata/
-# *.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
 
 # System files
-# .DS_Store
-# Thumbs.db
+.DS_Store
+Thumbs.db
 
-# Other
-# coverage.xml
-# htmlcov/
+# Node (if you add frontend later)
+node_modules/
+npm-debug.log
 
-# # Node
-# node_modules
+# Keep data.json for deployment
+!data.json
