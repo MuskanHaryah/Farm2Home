@@ -1,0 +1,1552 @@
+[
+{
+  "model": "main.product",
+  "pk": 169,
+  "fields": {
+    "name": "Tomato",
+    "local_name": "Tamatar",
+    "category": "vegetables",
+    "price": "120.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/vegetables/tomato.png",
+    "slug": "tomato",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.233Z",
+    "updated_at": "2025-11-12T14:50:46.964Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 170,
+  "fields": {
+    "name": "Potato",
+    "local_name": "Aloo",
+    "category": "vegetables",
+    "price": "80.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/vegetables/potatoes.png",
+    "slug": "potato",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.254Z",
+    "updated_at": "2025-11-12T14:03:36.254Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 171,
+  "fields": {
+    "name": "Onion",
+    "local_name": "Pyaz",
+    "category": "vegetables",
+    "price": "100.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/vegetables/onions.png",
+    "slug": "onion",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.262Z",
+    "updated_at": "2025-11-12T14:03:36.262Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 172,
+  "fields": {
+    "name": "Okra",
+    "local_name": "Bhindi",
+    "category": "vegetables",
+    "price": "150.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/vegetables/okra.png",
+    "slug": "okra",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.270Z",
+    "updated_at": "2025-11-12T14:03:36.270Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 173,
+  "fields": {
+    "name": "Bitter Gourd",
+    "local_name": "Karela",
+    "category": "vegetables",
+    "price": "110.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/vegetables/bitter-gourd.png",
+    "slug": "bitter-gourd",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.277Z",
+    "updated_at": "2025-11-12T14:03:36.277Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 174,
+  "fields": {
+    "name": "Carrot",
+    "local_name": "Gajar",
+    "category": "vegetables",
+    "price": "95.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/vegetables/carrot.png",
+    "slug": "carrot",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.286Z",
+    "updated_at": "2025-11-12T14:03:36.286Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 175,
+  "fields": {
+    "name": "Cucumber",
+    "local_name": "Kheera",
+    "category": "vegetables",
+    "price": "70.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/vegetables/cucumber.png",
+    "slug": "cucumber",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.293Z",
+    "updated_at": "2025-11-12T14:03:36.293Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 176,
+  "fields": {
+    "name": "Bottle Gourd",
+    "local_name": "Lauki",
+    "category": "vegetables",
+    "price": "60.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/vegetables/bottle-gourd.png",
+    "slug": "bottle-gourd",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.301Z",
+    "updated_at": "2025-11-12T14:03:36.301Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 177,
+  "fields": {
+    "name": "Ridge Gourd",
+    "local_name": "Tori",
+    "category": "vegetables",
+    "price": "85.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/vegetables/ridge-gourd.png",
+    "slug": "ridge-gourd",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.308Z",
+    "updated_at": "2025-11-12T14:03:36.308Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 178,
+  "fields": {
+    "name": "Apple Gourd",
+    "local_name": "Tinda",
+    "category": "vegetables",
+    "price": "90.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/vegetables/applegourd.png",
+    "slug": "apple-gourd",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.316Z",
+    "updated_at": "2025-11-26T04:11:09.204Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 179,
+  "fields": {
+    "name": "Pumpkin",
+    "local_name": "Kaddu",
+    "category": "vegetables",
+    "price": "75.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/vegetables/pumpkin.png",
+    "slug": "pumpkin",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.323Z",
+    "updated_at": "2025-11-12T14:03:36.323Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 180,
+  "fields": {
+    "name": "Beetroot",
+    "local_name": "Chukandar",
+    "category": "vegetables",
+    "price": "110.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/vegetables/beetroot.png",
+    "slug": "beetroot",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.330Z",
+    "updated_at": "2025-11-12T14:03:36.330Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 181,
+  "fields": {
+    "name": "Radish",
+    "local_name": "Mooli",
+    "category": "vegetables",
+    "price": "65.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/vegetables/radish.png",
+    "slug": "radish",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.338Z",
+    "updated_at": "2025-11-12T14:03:36.338Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 182,
+  "fields": {
+    "name": "Turnip",
+    "local_name": "Shaljam",
+    "category": "vegetables",
+    "price": "70.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/vegetables/turnips.png",
+    "slug": "turnip",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.346Z",
+    "updated_at": "2025-11-12T14:03:36.346Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 183,
+  "fields": {
+    "name": "Green Beans",
+    "local_name": "Sem",
+    "category": "vegetables",
+    "price": "140.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/vegetables/green-beans.png",
+    "slug": "green-beans",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.356Z",
+    "updated_at": "2025-11-12T14:03:36.356Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 184,
+  "fields": {
+    "name": "Peas",
+    "local_name": "Matar",
+    "category": "vegetables",
+    "price": "130.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/vegetables/peas.png",
+    "slug": "peas",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.363Z",
+    "updated_at": "2025-11-12T14:03:36.363Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 185,
+  "fields": {
+    "name": "Lettuce",
+    "local_name": "Salad Patta",
+    "category": "vegetables",
+    "price": "80.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/vegetables/lettuce.png",
+    "slug": "lettuce",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.372Z",
+    "updated_at": "2025-11-12T14:03:36.372Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 186,
+  "fields": {
+    "name": "Green Onions",
+    "local_name": "Hara Pyaz",
+    "category": "vegetables",
+    "price": "50.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/vegetables/greenonins.png",
+    "slug": "green-onions",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.379Z",
+    "updated_at": "2025-11-12T14:03:36.379Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 187,
+  "fields": {
+    "name": "Red Chillies",
+    "local_name": "Lal Mirch",
+    "category": "vegetables",
+    "price": "350.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/vegetables/red-chillies.png",
+    "slug": "red-chillies",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.387Z",
+    "updated_at": "2025-11-12T14:03:36.387Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 188,
+  "fields": {
+    "name": "Green Mustard",
+    "local_name": "Sarson",
+    "category": "vegetables",
+    "price": "90.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/vegetables/greenmustard.png",
+    "slug": "green-mustard",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.395Z",
+    "updated_at": "2025-11-12T14:03:36.395Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 189,
+  "fields": {
+    "name": "Sweet Potato",
+    "local_name": "Shakarkandi",
+    "category": "vegetables",
+    "price": "95.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/vegetables/sweetpotato.png",
+    "slug": "sweet-potato",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.403Z",
+    "updated_at": "2025-11-12T14:03:36.403Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 190,
+  "fields": {
+    "name": "Taro Root",
+    "local_name": "Arvi",
+    "category": "vegetables",
+    "price": "110.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/vegetables/taroo-root.png",
+    "slug": "taro-root",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.411Z",
+    "updated_at": "2025-11-12T14:03:36.411Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 191,
+  "fields": {
+    "name": "Zucchini",
+    "local_name": "Zucchini",
+    "category": "vegetables",
+    "price": "180.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/vegetables/zucchini.png",
+    "slug": "zucchini",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.419Z",
+    "updated_at": "2025-11-12T14:03:36.420Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 192,
+  "fields": {
+    "name": "Artichoke",
+    "local_name": "Artichoke",
+    "category": "vegetables",
+    "price": "400.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/vegetables/artichoke.png",
+    "slug": "artichoke",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.427Z",
+    "updated_at": "2025-11-12T14:03:36.427Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 193,
+  "fields": {
+    "name": "Watermelon",
+    "local_name": "Tarbooz",
+    "category": "fruits",
+    "price": "60.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/fruits/watermelon.png",
+    "slug": "watermelon",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.435Z",
+    "updated_at": "2025-11-12T14:03:36.435Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 194,
+  "fields": {
+    "name": "Melon",
+    "local_name": "Kharboza",
+    "category": "fruits",
+    "price": "70.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/fruits/melon.png",
+    "slug": "melon",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.442Z",
+    "updated_at": "2025-11-12T14:03:36.442Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 195,
+  "fields": {
+    "name": "Sweet Melon",
+    "local_name": "Garam",
+    "category": "fruits",
+    "price": "55.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/fruits/sweetmelon.png",
+    "slug": "sweet-melon",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.450Z",
+    "updated_at": "2025-11-12T14:03:36.450Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 196,
+  "fields": {
+    "name": "Guava",
+    "local_name": "Amrood",
+    "category": "fruits",
+    "price": "120.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/fruits/guava.png",
+    "slug": "guava",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.456Z",
+    "updated_at": "2025-11-12T14:03:36.456Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 197,
+  "fields": {
+    "name": "Green Apple",
+    "local_name": "Hara Seb",
+    "category": "fruits",
+    "price": "350.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/fruits/green-apples.png",
+    "slug": "green-apple",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.463Z",
+    "updated_at": "2025-11-12T14:03:36.463Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 198,
+  "fields": {
+    "name": "Pomegranate",
+    "local_name": "Anar",
+    "category": "fruits",
+    "price": "280.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/fruits/pomegranate.png",
+    "slug": "pomegranate",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.472Z",
+    "updated_at": "2025-11-12T14:03:36.472Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 199,
+  "fields": {
+    "name": "Papaya",
+    "local_name": "Papita",
+    "category": "fruits",
+    "price": "90.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/fruits/papaya.png",
+    "slug": "papaya",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.479Z",
+    "updated_at": "2025-11-12T14:03:36.479Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 200,
+  "fields": {
+    "name": "Pineapple",
+    "local_name": "Ananas",
+    "category": "fruits",
+    "price": "150.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/fruits/pineapple.png",
+    "slug": "pineapple",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.488Z",
+    "updated_at": "2025-11-12T14:03:36.488Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 201,
+  "fields": {
+    "name": "Grapefruit",
+    "local_name": "Chakotra",
+    "category": "fruits",
+    "price": "200.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/fruits/grapefruit.png",
+    "slug": "grapefruit",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.495Z",
+    "updated_at": "2025-11-12T14:03:36.495Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 202,
+  "fields": {
+    "name": "Mosambi",
+    "local_name": "Sweet Lime",
+    "category": "fruits",
+    "price": "140.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/fruits/mosambi.png",
+    "slug": "mosambi",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.504Z",
+    "updated_at": "2025-11-12T14:03:36.504Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 203,
+  "fields": {
+    "name": "Apricot",
+    "local_name": "Khubani",
+    "category": "fruits",
+    "price": "450.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/fruits/apricot.png",
+    "slug": "apricot",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.511Z",
+    "updated_at": "2025-11-12T14:03:36.511Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 204,
+  "fields": {
+    "name": "Peaches",
+    "local_name": "Aaru",
+    "category": "fruits",
+    "price": "320.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/fruits/peaches.png",
+    "slug": "peaches",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.522Z",
+    "updated_at": "2025-11-12T14:03:36.522Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 205,
+  "fields": {
+    "name": "Plums",
+    "local_name": "Alubukhara",
+    "category": "fruits",
+    "price": "380.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/fruits/plums.png",
+    "slug": "plums",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.530Z",
+    "updated_at": "2025-11-12T14:03:36.530Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 206,
+  "fields": {
+    "name": "Cherries",
+    "local_name": "Cherry",
+    "category": "fruits",
+    "price": "850.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/fruits/cherries.png",
+    "slug": "cherries",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.539Z",
+    "updated_at": "2025-11-12T14:03:36.539Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 207,
+  "fields": {
+    "name": "Lychee",
+    "local_name": "Leechi",
+    "category": "fruits",
+    "price": "420.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/fruits/lychees.png",
+    "slug": "lychee",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.546Z",
+    "updated_at": "2025-11-12T14:03:36.546Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 208,
+  "fields": {
+    "name": "Pear",
+    "local_name": "Nashpati",
+    "category": "fruits",
+    "price": "250.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/fruits/pear.png",
+    "slug": "pear",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.555Z",
+    "updated_at": "2025-11-12T14:03:36.555Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 209,
+  "fields": {
+    "name": "Persimmon",
+    "local_name": "Japani Phal",
+    "category": "fruits",
+    "price": "380.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/fruits/persimmon.png",
+    "slug": "persimmon",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.562Z",
+    "updated_at": "2025-11-12T14:03:36.562Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 210,
+  "fields": {
+    "name": "Avocado",
+    "local_name": "Avocado",
+    "category": "fruits",
+    "price": "600.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/fruits/avacado.png",
+    "slug": "avocado",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.570Z",
+    "updated_at": "2025-11-13T06:40:07.005Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 211,
+  "fields": {
+    "name": "Jackfruit",
+    "local_name": "Kathal",
+    "category": "fruits",
+    "price": "120.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/fruits/jackfruit.png",
+    "slug": "jackfruit",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.577Z",
+    "updated_at": "2025-11-12T14:03:36.577Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 212,
+  "fields": {
+    "name": "Custard Apple",
+    "local_name": "Sharifa",
+    "category": "fruits",
+    "price": "220.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/fruits/custard-apple.png",
+    "slug": "custard-apple",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.586Z",
+    "updated_at": "2025-11-12T14:03:36.586Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 213,
+  "fields": {
+    "name": "Sapodilla",
+    "local_name": "Chikoo",
+    "category": "fruits",
+    "price": "180.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/fruits/sapodilla.png",
+    "slug": "sapodilla",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.593Z",
+    "updated_at": "2025-11-14T16:38:17.424Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 214,
+  "fields": {
+    "name": "Dates",
+    "local_name": "Khajoor",
+    "category": "fruits",
+    "price": "550.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/fruits/dates.png",
+    "slug": "dates",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.602Z",
+    "updated_at": "2025-11-12T14:03:36.603Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 215,
+  "fields": {
+    "name": "Figs",
+    "local_name": "Anjeer",
+    "category": "fruits",
+    "price": "750.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/fruits/figs.png",
+    "slug": "figs",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.611Z",
+    "updated_at": "2025-11-12T14:03:36.611Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 216,
+  "fields": {
+    "name": "Mulberries",
+    "local_name": "Shahtoot",
+    "category": "fruits",
+    "price": "320.00",
+    "discount": "0.00",
+    "season": "WINTER",
+    "image": "images/fruits/mulberries.png",
+    "slug": "mulberries",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.620Z",
+    "updated_at": "2025-11-12T14:03:36.620Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 217,
+  "fields": {
+    "name": "Curry Leaves",
+    "local_name": "Kari Patta",
+    "category": "herbs",
+    "price": "40.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/herbs/curry-leaves.png",
+    "slug": "curry-leaves",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.628Z",
+    "updated_at": "2025-11-12T14:03:36.628Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 218,
+  "fields": {
+    "name": "Basil",
+    "local_name": "Tulsi",
+    "category": "herbs",
+    "price": "60.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/herbs/basil.png",
+    "slug": "basil",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.637Z",
+    "updated_at": "2025-11-12T14:03:36.637Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 219,
+  "fields": {
+    "name": "Ginger",
+    "local_name": "Adrak",
+    "category": "herbs",
+    "price": "200.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/herbs/ginger.png",
+    "slug": "ginger",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.648Z",
+    "updated_at": "2025-11-12T14:03:36.648Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 220,
+  "fields": {
+    "name": "Lemongrass",
+    "local_name": "Lemon Ghaas",
+    "category": "herbs",
+    "price": "80.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/herbs/lemon-grass.png",
+    "slug": "lemongrass",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.656Z",
+    "updated_at": "2025-11-12T14:03:36.656Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 221,
+  "fields": {
+    "name": "Fenugreek",
+    "local_name": "Methi",
+    "category": "herbs",
+    "price": "50.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/herbs/fenugreek.png",
+    "slug": "fenugreek",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.667Z",
+    "updated_at": "2025-11-12T14:03:36.667Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 222,
+  "fields": {
+    "name": "Celery",
+    "local_name": "Celery",
+    "category": "herbs",
+    "price": "120.00",
+    "discount": "0.00",
+    "season": "SUMMER",
+    "image": "images/herbs/celery.png",
+    "slug": "celery",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.681Z",
+    "updated_at": "2025-11-12T14:03:36.681Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 223,
+  "fields": {
+    "name": "Rosemary",
+    "local_name": "Rosemary",
+    "category": "herbs",
+    "price": "150.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/herbs/rosemarry.png",
+    "slug": "rosemary",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.693Z",
+    "updated_at": "2025-11-12T14:03:36.693Z"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 224,
+  "fields": {
+    "name": "Thyme",
+    "local_name": "Thyme",
+    "category": "herbs",
+    "price": "140.00",
+    "discount": "0.00",
+    "season": "ALL_YEAR",
+    "image": "images/herbs/thyme.png",
+    "slug": "thyme",
+    "is_active": true,
+    "created_at": "2025-11-12T14:03:36.703Z",
+    "updated_at": "2025-11-12T14:03:36.703Z"
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 169,
+  "fields": {
+    "product": 169,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 170,
+  "fields": {
+    "product": 170,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 171,
+  "fields": {
+    "product": 171,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 172,
+  "fields": {
+    "product": 172,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 173,
+  "fields": {
+    "product": 173,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 174,
+  "fields": {
+    "product": 174,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 175,
+  "fields": {
+    "product": 175,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 176,
+  "fields": {
+    "product": 176,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 177,
+  "fields": {
+    "product": 177,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 178,
+  "fields": {
+    "product": 178,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 179,
+  "fields": {
+    "product": 179,
+    "stock_available": 99
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 180,
+  "fields": {
+    "product": 180,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 181,
+  "fields": {
+    "product": 181,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 182,
+  "fields": {
+    "product": 182,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 183,
+  "fields": {
+    "product": 183,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 184,
+  "fields": {
+    "product": 184,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 185,
+  "fields": {
+    "product": 185,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 186,
+  "fields": {
+    "product": 186,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 187,
+  "fields": {
+    "product": 187,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 188,
+  "fields": {
+    "product": 188,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 189,
+  "fields": {
+    "product": 189,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 190,
+  "fields": {
+    "product": 190,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 191,
+  "fields": {
+    "product": 191,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 192,
+  "fields": {
+    "product": 192,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 193,
+  "fields": {
+    "product": 193,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 194,
+  "fields": {
+    "product": 194,
+    "stock_available": 98
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 195,
+  "fields": {
+    "product": 195,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 196,
+  "fields": {
+    "product": 196,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 197,
+  "fields": {
+    "product": 197,
+    "stock_available": 99
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 198,
+  "fields": {
+    "product": 198,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 199,
+  "fields": {
+    "product": 199,
+    "stock_available": 99
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 200,
+  "fields": {
+    "product": 200,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 201,
+  "fields": {
+    "product": 201,
+    "stock_available": 99
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 202,
+  "fields": {
+    "product": 202,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 203,
+  "fields": {
+    "product": 203,
+    "stock_available": 83
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 204,
+  "fields": {
+    "product": 204,
+    "stock_available": 98
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 205,
+  "fields": {
+    "product": 205,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 206,
+  "fields": {
+    "product": 206,
+    "stock_available": 70
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 207,
+  "fields": {
+    "product": 207,
+    "stock_available": 98
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 208,
+  "fields": {
+    "product": 208,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 209,
+  "fields": {
+    "product": 209,
+    "stock_available": 99
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 210,
+  "fields": {
+    "product": 210,
+    "stock_available": 84
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 211,
+  "fields": {
+    "product": 211,
+    "stock_available": 96
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 212,
+  "fields": {
+    "product": 212,
+    "stock_available": 89
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 213,
+  "fields": {
+    "product": 213,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 214,
+  "fields": {
+    "product": 214,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 215,
+  "fields": {
+    "product": 215,
+    "stock_available": 98
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 216,
+  "fields": {
+    "product": 216,
+    "stock_available": 99
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 217,
+  "fields": {
+    "product": 217,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 218,
+  "fields": {
+    "product": 218,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 219,
+  "fields": {
+    "product": 219,
+    "stock_available": 99
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 220,
+  "fields": {
+    "product": 220,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 221,
+  "fields": {
+    "product": 221,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 222,
+  "fields": {
+    "product": 222,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 223,
+  "fields": {
+    "product": 223,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.inventory",
+  "pk": 224,
+  "fields": {
+    "product": 224,
+    "stock_available": 100
+  }
+},
+{
+  "model": "main.customer",
+  "pk": 1,
+  "fields": {
+    "name": "Ahmed Khan",
+    "email": "ahmed.khan@email.com",
+    "phone": "+923001234567",
+    "password": "pbkdf2_sha256$1000000$r16mJNyHQ8sJ2h7Okf35g3$bD5IFVdc+cg2qKTd3IgqDIfAAAavnBno5jC04FV5H+w="
+  }
+},
+{
+  "model": "main.customer",
+  "pk": 2,
+  "fields": {
+    "name": "Fatima Ali",
+    "email": "fatima.ali@email.com",
+    "phone": "+923219876543",
+    "password": "pbkdf2_sha256$1000000$r16mJNyHQ8sJ2h7Okf35g3$bD5IFVdc+cg2qKTd3IgqDIfAAAavnBno5jC04FV5H+w="
+  }
+},
+{
+  "model": "main.customer",
+  "pk": 3,
+  "fields": {
+    "name": "Hassan Malik",
+    "email": "hassan.malik@email.com",
+    "phone": "+923335555555",
+    "password": "pbkdf2_sha256$1000000$r16mJNyHQ8sJ2h7Okf35g3$bD5IFVdc+cg2qKTd3IgqDIfAAAavnBno5jC04FV5H+w="
+  }
+},
+{
+  "model": "main.customer",
+  "pk": 4,
+  "fields": {
+    "name": "Ayesha Rizwan",
+    "email": "ayesha.rizwan@email.com",
+    "phone": "+923017777777",
+    "password": "pbkdf2_sha256$1000000$r16mJNyHQ8sJ2h7Okf35g3$bD5IFVdc+cg2qKTd3IgqDIfAAAavnBno5jC04FV5H+w="
+  }
+},
+{
+  "model": "main.customer",
+  "pk": 5,
+  "fields": {
+    "name": "Ail",
+    "email": "ali.raza@email.com",
+    "phone": "+923452222222",
+    "password": "pbkdf2_sha256$1000000$o6g8A72HIKFOZGNCAZIDCm$uPIoB16YOmcih10KApWIKCUW2H++Qm16nUpf0+3yeTM="
+  }
+},
+{
+  "model": "main.customer",
+  "pk": 6,
+  "fields": {
+    "name": "muskan ali",
+    "email": "unknown342189@gmail.com",
+    "phone": "+923156898441",
+    "password": "pbkdf2_sha256$1000000$QuH0YSzZVvEdHhzy1wT4kf$2lBlnsw5Fy2irthcC/OCMhJbjNJeEZ5yVD7SNyLV+CM="
+  }
+},
+{
+  "model": "main.customer",
+  "pk": 8,
+  "fields": {
+    "name": "alizay",
+    "email": "alizay@gamil.com",
+    "phone": "+923156898444",
+    "password": "pbkdf2_sha256$1000000$yZ11tcy9eMTzXWZMNgekYa$RVi4Uw8RwVoSP+r61jgr+PWdPoJq/B9z3wlHdabVDpA="
+  }
+},
+{
+  "model": "main.customer",
+  "pk": 9,
+  "fields": {
+    "name": "m",
+    "email": "unknown@gmail.com",
+    "phone": "+923156898477",
+    "password": "pbkdf2_sha256$1000000$EQndsTHK1SavAarcMWk7r4$YzJ3xjfqOtnAdqR3/pDOdZP30mZlQxL7XcTUISCMtDU="
+  }
+},
+{
+  "model": "main.customer",
+  "pk": 27,
+  "fields": {
+    "name": "Muskan Haryah",
+    "email": "muskan4606406@cloud.neduet.edu.pk",
+    "phone": "+923156898477",
+    "password": "pbkdf2_sha256$1000000$1YtaZynGn1DDBoVivvdfJ4$hTLP6digjXjxavhXp6k+5amj9zpoDr6jIW7BB3+ITlw="
+  }
+},
+{
+  "model": "main.address",
+  "pk": 1,
+  "fields": {
+    "customer": 6,
+    "label": "HOME",
+    "address_line": "abc street",
+    "city": "Karachi",
+    "postal_code": "12345",
+    "phone": "+923156898441",
+    "is_default": false,
+    "created_at": "2025-11-13T21:06:51.610Z",
+    "updated_at": "2025-11-26T04:05:01.258Z"
+  }
+},
+{
+  "model": "main.address",
+  "pk": 14,
+  "fields": {
+    "customer": 27,
+    "label": "WORK",
+    "address_line": "Jamshedabad",
+    "city": "Karachi",
+    "postal_code": "12346",
+    "phone": "03022545645",
+    "is_default": false,
+    "created_at": "2025-11-23T13:57:16.557Z",
+    "updated_at": "2025-11-23T13:57:19.054Z"
+  }
+},
+{
+  "model": "main.address",
+  "pk": 15,
+  "fields": {
+    "customer": 6,
+    "label": "WORK",
+    "address_line": "HOUSE # R1-166 (Ground Floor), SECTOR # 38/A, Scheme 33, Mosamiyat, Karachi",
+    "city": "Karachi",
+    "postal_code": "75280",
+    "phone": "+923163324011",
+    "is_default": true,
+    "created_at": "2025-11-26T04:05:57.243Z",
+    "updated_at": "2025-11-26T04:06:06.959Z"
+  }
+},
+{
+  "model": "main.address",
+  "pk": 17,
+  "fields": {
+    "customer": 27,
+    "label": "WORK",
+    "address_line": "k",
+    "city": "Karachi",
+    "postal_code": "12345",
+    "phone": "+923156898477",
+    "is_default": true,
+    "created_at": "2025-12-15T10:17:12.423Z",
+    "updated_at": "2025-12-15T10:17:12.423Z"
+  }
+}
+]
