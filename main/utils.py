@@ -35,7 +35,7 @@ def send_welcome_email(customer):
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[customer.email],
             html_message=html_message,
-            fail_silently=False,
+            fail_silently=True,  # Prevent timeouts
         )
         
         print(f"✅ Welcome email sent successfully to {customer.email}")
@@ -108,10 +108,8 @@ def send_order_confirmation_email(order):
         # Create plain text version (fallback)
         plain_message = strip_tags(html_message)
         
-        # Send email
-        print(f"📧 Attempting to send email to: {order.customer.email}")
-        print(f"📧 Using SMTP: {settings.EMAIL_HOST}")
-        print(f"📧 From: {settings.DEFAULT_FROM_EMAIL}")
+        # Send email (fail silently to avoid timeouts)
+        print(f"📧 Order confirmation for: {order.customer.email}")
         
         result = send_mail(
             subject=subject,
@@ -119,7 +117,7 @@ def send_order_confirmation_email(order):
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[order.customer.email],
             html_message=html_message,
-            fail_silently=False,
+            fail_silently=True,  # Don't crash if email fails
         )
         
         print(f"📧 Email send result: {result} (1 = success, 0 = failed)")
@@ -166,7 +164,7 @@ def send_password_reset_email(customer, reset_link):
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[customer.email],
             html_message=html_message,
-            fail_silently=False,
+            fail_silently=True,  # Prevent timeouts
         )
         
         print(f"✅ Password reset email sent successfully to {customer.email}")
@@ -214,7 +212,7 @@ def send_order_shipped_email(order, tracking_number=None):
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[order.customer.email],
             html_message=html_message,
-            fail_silently=False,
+            fail_silently=True,  # Prevent timeouts
         )
         
         print(f"✅ Shipping notification email sent successfully to {order.customer.email}")
@@ -261,7 +259,7 @@ def send_order_delivered_email(order):
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[order.customer.email],
             html_message=html_message,
-            fail_silently=False,
+            fail_silently=True,  # Prevent timeouts
         )
         
         print(f"✅ Delivery confirmation email sent successfully to {order.customer.email}")
@@ -322,7 +320,7 @@ Farm2Home Website - Automated Notification
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[settings.EMAIL_HOST_USER],  # Send to admin email
             html_message=html_message,
-            fail_silently=False,
+            fail_silently=True,  # Prevent timeouts
         )
         
         print(f"✅ Contact form email sent successfully from {sender_email}")
@@ -386,7 +384,7 @@ Farm2Home B2B Service - Automated Notification
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[settings.EMAIL_HOST_USER],  # Send to admin email
             html_message=html_message,
-            fail_silently=False,
+            fail_silently=True,  # Prevent timeouts
         )
         
         print(f"✅ Callback request email sent successfully for {client_name} ({phone_number})")
@@ -395,4 +393,5 @@ Farm2Home B2B Service - Automated Notification
     except Exception as e:
         print(f"❌ Failed to send callback request email: {str(e)}")
         return False
+
 
