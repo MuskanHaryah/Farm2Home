@@ -148,13 +148,16 @@ REST_FRAMEWORK = {
 }
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# Email Configuration
+# Use console backend in production if SMTP is blocked, otherwise use SMTP
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='your-email@gmail.com')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='your-app-password')
 DEFAULT_FROM_EMAIL = 'Farm2Home <noreply@farm2home.com>'
+EMAIL_TIMEOUT = 10  # 10 second timeout to prevent hanging
 
 
 STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLIC_KEY', default='pk_test_your_key_here')
