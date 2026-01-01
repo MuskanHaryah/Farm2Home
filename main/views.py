@@ -2178,11 +2178,12 @@ def api_contact_form(request):
         # Log the contact request
         print(f"📧 Contact form: {sender_name} ({sender_email}): {message}")
         
-        # Try to send email (don't fail if it times out)
-        try:
-            send_contact_form_email(sender_name, sender_email, message)
-        except Exception as email_error:
-            print(f"⚠️ Email failed but form logged: {str(email_error)}")
+        # Email sending disabled due to timeout issues
+        # TODO: Configure proper SMTP or use background tasks
+        # try:
+        #     send_contact_form_email(sender_name, sender_email, message)
+        # except Exception as email_error:
+        #     print(f"⚠️ Email failed but form logged: {str(email_error)}")
         
         # Always return success
         return Response({
@@ -2236,16 +2237,17 @@ def api_callback_request(request):
         # Log the callback request
         print(f"📞 Callback: {client_name} ({phone_number}) at {preferred_time}")
         
-        # Try to send email (don't fail if it times out)
-        try:
-            send_callback_request_email(
-                client_name, 
-                phone_number, 
-                preferred_time, 
-                message if message else None
-            )
-        except Exception as email_error:
-            print(f"⚠️ Email failed but request logged: {str(email_error)}")
+        # Email sending disabled due to timeout issues
+        # TODO: Configure proper SMTP or use background tasks
+        # try:
+        #     send_callback_request_email(
+        #         client_name, 
+        #         phone_number, 
+        #         preferred_time, 
+        #         message if message else None
+        #     )
+        # except Exception as email_error:
+        #     print(f"⚠️ Email failed but request logged: {str(email_error)}")
         
         # Always return success
         return Response({

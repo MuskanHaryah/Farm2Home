@@ -161,6 +161,9 @@ EMAIL_HOST_PASSWORD = RESEND_API_KEY if RESEND_API_KEY else ''
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='onboarding@resend.dev')
 EMAIL_TIMEOUT = 10
 
+# Admin email for receiving contact/callback form notifications
+ADMIN_EMAIL = config('ADMIN_EMAIL', default='unknown342189@gmail.com')
+
 
 STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLIC_KEY', default='pk_test_your_key_here')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', default='sk_test_your_key_here')

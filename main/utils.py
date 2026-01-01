@@ -1,7 +1,28 @@
-from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
-from django.utils.html import strip_tags
+import resend
+
+
+def send_email_via_resend(to_email, subject, html_content):
+    """
+    Send email using Resend API directly
+    """
+    try:
+        resend.api_key = settings.RESEND_API_KEY
+        
+        params = {
+            "from": settings.DEFAULT_FROM_EMAIL,
+            "to": [to_email],
+            "subject": subject,
+            "html": html_content,
+        }
+        
+        result = resend.Emails.send(params)
+        print(f"📧 Email sent via Resend API: {result}")
+        return True
+    except Exception as e:
+        print(f"❌ Resend API error: {str(e)}")
+        return False
 
 
 def send_welcome_email(customer):
@@ -25,21 +46,12 @@ def send_welcome_email(customer):
         # Render HTML email template
         html_message = render_to_string('emails/welcome.html', context)
         
-        # Create plain text version (fallback)
-        plain_message = strip_tags(html_message)
+        # Send via Resend API
+        result = send_email_via_resend(customer.email, subject, html_message)
         
-        # Send email
-        send_mail(
-            subject=subject,
-            message=plain_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[customer.email],
-            html_message=html_message,
-            fail_silently=True,  # Prevent timeouts
-        )
-        
-        print(f"✅ Welcome email sent successfully to {customer.email}")
-        return True
+        if result:
+            print(f"✅ Welcome email sent successfully to {customer.email}")
+        return result
         
     except Exception as e:
         print(f"❌ Failed to send welcome email to {customer.email}: {str(e)}")
@@ -95,7 +107,7 @@ def send_order_confirmation_email(order):
             'payment_method': order.payment if order.payment else 'Cash on Delivery',
             'items': items_with_subtotal,
             # Shipping/Delivery information
-            'shipping_name': shipping_name,
+                    'shipping_name': shipping_name,
             'shipping_phone': shipping_phone,
             'shipping_address': shipping_address,
             'shipping_city': shipping_city,
@@ -105,24 +117,15 @@ def send_order_confirmation_email(order):
         # Render HTML email template
         html_message = render_to_string('emails/order_confirmation.html', context)
         
-        # Create plain text version (fallback)
-        plain_message = strip_tags(html_message)
-        
-        # Send email (fail silently to avoid timeouts)
+        # Send email via Resend API
         print(f"📧 Order confirmation for: {order.customer.email}")
         
-        result = send_mail(
-            subject=subject,
-            message=plain_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[order.customer.email],
-            html_message=html_message,
-            fail_silently=True,  # Don't crash if email fails
-        )
+        # Send via Resend API
+        result = send_email_via_resend(order.customer.email, subject, html_message)
         
-        print(f"📧 Email send result: {result} (1 = success, 0 = failed)")
-        print(f"✅ Order confirmation email sent successfully to {order.customer.email} for Order #{order.order_id}")
-        return True
+        if result:
+            print(f"✅ Order confirmation email sent successfully to {order.customer.email} for Order #{order.order_id}")
+        return result
         
     except Exception as e:
         print(f"❌ Failed to send order confirmation email for Order #{order.order_id}: {str(e)}")
@@ -154,21 +157,12 @@ def send_password_reset_email(customer, reset_link):
         # Render HTML email template
         html_message = render_to_string('emails/password_reset.html', context)
         
-        # Create plain text version (fallback)
-        plain_message = strip_tags(html_message)
+        # Send via Resend API
+        result = send_email_via_resend(customer.email, subject, html_message)
         
-        # Send email
-        send_mail(
-            subject=subject,
-            message=plain_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[customer.email],
-            html_message=html_message,
-            fail_silently=True,  # Prevent timeouts
-        )
-        
-        print(f"✅ Password reset email sent successfully to {customer.email}")
-        return True
+        if result:
+            print(f"✅ Password reset email sent successfully to {customer.email}")
+        return result
         
     except Exception as e:
         print(f"❌ Failed to send password reset email to {customer.email}: {str(e)}")
@@ -204,19 +198,12 @@ def send_order_shipped_email(order, tracking_number=None):
         </html>
         """
         
-        plain_message = strip_tags(html_message)
+        # Send via Resend API
+        result = send_email_via_resend(order.customer.email, subject, html_message)
         
-        send_mail(
-            subject=subject,
-            message=plain_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[order.customer.email],
-            html_message=html_message,
-            fail_silently=True,  # Prevent timeouts
-        )
-        
-        print(f"✅ Shipping notification email sent successfully to {order.customer.email}")
-        return True
+        if result:
+            print(f"✅ Shipping notification email sent successfully to {order.customer.email}")
+        return result
         
     except Exception as e:
         print(f"❌ Failed to send shipping notification email: {str(e)}")
@@ -251,19 +238,12 @@ def send_order_delivered_email(order):
         </html>
         """
         
-        plain_message = strip_tags(html_message)
+        # Send via Resend API
+        result = send_email_via_resend(order.customer.email, subject, html_message)
         
-        send_mail(
-            subject=subject,
-            message=plain_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[order.customer.email],
-            html_message=html_message,
-            fail_silently=True,  # Prevent timeouts
-        )
-        
-        print(f"✅ Delivery confirmation email sent successfully to {order.customer.email}")
-        return True
+        if result:
+            print(f"✅ Delivery confirmation email sent successfully to {order.customer.email}")
+        return result
         
     except Exception as e:
         print(f"❌ Failed to send delivery confirmation email: {str(e)}")
@@ -298,33 +278,13 @@ def send_contact_form_email(sender_name, sender_email, message):
         # Render HTML email template
         html_message = render_to_string('emails/contact_form.html', context)
         
-        # Create plain text version (fallback)
-        plain_message = f"""
-New Contact Form Submission
-
-From: {sender_name}
-Email: {sender_email}
-
-Message:
-{message}
-
----
-Received: {context['timestamp']}
-Farm2Home Website - Automated Notification
-        """
+        # Send via Resend API to admin email
+        admin_email = getattr(settings, 'ADMIN_EMAIL', 'muskan4606406@cloud.neduet.edu.pk')
+        result = send_email_via_resend(admin_email, subject, html_message)
         
-        # Send email to admin
-        send_mail(
-            subject=subject,
-            message=plain_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[settings.EMAIL_HOST_USER],  # Send to admin email
-            html_message=html_message,
-            fail_silently=True,  # Prevent timeouts
-        )
-        
-        print(f"✅ Contact form email sent successfully from {sender_email}")
-        return True
+        if result:
+            print(f"✅ Contact form email sent successfully from {sender_email}")
+        return result
         
     except Exception as e:
         print(f"❌ Failed to send contact form email: {str(e)}")
@@ -361,34 +321,13 @@ def send_callback_request_email(client_name, phone_number, preferred_time, messa
         # Render HTML email template
         html_message = render_to_string('emails/callback_request.html', context)
         
-        # Create plain text version (fallback)
-        plain_message = f"""
-🔔 URGENT: New Callback Request - B2B Service
-
-Client Name: {client_name}
-Phone Number: {phone_number}
-Preferred Time: {preferred_time}
-
-Additional Message:
-{message if message else 'No additional message provided'}
-
----
-Request Received: {context['timestamp']}
-Farm2Home B2B Service - Automated Notification
-        """
+        # Send via Resend API to admin email
+        admin_email = getattr(settings, 'ADMIN_EMAIL', 'muskan4606406@cloud.neduet.edu.pk')
+        result = send_email_via_resend(admin_email, subject, html_message)
         
-        # Send email to admin
-        send_mail(
-            subject=subject,
-            message=plain_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[settings.EMAIL_HOST_USER],  # Send to admin email
-            html_message=html_message,
-            fail_silently=True,  # Prevent timeouts
-        )
-        
-        print(f"✅ Callback request email sent successfully for {client_name} ({phone_number})")
-        return True
+        if result:
+            print(f"✅ Callback request email sent successfully for {client_name} ({phone_number})")
+        return result
         
     except Exception as e:
         print(f"❌ Failed to send callback request email: {str(e)}")
