@@ -154,12 +154,12 @@ RESEND_API_KEY = config('RESEND_API_KEY', default='')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.resend.com'
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True
+EMAIL_PORT = 587  # Changed from 465
+EMAIL_USE_TLS = True  # Changed from EMAIL_USE_SSL
 EMAIL_HOST_USER = 'resend'
 EMAIL_HOST_PASSWORD = RESEND_API_KEY if RESEND_API_KEY else ''
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='onboarding@resend.dev')
-EMAIL_TIMEOUT = 10  # 10 second timeout to prevent hanging
+EMAIL_TIMEOUT = 10
 
 
 STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLIC_KEY', default='pk_test_your_key_here')
