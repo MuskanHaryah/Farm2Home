@@ -149,23 +149,16 @@ REST_FRAMEWORK = {
 
 
 # Email Configuration
-# Using SendGrid for reliable email delivery
-SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
+# Using Resend for reliable email delivery
+RESEND_API_KEY = config('RESEND_API_KEY', default='')
 
-if SENDGRID_API_KEY:
-    # Use SendGrid if API key is provided
-    EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
-else:
-    # Fallback to console backend for local testing
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# Gmail SMTP (backup - not recommended for production)
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='your-email@gmail.com')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='your-app-password')
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='Farm2Home <noreply@farm2home.com>')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.resend.com'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'resend'
+EMAIL_HOST_PASSWORD = RESEND_API_KEY if RESEND_API_KEY else ''
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='onboarding@resend.dev')
 EMAIL_TIMEOUT = 10  # 10 second timeout to prevent hanging
 
 
